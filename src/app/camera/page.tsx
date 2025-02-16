@@ -17,7 +17,7 @@ export default function Camera() {
 
   const [image, setImage] = useState<string | null>(null);
 
-  const clipPath = "/svg-outlines/two-shapes.svg";
+  const clipPath = "/svg-outlines/face.svg";
 
   useEffect(() => {
     fetch(clipPath)
@@ -90,20 +90,22 @@ export default function Camera() {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
 
           ctx.save();
-          
-          //scale and center clip path
           ctx.scale(scaleX, scaleY);
           ctx.translate(0, viewBox.height / 2);
-          clipPathData.forEach(path => {
-            ctx.clip(path);
-          });
-          //reset scaling before drawing video
+          
+          //add paths to region and use even odd to handle multiple paths
+          const region = new Path2D();
+          for (const path of clipPathData) {
+            region.addPath(path);
+          }
+           
+          ctx.clip(region, "evenodd");
+          
           ctx.scale(1 / scaleX, 1 / scaleY);
           ctx.translate(0, -viewBox.height / 2);
-          //draw webcam feed at normal position
           ctx.drawImage(video, dx, dy, newWidth, newHeight);
-
           ctx.restore();
+          
         }
 
         requestAnimationFrame(processWebcamFeed);
