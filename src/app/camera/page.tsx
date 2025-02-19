@@ -5,6 +5,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
+import { saveImage, loadLastImage } from "../context/IndexedDB";
 import Webcam from "react-webcam";
 
 export default function Camera() {
@@ -116,11 +117,18 @@ export default function Camera() {
   }, [canvasSize, clipPathData, viewBox]);
 
   //set current frame as image
-  const captureImage = () => {
+
+  const captureImage = async () => {
     if (canvasRef.current) {
       const imageData = canvasRef.current.toDataURL("image/png");
       setImage(imageData);
+      await saveImage(imageData);
     }
+  };
+
+  const loadLastSavedImage = async () => {
+    const savedImage = await loadLastImage();
+    if (savedImage) setImage(savedImage);
   };
 
     const downloadImage = () => {
@@ -163,6 +171,10 @@ export default function Camera() {
         >
         Download PNG
         </button>
+
+        <button onClick={loadLastSavedImage} className="absolute bottom-10 bg-white text-black px-4 py-2 mb-40 rounded-md">
+        Load Last Image
+      </button>
       
 
       {image && (
