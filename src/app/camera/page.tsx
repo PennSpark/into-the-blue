@@ -1,22 +1,17 @@
-/* Camera page */
-// takes an svg image within a pre-configured 100x100 bounding box (for control over size variation) and clips a webcam feed to the svg
-// when user clicks the take picture button, saves the current frame as a picture.
-
 "use client";
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
-import { saveImage, loadLastImage } from "../context/IndexedDB";
+import { saveImage, loadAllImages, clearImages } from "../context/IndexedDB";
 import Webcam from "react-webcam";
 
 export default function Camera() {
   const webcamRef = useRef<Webcam>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
-
   const [clipPathData, setClipPathData] = useState<Path2D[] | null>(null);
   const [viewBox, setViewBox] = useState({ width: 100, height: 100 });
-
   const [image, setImage] = useState<string | null>(null);
+  const [imageGallery, setImageGallery] = useState<string[]>([]);
 
   const clipPath = "/svg-outlines/face.svg";
 
@@ -30,10 +25,9 @@ export default function Camera() {
         const svgElement = svgDoc.querySelector("svg");
 
         if (pathElements.length > 0) {
-            //array of paths in case of multiple elements
-            const pathsArray = Array.from(pathElements).map((path) => new Path2D(path.getAttribute("d") || ""));
-            setClipPathData(pathsArray);
-          }
+          const pathsArray = Array.from(pathElements).map((path) => new Path2D(path.getAttribute("d") || ""));
+          setClipPathData(pathsArray);
+        }
 
         if (svgElement) {
           const viewBoxValues = svgElement.getAttribute("viewBox")?.split(" ").map(Number);
@@ -47,10 +41,7 @@ export default function Camera() {
 
   const updateCanvasSize = useCallback(() => {
     const svhToPixels = window.innerHeight / 100;
-    setCanvasSize({
-      width: 50 * svhToPixels,
-      height: 100 * svhToPixels,
-    });
+    setCanvasSize({ width: 50 * svhToPixels, height: 100 * svhToPixels });
   }, []);
 
   useEffect(() => {
@@ -69,44 +60,35 @@ export default function Camera() {
         if (ctx && video.readyState === 4 && clipPathData) {
           const videoWidth = video.videoWidth;
           const videoHeight = video.videoHeight;
-
-          //canvas dimensions
           canvas.width = canvasSize.width;
           canvas.height = canvasSize.height;
 
-          //maintain aspect ratio
           const aspectRatio = videoWidth / videoHeight;
           const newHeight = canvasSize.height;
           const newWidth = newHeight * aspectRatio;
 
-          //center webcam feed
           const dx = (canvasSize.width - newWidth) / 2;
           const dy = 0;
 
-          //scale clip path to match canvas size
           const scaleX = canvas.width / viewBox.width;
           const scaleY = canvas.width / viewBox.width;
 
-          //clear canvas before redrawing
           ctx.clearRect(0, 0, canvas.width, canvas.height);
-
           ctx.save();
           ctx.scale(scaleX, scaleY);
           ctx.translate(0, viewBox.height / 2);
-          
-          //add paths to region and use even odd to handle multiple paths
+
           const region = new Path2D();
           for (const path of clipPathData) {
             region.addPath(path);
           }
-           
+
           ctx.clip(region, "evenodd");
-          
+
           ctx.scale(1 / scaleX, 1 / scaleY);
           ctx.translate(0, -viewBox.height / 2);
           ctx.drawImage(video, dx, dy, newWidth, newHeight);
           ctx.restore();
-          
         }
 
         requestAnimationFrame(processWebcamFeed);
@@ -116,69 +98,74 @@ export default function Camera() {
     requestAnimationFrame(processWebcamFeed);
   }, [canvasSize, clipPathData, viewBox]);
 
-  //set current frame as image
-
   const captureImage = async () => {
     if (canvasRef.current) {
       const imageData = canvasRef.current.toDataURL("image/png");
       setImage(imageData);
       await saveImage(imageData);
+      loadAllSavedImages(); // Refresh gallery
     }
   };
 
-  const loadLastSavedImage = async () => {
-    const savedImage = await loadLastImage();
-    if (savedImage) setImage(savedImage);
+  const loadAllSavedImages = async () => {
+    const savedImages = await loadAllImages();
+    setImageGallery(savedImages);
   };
 
-    const downloadImage = () => {
-        if (image) {
-        const link = document.createElement("a");
-        link.href = image;
-        link.download = "captured-image.png";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        }
-    };
-  
+  const clearAllImages = async () => {
+    await clearImages();
+    setImageGallery([]);
+  };
+
+  useEffect(() => {
+    loadAllSavedImages();
+  }, []);
 
   return (
-    <div className="relative flex items-center justify-center w-screen h-screen bg-black">
+    <div className="relative flex flex-col items-center justify-center w-screen h-screen bg-black">
       {/* hidden webcam source */}
       <Webcam ref={webcamRef} className="absolute opacity-0 pointer-events-none" />
 
       {/* visible canvas */}
       <canvas
         ref={canvasRef}
-        style={{
-          width: `${canvasSize.width}px`,
-          height: `${canvasSize.height}px`,
-        }}
+        style={{ width: `${canvasSize.width}px`, height: `${canvasSize.height}px` }}
         className="absolute"
       />
 
-      <button
-        onClick={captureImage}
-        className="absolute bottom-10 bg-white text-black px-4 py-2 rounded-md"
-      > 
-        Take Picture
-      </button>
-
-        <button
-        onClick={downloadImage}
-        className="absolute bottom-10 bg-white text-black px-4 py-2 mb-20 rounded-md z-10"
-        >
-        Download PNG
+      {/* Buttons */}
+      <div className="absolute bottom-10 flex flex-col gap-4">
+        <button onClick={captureImage} className="bg-white text-black px-4 py-2 rounded-md">
+          Take Picture
         </button>
 
-        <button onClick={loadLastSavedImage} className="absolute bottom-10 bg-white text-black px-4 py-2 mb-40 rounded-md">
-        Load Last Image
-      </button>
-      
+        <button onClick={clearAllImages} className="bg-red-500 text-white px-4 py-2 rounded-md">
+          Clear All Images
+        </button>
+      </div>
 
+      {/* Gallery Panel */}
+      <div className="absolute top-10 right-10 w-60 h-80 bg-white/20 p-4 rounded-lg overflow-auto">
+        <h2 className="text-white text-center mb-2">Gallery</h2>
+        <div className="grid grid-cols-2 gap-2">
+          {imageGallery.map((img, index) => (
+            <img
+              key={index}
+              src={img}
+              alt={`Captured ${index}`}
+              className="w-full h-20 object-cover cursor-pointer rounded-md hover:opacity-80"
+              onClick={() => setImage(img)}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Fullscreen Image Viewer */}
       {image && (
-        <div className="absolute inset-0 flex justify-center items-center bg-black/80">
+        <div
+          className="absolute inset-0 flex justify-center items-center bg-black/80"
+          onClick={() => setImage(null)}
+        >
           <img src={image} alt="Captured" className="w-[50svh] h-auto rounded-md" />
         </div>
       )}
