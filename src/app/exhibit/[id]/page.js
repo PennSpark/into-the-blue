@@ -61,7 +61,7 @@ export default async function ExhibitPage({ params }) {
       <h1>{exhibit.name}</h1>
       <div style={gridStyles}>
         {exhibit.items.map((item) => (
-          <Link key={item.id} href={`/item/${item.id}`}>
+          <Link key={item.id} href={`/exhibit/${exhibit.name.toLowerCase()}/${item.id}`}>
             {item.title}
           </Link>
         ))}
