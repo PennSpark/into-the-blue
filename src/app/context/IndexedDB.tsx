@@ -1,7 +1,7 @@
 const DB_NAME = "ImageDatabase";
 const STORE_NAME = "images";
 
-// Open IndexedDB
+//open the db
 export const openDB = (): Promise<IDBDatabase> => {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, 1);
@@ -18,7 +18,7 @@ export const openDB = (): Promise<IDBDatabase> => {
   });
 };
 
-// Convert dataURL to Blob
+//dataurl to blob
 export const dataURLtoBlob = (dataURL: string): Blob => {
   const byteString = atob(dataURL.split(",")[1]);
   const mimeString = dataURL.split(",")[0].split(":")[1].split(";")[0];
@@ -31,7 +31,7 @@ export const dataURLtoBlob = (dataURL: string): Blob => {
   return new Blob([arrayBuffer], { type: mimeString });
 };
 
-// Save image to IndexedDB
+//save image
 export const saveImage = async (imageData: string) => {
   const imageBlob = dataURLtoBlob(imageData);
   const db = await openDB();
@@ -46,7 +46,7 @@ export const saveImage = async (imageData: string) => {
   });
 };
 
-// Retrieve the latest saved image
+//retrieve last stored image 
 export const loadLastImage = async (): Promise<string | null> => {
   const db = await openDB();
   const transaction = db.transaction(STORE_NAME, "readonly");
@@ -64,7 +64,7 @@ export const loadLastImage = async (): Promise<string | null> => {
   });
 };
 
-// Retrieve all saved images
+//retrieve all images
 export const loadAllImages = async (): Promise<string[]> => {
   const db = await openDB();
   const transaction = db.transaction(STORE_NAME, "readonly");
@@ -82,7 +82,7 @@ export const loadAllImages = async (): Promise<string[]> => {
   });
 };
 
-// Delete all images from IndexedDB
+//delete images (for convenience)
 export const clearImages = async () => {
   const db = await openDB();
   const transaction = db.transaction(STORE_NAME, "readwrite");
