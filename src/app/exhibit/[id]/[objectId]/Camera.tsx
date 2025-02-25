@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
-import { saveImage, loadAllImages, clearImages } from "../context/IndexedDB";
+import { saveImage, loadAllImages, clearImages } from "../../../context/IndexedDB";
 import Webcam from "react-webcam";
 import Image from "next/image";
 import './camera.css';
-import { Artifact } from "../types";
+import { Artifact } from "../../../types";
 
 export interface CameraProps {
   artifact: Artifact;
