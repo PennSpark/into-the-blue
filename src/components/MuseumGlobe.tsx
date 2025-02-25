@@ -14,9 +14,9 @@ interface Region {
 }
 
 const regions: Region[] = [
-  { name: 'Rome', position: [0.8660254, 0.4330127, -0.25], color: '#ff4444', path: '/rome' },
-  { name: 'Egypt', position: [0.4330127, -0.25, 0.8660254], color: '#ffbb44', path: '/egypt' },
-  { name: 'Asia', position: [-0.8660254, 0.4330127, 0.25], color: '#44ff44', path: '/asia' }
+  { name: 'rome', position: [0.8660254, 0.4330127, -0.25], color: '#ff4444', path: '/exhibit/rome' },
+  { name: 'egypt', position: [0.4330127, -0.25, 0.8660254], color: '#ffbb44', path: '/exhibit/egypt' },
+  { name: 'asia', position: [-0.8660254, 0.4330127, 0.25], color: '#44ff44', path: '/exhibit/asia' }
 ];
 
 const Globe = ({ onRegionClick }: { onRegionClick: (region: Region) => void }) => {
