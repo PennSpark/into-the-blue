@@ -148,7 +148,8 @@ export default function Camera({ artifact }: CameraProps) {
       />
 
       <div id="caption" className='absolute z-[10] top-24 text-white'><p>{text}</p></div>
-
+      <div id="caption" className='absolute z-[10] top-32 text-white'><p>artifact name: {artifact.name}</p></div>
+      <div id="caption" className='absolute z-[10] top-40 text-white'><p>exhibit name: {artifact.exhibit}</p></div>
       {/* Buttons */}
       <div className="absolute bottom-10 flex flex-col gap-4">
         <button onClick={captureImage} className="bg-white text-black px-4 py-2 rounded-md">
