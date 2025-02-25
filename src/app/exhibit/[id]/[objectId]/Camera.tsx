@@ -137,7 +137,7 @@ export default function Camera({ artifact }: CameraProps) {
     <div className="relative flex flex-col items-center justify-center w-screen h-screen bg-black">
       {/* hidden webcam source */}
       <Webcam ref={webcamRef} 
-      videoConstraints={{ facingMode: { exact: "environment" } }}
+      // videoConstraints={{ facingMode: { exact: "environment" } }}
       className="absolute opacity-0 pointer-events-none" />
 
       {/* visible canvas */}
