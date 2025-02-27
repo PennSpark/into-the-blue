@@ -15,7 +15,10 @@ export default function Camera({ artifact }: CameraProps) {
   const webcamRef = useRef<Webcam>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
+  //need to store svg paths as path2d for clipping and string for svg (i don't like it but we can fix later)
   const [clipPathData, setClipPathData] = useState<Path2D[] | null>(null);
+  const [svgPaths, setSvgPaths] = useState<string[] | null>(null);
+
   const [viewBox, setViewBox] = useState({ width: 100, height: 100 });
   const [svgSource, setSvgSource] = useState<string>(artifact.svgURL);
   const [showStroke, setShowStroke] = useState(false);
@@ -24,32 +27,6 @@ export default function Camera({ artifact }: CameraProps) {
 
   const [text, setText] = useState<string>("line the image to the outline");
 
-  const [pathData, setPathData] = useState<string>("");
-
-  useEffect(() => {
-    const fetchSvgPath = async () => {
-      try {
-        const response = await fetch(artifact.svgURL);
-        if (!response.ok) throw new Error("SVG file not found");
-
-        const text = await response.text();
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(text, "image/svg+xml");
-
-        // Find the first <path> element and extract its 'd' attribute
-        const pathElement = xmlDoc.querySelector("path");
-        if (pathElement) {
-          setPathData(pathElement.getAttribute("d") || "");
-        }
-      } catch (error) {
-        console.error("Error loading SVG:", error);
-      }
-    };
-
-    if (artifact) {
-      fetchSvgPath();
-    }
-  }, [artifact]);
 
   useEffect(() => {
     fetch(svgSource)
@@ -61,6 +38,9 @@ export default function Camera({ artifact }: CameraProps) {
         const svgElement = svgDoc.querySelector("svg");
 
         if (pathElements.length > 0) {
+          const dStrings = Array.from(pathElements).map((path) => path.getAttribute("d") || "");
+          setSvgPaths(dStrings);
+
           const pathsArray = Array.from(pathElements).map((path) => new Path2D(path.getAttribute("d") || ""));
           setClipPathData(pathsArray);
         }
@@ -155,23 +135,27 @@ export default function Camera({ artifact }: CameraProps) {
             console.error("no clippath");
           }
 
+          //reset transformations before drawing image onto clipped canvas so image isn't distorted
           clipCtx.translate(viewBox.width / 2, viewBox.height / 2);
           clipCtx.scale(1/scaleX, 1/scaleY);
           clipCtx.translate(-clipCanvas.width / 2, -clipCanvas.height / 2);
   
+          //draw the image
           clipCtx.drawImage(canvas, 0, -clipCanvas.height / 4, clipCanvas.width, canvasSize.height);
+
           clipCtx.restore();
   
           const clippedImageData = clipCanvas.toDataURL("image/png");
   
+          //put into inddexeddb, return error if the image is empty
           if (clippedImageData.length > 50) {
             setImage(clippedImageData);
             await saveImage(clippedImageData, artifact.id);
           } else {
-            console.error("Captured image is empty.");
+            console.error("empty captured image");
           }
         } else {
-          console.error("clipCtx is null! Offscreen canvas not created properly.");
+          console.error("canvas not initialized properly");
         }
       }
     }
@@ -212,18 +196,23 @@ export default function Camera({ artifact }: CameraProps) {
           width="100" height="100" viewBox="0 0 100 100" fill="none" 
           xmlns="http://www.w3.org/2000/svg"
         >
-                  {pathData ? (
-        <path
-          d={pathData}
-          pathLength={100}
-          stroke="white" strokeWidth="0.8svh" strokeLinejoin="round"
-        />
-      ) : (
-        <text x="10" y="50" fill="white">Loading...</text>
-      )}
-          </svg>
-        </div>
-      )}
+          {svgPaths && svgPaths.length > 0 ? (
+            svgPaths.map((d, index) => (
+              <path
+                key={index}
+                d={d} // Use stored SVG `d` strings
+                pathLength={100}
+                stroke="white"
+                strokeWidth="0.8svh"
+                strokeLinejoin="round"
+              />
+            ))
+          ) : (
+            <text x="10" y="50" fill="white">Loading...</text>
+          )}
+              </svg>
+            </div>
+          )}
 
       <div
           className="absolute inset-0 flex justify-center items-center pointer-events-none"
@@ -233,18 +222,21 @@ export default function Camera({ artifact }: CameraProps) {
           width="100" height="100" viewBox="0 0 100 100" fill="none" 
           xmlns="http://www.w3.org/2000/svg"
         >
-        {pathData ? (
-        <path
-          d={pathData}
-          pathLength={100}
-          stroke="white"
-          strokeDasharray="0.5 1"
-          strokeWidth="0.1svh"
-          strokeLinejoin="round"
-        />
-      ) : (
-        <text x="10" y="50" fill="white">Loading...</text>
-      )}
+          {svgPaths && svgPaths.length > 0 ? (
+            svgPaths.map((d, index) => (
+              <path
+                key={index}
+                d={d}
+                pathLength={100}
+                stroke="white"
+                strokeDasharray="0.5 1"
+                strokeWidth="0.1svh"
+                strokeLinejoin="round"
+              />
+            ))
+          ) : (
+            <text x="10" y="50" fill="white">Loading...</text>
+          )}
       </svg>
       </div>
       
