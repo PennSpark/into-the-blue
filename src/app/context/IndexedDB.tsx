@@ -1,7 +1,19 @@
 const DB_NAME = "ImageDatabase";
 const STORE_NAME = "images";
 
-//open the db
+{/*IndexedDB Structure*/}
+// ImageDatabase
+// - images
+//   - id (TODO: find out if it's search-able)
+//   - image (Blob)
+//   - timestamp (number)
+
+// FoundObjectsArrays
+// - exhibit (string)
+//   - objectId (string)
+//   - found (boolean)
+
+{/* open db, TODO: initialize found objects array */}
 export const openDB = (): Promise<IDBDatabase> => {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, 1);
@@ -31,20 +43,32 @@ export const dataURLtoBlob = (dataURL: string): Blob => {
   return new Blob([arrayBuffer], { type: mimeString });
 };
 
-//save image
-export const saveImage = async (imageData: string) => {
+//save image, if image with same name exists replace it (for simplicity's sake)
+export const saveImage = async (imageData: string, imageName: string) => {
   const imageBlob = dataURLtoBlob(imageData);
   const db = await openDB();
-  
+
   const transaction = db.transaction(STORE_NAME, "readwrite");
   const store = transaction.objectStore(STORE_NAME);
-  store.add({ image: imageBlob, timestamp: Date.now() });
-  
+
+  const existingImageRequest = store.get(imageName);
+
   return new Promise<void>((resolve, reject) => {
-    transaction.oncomplete = () => resolve();
-    transaction.onerror = () => reject("Failed to save image");
+    existingImageRequest.onsuccess = () => {
+      if (existingImageRequest.result) {
+        store.delete(imageName);
+      }
+
+      store.put({ id: imageName, image: imageBlob, timestamp: Date.now() });
+
+      transaction.oncomplete = () => resolve();
+      transaction.onerror = () => reject("Failed to save image");
+    };
+
+    existingImageRequest.onerror = () => reject("Failed to check for existing image");
   });
 };
+
 
 //retrieve last stored image 
 export const loadLastImage = async (): Promise<string | null> => {
@@ -94,3 +118,57 @@ export const clearImages = async () => {
     transaction.onerror = () => reject("Failed to clear images");
   });
 };
+
+{/*modify exhibit array that user found*/}
+export const modifyArray = async (exhibit: string, objectId: string) => {
+  const db = await openDB();
+  const transaction = db.transaction(STORE_NAME, "readwrite");
+  const store = transaction.objectStore(STORE_NAME);
+  const request = store.getAll();
+
+  return new Promise((resolve, reject) => {
+    request.onsuccess = () => {
+      const images = request.result.map((item: { image: Blob }) =>
+        URL.createObjectURL(item.image)
+      );
+      resolve(images);
+    };
+    request.onerror = () => reject("Failed to load images");
+  });
+}
+
+{/*pull array by exhbit*/}
+export const pullArray = async (exhibit: string): Promise<string[]> => {
+  const db = await openDB();
+  const transaction = db.transaction(STORE_NAME, "readonly");
+  const store = transaction.objectStore(STORE_NAME);
+  const request = store.getAll();
+
+  return new Promise((resolve, reject) => {
+    request.onsuccess = () => {
+      const images = request.result.map((item: { image: Blob }) =>
+        URL.createObjectURL(item.image)
+      );
+      resolve(images);
+    };
+    request.onerror = () => reject("Failed to load images");
+  });
+}
+
+{/*load images that user found from a certain exhibit*/}
+export const loadFoundImages = async (exhibit: string): Promise<string[]> => {
+  const db = await openDB();
+  const transaction = db.transaction(STORE_NAME, "readonly");
+  const store = transaction.objectStore(STORE_NAME);
+  const request = store.getAll();
+
+  return new Promise((resolve, reject) => {
+    request.onsuccess = () => {
+      const images = request.result.map((item: { image: Blob }) =>
+        URL.createObjectURL(item.image)
+      );
+      resolve(images);
+    };
+    request.onerror = () => reject("Failed to load images");
+  });
+}

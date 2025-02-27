@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
-import { saveImage, loadAllImages, clearImages } from "../../../context/IndexedDB";
+import { saveImage } from "../../../context/IndexedDB";
 import Webcam from "react-webcam";
 import Image from "next/image";
 import './camera.css';
@@ -21,9 +21,35 @@ export default function Camera({ artifact }: CameraProps) {
   const [showStroke, setShowStroke] = useState(false);
 
   const [image, setImage] = useState<string | null>(null);
-  const [imageGallery, setImageGallery] = useState<string[]>([]);
 
   const [text, setText] = useState<string>("line the image to the outline");
+
+  const [pathData, setPathData] = useState<string>("");
+
+  useEffect(() => {
+    const fetchSvgPath = async () => {
+      try {
+        const response = await fetch(artifact.svgURL);
+        if (!response.ok) throw new Error("SVG file not found");
+
+        const text = await response.text();
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(text, "image/svg+xml");
+
+        // Find the first <path> element and extract its 'd' attribute
+        const pathElement = xmlDoc.querySelector("path");
+        if (pathElement) {
+          setPathData(pathElement.getAttribute("d") || "");
+        }
+      } catch (error) {
+        console.error("Error loading SVG:", error);
+      }
+    };
+
+    if (artifact) {
+      fetchSvgPath();
+    }
+  }, [artifact]);
 
   useEffect(() => {
     fetch(svgSource)
@@ -51,7 +77,7 @@ export default function Camera({ artifact }: CameraProps) {
 
   const updateCanvasSize = useCallback(() => {
     const svhToPixels = window.innerHeight / 100;
-    setCanvasSize({ width: 50 * svhToPixels, height: 100 * svhToPixels });
+    setCanvasSize({ width: 40 * svhToPixels, height: 60 * svhToPixels });
   }, []);
 
   useEffect(() => {
@@ -80,25 +106,8 @@ export default function Camera({ artifact }: CameraProps) {
           const dx = (canvasSize.width - newWidth) / 2;
           const dy = 0;
 
-          const scaleX = canvas.width / viewBox.width;
-          const scaleY = canvas.width / viewBox.width;
-
           ctx.clearRect(0, 0, canvas.width, canvas.height);
-          ctx.save();
-          ctx.scale(scaleX, scaleY);
-          ctx.translate(0, viewBox.height / 2);
-
-          const region = new Path2D();
-          for (const path of clipPathData) {
-            region.addPath(path);
-          }
-
-          ctx.clip(region, "evenodd");
-
-          ctx.scale(1 / scaleX, 1 / scaleY);
-          ctx.translate(0, -viewBox.height / 2);
           ctx.drawImage(video, dx, dy, newWidth, newHeight);
-          ctx.restore();
         }
 
         requestAnimationFrame(processWebcamFeed);
@@ -109,32 +118,68 @@ export default function Camera({ artifact }: CameraProps) {
   }, [canvasSize, clipPathData, viewBox]);
 
   const captureImage = async () => {
-    if (canvasRef.current) {
-      const imageData = canvasRef.current.toDataURL("image/png");
-      setImage(imageData);
-      setShowStroke(false);
-      setTimeout(() => setShowStroke(true), 50000);
-      await saveImage(imageData);
-      loadAllSavedImages();
+    if (webcamRef.current && canvasRef.current) {
+      const video = webcamRef.current.video as HTMLVideoElement;
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext("2d");
+  
+      if (ctx && video.readyState === 4) {
+        //create new canvas for safety + more freedom
+        const clipCanvas = document.createElement("canvas");
+        clipCanvas.width = canvasSize.width;
+        clipCanvas.height = canvasSize.width;
+        const clipCtx = clipCanvas.getContext("2d");
+  
+        if (clipCtx) {
+          //ensure there's nothing on canvas yet
+          clipCtx.clearRect(0, 0, clipCanvas.width, clipCanvas.height);
+          clipCtx.save();
+
+          //scaling factors to put rectangular input into square picture
+          const scaleX = clipCanvas.width / viewBox.width;
+          const scaleY = clipCanvas.width / viewBox.height;
+
+          //initially move the canvas to position clippath correctly (nothing drawn yet)
+          clipCtx.translate(clipCanvas.width / 2, clipCanvas.height / 2);
+          clipCtx.scale(scaleX, scaleY);
+          clipCtx.translate(-viewBox.width / 2, -viewBox.height / 2);
+  
+          //clip, handle multiple images by grouping everything into same region
+          if (clipPathData) {
+            const region = new Path2D();
+            for (const path of clipPathData) {
+              region.addPath(path);
+            }
+            clipCtx.clip(region, "evenodd");
+          } else {
+            console.error("no clippath");
+          }
+
+          clipCtx.translate(viewBox.width / 2, viewBox.height / 2);
+          clipCtx.scale(1/scaleX, 1/scaleY);
+          clipCtx.translate(-clipCanvas.width / 2, -clipCanvas.height / 2);
+  
+          clipCtx.drawImage(canvas, 0, -clipCanvas.height / 4, clipCanvas.width, canvasSize.height);
+          clipCtx.restore();
+  
+          const clippedImageData = clipCanvas.toDataURL("image/png");
+  
+          if (clippedImageData.length > 50) {
+            setImage(clippedImageData);
+            await saveImage(clippedImageData, artifact.id);
+          } else {
+            console.error("Captured image is empty.");
+          }
+        } else {
+          console.error("clipCtx is null! Offscreen canvas not created properly.");
+        }
+      }
     }
   };
-
-  const loadAllSavedImages = async () => {
-    const savedImages = await loadAllImages();
-    setImageGallery(savedImages);
-  };
-
-  const clearAllImages = async () => {
-    await clearImages();
-    setImageGallery([]);
-  };
-
-  useEffect(() => {
-    loadAllSavedImages();
-  }, []);
-
+  
+  
   return (
-    <div className="relative flex flex-col items-center justify-center w-screen h-screen bg-black">
+    <div className="relative flex flex-col items-center justify-center w-screen h-screen bg-white">
       {/* hidden webcam source */}
       <Webcam ref={webcamRef} 
       // videoConstraints={{ facingMode: { exact: "environment" } }}
@@ -144,38 +189,17 @@ export default function Camera({ artifact }: CameraProps) {
       <canvas
         ref={canvasRef}
         style={{ width: `${canvasSize.width}px`, height: `${canvasSize.height}px` }}
-        className="absolute"
+        className="absolute rounded-lg shadow-lg"
       />
 
-      <div id="caption" className='absolute z-[10] top-24 text-white'><p>{text}</p></div>
-      <div id="caption" className='absolute z-[10] top-32 text-white'><p>artifact name: {artifact.name}</p></div>
-      <div id="caption" className='absolute z-[10] top-40 text-white'><p>exhibit name: {artifact.exhibit}</p></div>
+      <div id="caption" className='absolute z-[10] top-10'><p>{text}</p></div>
+      <div id="caption" className='absolute z-[10] top-16'><p>artifact name: {artifact.name}</p></div>
+      <div id="caption" className='absolute z-[10] top-24'><p>exhibit name: {artifact.exhibit}</p></div>
       {/* Buttons */}
       <div className="absolute bottom-10 flex flex-col gap-4">
         <button onClick={captureImage} className="bg-white text-black px-4 py-2 rounded-md">
           Take Picture
         </button>
-
-        <button onClick={clearAllImages} className="bg-red-500 text-white px-4 py-2 rounded-md">
-          Clear All Images
-        </button>
-      </div>
-
-      {/* Gallery Panel */}
-      <div className="absolute top-10 right-10 w-60 h-80 bg-white/20 p-4 rounded-lg overflow-auto">
-        <h2 className="text-white text-center mb-2">Gallery</h2>
-        <div className="grid grid-cols-2 gap-2">
-          {imageGallery.map((img, index) => (
-            <Image
-              key={index}
-              src={img}
-              width={100} height={100}
-              alt={`Captured ${index}`}
-              className="w-full h-20 object-cover cursor-pointer rounded-md hover:opacity-80"
-              onClick={() => setImage(img)}
-            />
-          ))}
-        </div>
       </div>
 
       {image && (
@@ -184,15 +208,20 @@ export default function Camera({ artifact }: CameraProps) {
         >
         <svg
         key={Number(showStroke)}
-          className="w-[50svh] h-auto rounded-md stroke-animation"
+          className="w-[40svh] h-auto rounded-md stroke-animation"
           width="100" height="100" viewBox="0 0 100 100" fill="none" 
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path
-            pathLength={100}
-            stroke="white" strokeWidth="0.8svh" strokeLinejoin="round"
-            d="M30.0728 49.345C30.9055 49.7783 31.7937 50.9235 28.685 52.0377C24.7991 53.4304 22.8561 74.8792 24.7066 74.5078C26.557 74.1364 29.7027 73.3007 31.0906 75.2506C32.2008 76.8105 36.5494 82.4002 38.5848 85L61.3452 83.6072C64.1209 81.9668 69.6907 77.999 69.7647 75.2506C69.8387 72.5022 69.7955 69.8342 69.7647 68.8438C70.9983 70.0199 73.8172 71.6665 75.2235 68.8438C76.6298 66.0211 75.8095 62.8394 75.2235 61.6014C75.3777 56.5564 75.094 46.4294 72.7254 46.2809C70.3568 46.1323 69.7647 43.7429 69.7647 42.5668C70.5666 42.1025 72.1148 40.9883 71.8927 40.2455C71.6706 39.5027 69.518 38.8837 68.4694 38.667L67.3591 34.303L69.7647 31.2389C68.1918 30.4961 65.0276 28.7876 64.9536 27.8962C64.8795 27.0049 64.1825 23.9965 63.8433 22.6037L59.5873 25.1107L56.7191 19.7253L54.036 22.6037L52.3706 23.2537C51.8463 19.6944 50.2611 12.8914 48.1146 14.1542C45.9681 15.417 45.4931 14.6804 45.524 14.1542C46.6034 16.816 48.2996 22.3623 46.4492 23.2537C44.5988 24.145 42.5941 24.8631 41.8231 25.1107C41.8539 23.7489 41.5825 21.0252 40.2502 21.0252C38.5848 21.0252 38.4923 24.4607 37.012 25.1107C35.5316 25.7607 37.1045 27.3391 32.4784 26.2249C27.8523 25.1107 31.4607 25.1107 30.0728 25.1107C28.9626 25.1107 29.6102 29.1962 30.0728 31.2389C29.9186 32.0746 28.87 34.1544 25.9093 35.7886C22.9486 37.4228 26.5262 38.3885 28.685 38.667V41.9168L24.7066 42.5668L28.685 47.0237C28.3458 47.7974 28.1484 49.345 30.0728 49.345Z"/>
-        </svg>
+                  {pathData ? (
+        <path
+          d={pathData}
+          pathLength={100}
+          stroke="white" strokeWidth="0.8svh" strokeLinejoin="round"
+        />
+      ) : (
+        <text x="10" y="50" fill="white">Loading...</text>
+      )}
+          </svg>
         </div>
       )}
 
@@ -200,24 +229,32 @@ export default function Camera({ artifact }: CameraProps) {
           className="absolute inset-0 flex justify-center items-center pointer-events-none"
         >
         <svg
-          className="w-[50svh] h-auto rounded-md z-[10]"
+          className="w-[40svh] h-auto rounded-md z-[10]"
           width="100" height="100" viewBox="0 0 100 100" fill="none" 
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path
-            pathLength={100}
-            stroke="white" strokeDasharray={1} strokeWidth="0.1svh" strokeLinejoin="round"
-            d="M30.0728 49.345C30.9055 49.7783 31.7937 50.9235 28.685 52.0377C24.7991 53.4304 22.8561 74.8792 24.7066 74.5078C26.557 74.1364 29.7027 73.3007 31.0906 75.2506C32.2008 76.8105 36.5494 82.4002 38.5848 85L61.3452 83.6072C64.1209 81.9668 69.6907 77.999 69.7647 75.2506C69.8387 72.5022 69.7955 69.8342 69.7647 68.8438C70.9983 70.0199 73.8172 71.6665 75.2235 68.8438C76.6298 66.0211 75.8095 62.8394 75.2235 61.6014C75.3777 56.5564 75.094 46.4294 72.7254 46.2809C70.3568 46.1323 69.7647 43.7429 69.7647 42.5668C70.5666 42.1025 72.1148 40.9883 71.8927 40.2455C71.6706 39.5027 69.518 38.8837 68.4694 38.667L67.3591 34.303L69.7647 31.2389C68.1918 30.4961 65.0276 28.7876 64.9536 27.8962C64.8795 27.0049 64.1825 23.9965 63.8433 22.6037L59.5873 25.1107L56.7191 19.7253L54.036 22.6037L52.3706 23.2537C51.8463 19.6944 50.2611 12.8914 48.1146 14.1542C45.9681 15.417 45.4931 14.6804 45.524 14.1542C46.6034 16.816 48.2996 22.3623 46.4492 23.2537C44.5988 24.145 42.5941 24.8631 41.8231 25.1107C41.8539 23.7489 41.5825 21.0252 40.2502 21.0252C38.5848 21.0252 38.4923 24.4607 37.012 25.1107C35.5316 25.7607 37.1045 27.3391 32.4784 26.2249C27.8523 25.1107 31.4607 25.1107 30.0728 25.1107C28.9626 25.1107 29.6102 29.1962 30.0728 31.2389C29.9186 32.0746 28.87 34.1544 25.9093 35.7886C22.9486 37.4228 26.5262 38.3885 28.685 38.667V41.9168L24.7066 42.5668L28.685 47.0237C28.3458 47.7974 28.1484 49.345 30.0728 49.345Z"/>
-        </svg>
+        {pathData ? (
+        <path
+          d={pathData}
+          pathLength={100}
+          stroke="white"
+          strokeDasharray="0.5 1"
+          strokeWidth="0.1svh"
+          strokeLinejoin="round"
+        />
+      ) : (
+        <text x="10" y="50" fill="white">Loading...</text>
+      )}
+      </svg>
       </div>
       
 
       {image && (
         <div
-          className="absolute inset-0 flex justify-center items-center"
+          className="absolute inset-0 flex justify-center items-center z-[10]"
           onClick={() => setImage(null)}
         >
-          <Image src={image} alt="Captured" className="w-[50svh] h-auto" width={500} height={500} />
+          <Image src={image} alt="Captured" className="w-[40svh] h-auto" width={500} height={500} />
         </div>
       )}
     </div>

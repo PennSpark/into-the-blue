@@ -5,4 +5,11 @@
     "exhibit": "Rome ???",
     "imageURL": "/images/mask.png",
     "svgURL": "/svg-outlines/mask.svg"
+},{
+    "id": "rome-2",
+    "name": "mask",
+    "description": "A mask that covers the face",
+    "exhibit": "Rome ???",
+    "imageURL": "/images/mask.png",
+    "svgURL": "/svg-outlines/two-paths.svg"
 }]

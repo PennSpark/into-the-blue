@@ -1,3 +1,11 @@
+export type Exhibit = {
+    name: string;
+    items: Artifact[];
+    //description/other info relevant to ui
+    totalObjects: number;
+    foundObjects: number;
+};
+  
 export type Artifact = {
     id: string;
     name: string;
@@ -5,14 +13,6 @@ export type Artifact = {
     imageURL: string;
     svgURL: string;
     exhibit: string;
+    //other relevant info/fun facts fro 
+    userFound: boolean;
 }
-
-export type Exhibit = {
-    id: string;
-};
-  
-export type ExhibitData = {
-    name: string;
-    items: { id: string; title: string }[];
-};
-  
