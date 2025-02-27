@@ -43,31 +43,49 @@ export const dataURLtoBlob = (dataURL: string): Blob => {
   return new Blob([arrayBuffer], { type: mimeString });
 };
 
-//save image, if image with same name exists replace it (for simplicity's sake)
-export const saveImage = async (imageData: string, imageName: string) => {
-  const imageBlob = dataURLtoBlob(imageData);
-  const db = await openDB();
-
-  const transaction = db.transaction(STORE_NAME, "readwrite");
-  const store = transaction.objectStore(STORE_NAME);
-
-  const existingImageRequest = store.get(imageName);
-
-  return new Promise<void>((resolve, reject) => {
-    existingImageRequest.onsuccess = () => {
-      if (existingImageRequest.result) {
-        store.delete(imageName);
-      }
-
-      store.put({ id: imageName, image: imageBlob, timestamp: Date.now() });
-
-      transaction.oncomplete = () => resolve();
-      transaction.onerror = () => reject("Failed to save image");
-    };
-
-    existingImageRequest.onerror = () => reject("Failed to check for existing image");
+const blobToBase64 = (blob: Blob): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
   });
 };
+
+//save image, if image with same name exists replace it (for simplicity's sake)
+export const saveImage = async (imageData: string, imageName: string): Promise<void> => {
+  try {
+    const imageBlob = dataURLtoBlob(imageData);
+    const imageBase64 = await blobToBase64(imageBlob);
+    const db = await openDB();
+
+    const transaction = db.transaction(STORE_NAME, "readwrite");
+    const store = transaction.objectStore(STORE_NAME);
+
+    return new Promise<void>((resolve, reject) => {
+      transaction.oncomplete = () => resolve();
+      transaction.onerror = () => reject("Failed to save image");
+
+      const existingImageRequest = store.get(imageName);
+      
+      existingImageRequest.onsuccess = () => {
+        if (existingImageRequest.result) {
+          store.delete(imageName).onsuccess = () => {
+            store.put({ id: imageName, image: imageBase64, timestamp: Date.now() });
+          };
+        } else {
+          store.put({ id: imageName, image: imageBase64, timestamp: Date.now() });
+        }
+      };
+
+      existingImageRequest.onerror = () => reject("Failed to check for existing image");
+    });
+  } catch (error) {
+    console.error("Error in saveImage:", error);
+    throw new Error("Unexpected error while saving image");
+  }
+};
+
 
 
 //retrieve last stored image 
@@ -79,14 +97,23 @@ export const loadLastImage = async (): Promise<string | null> => {
 
   return new Promise((resolve, reject) => {
     request.onsuccess = () => {
-      const images = request.result.map((item: { image: Blob }) =>
-        URL.createObjectURL(item.image)
-      );
-      resolve(images.length ? images[images.length - 1] : null);
+      if (!request.result.length) {
+        resolve(null);
+        return;
+      }
+      const lastImage = request.result[request.result.length - 1]?.image;
+
+      if (!lastImage || typeof lastImage !== "string") {
+        reject("Invalid image format in IndexedDB");
+        return;
+      }
+      resolve(lastImage);
     };
+
     request.onerror = () => reject("Failed to load image");
   });
 };
+
 
 //retrieve all images
 export const loadAllImages = async (): Promise<string[]> => {
