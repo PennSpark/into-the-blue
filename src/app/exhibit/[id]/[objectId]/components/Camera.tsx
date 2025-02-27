@@ -1,17 +1,18 @@
 "use client";
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
-import { saveImage } from "../../../context/IndexedDB";
+import { saveImage } from "../../../../context/IndexedDB";
 import Webcam from "react-webcam";
 import Image from "next/image";
 import './camera.css';
-import { Artifact } from "../../../types";
+import { Artifact } from "../../../../types";
 
 export interface CameraProps {
   artifact: Artifact;
+  onImageCaptured: () => void;
 }
 
-export default function Camera({ artifact }: CameraProps) {
+export default function Camera({ artifact, onImageCaptured }: CameraProps) {
   const webcamRef = useRef<Webcam>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
@@ -19,9 +20,8 @@ export default function Camera({ artifact }: CameraProps) {
   const [clipPathData, setClipPathData] = useState<Path2D[] | null>(null);
   const [svgPaths, setSvgPaths] = useState<string[] | null>(null);
 
-  const [viewBox, setViewBox] = useState({ width: 100, height: 100 });
-  const [svgSource, setSvgSource] = useState<string>(artifact.svgURL);
-  const [showStroke, setShowStroke] = useState(false);
+  //all svg outlines must have 100x100 coordinate system for simplicity and design freedom in scaling
+  const viewBox = { width: 100, height: 100 };
 
   const [image, setImage] = useState<string | null>(null);
 
@@ -29,13 +29,12 @@ export default function Camera({ artifact }: CameraProps) {
 
 
   useEffect(() => {
-    fetch(svgSource)
+    fetch(artifact.svgURL)
       .then((res) => res.text())
       .then((data) => {
         const parser = new DOMParser();
         const svgDoc = parser.parseFromString(data, "image/svg+xml");
         const pathElements = svgDoc.querySelectorAll("path");
-        const svgElement = svgDoc.querySelector("svg");
 
         if (pathElements.length > 0) {
           const dStrings = Array.from(pathElements).map((path) => path.getAttribute("d") || "");
@@ -44,16 +43,9 @@ export default function Camera({ artifact }: CameraProps) {
           const pathsArray = Array.from(pathElements).map((path) => new Path2D(path.getAttribute("d") || ""));
           setClipPathData(pathsArray);
         }
-
-        if (svgElement) {
-          const viewBoxValues = svgElement.getAttribute("viewBox")?.split(" ").map(Number);
-          if (viewBoxValues && viewBoxValues.length === 4) {
-            setViewBox({ width: viewBoxValues[2], height: viewBoxValues[3] });
-          }
-        }
       })
       .catch(console.error);
-  }, []);
+  }, [artifact.svgURL]);
 
   const updateCanvasSize = useCallback(() => {
     const svhToPixels = window.innerHeight / 100;
@@ -95,7 +87,7 @@ export default function Camera({ artifact }: CameraProps) {
     };
 
     requestAnimationFrame(processWebcamFeed);
-  }, [canvasSize, clipPathData, viewBox]);
+  }, [canvasSize, clipPathData]);
 
   const captureImage = async () => {
     if (webcamRef.current && canvasRef.current) {
@@ -144,79 +136,46 @@ export default function Camera({ artifact }: CameraProps) {
           clipCtx.drawImage(canvas, 0, -clipCanvas.height / 4, clipCanvas.width, canvasSize.height);
 
           clipCtx.restore();
-  
-          const clippedImageData = clipCanvas.toDataURL("image/png");
-  
-          //put into inddexeddb, return error if the image is empty
-          if (clippedImageData.length > 50) {
-            setImage(clippedImageData);
-            await saveImage(clippedImageData, artifact.id);
-          } else {
-            console.error("empty captured image");
-          }
+          setImage(clipCanvas.toDataURL("image/png"));
+          setText("How do you like it?");
         } else {
           console.error("canvas not initialized properly");
         }
       }
     }
   };
+
+  const saveClippedImage = async () => {
+    if (image && image.length > 50) {
+      await saveImage(image, artifact.id);
+      console.log("image saved");
+      onImageCaptured();
+    } else {
+      console.error("empty captured image");
+    }
+  };
+
+  const rejectClippedImage = async () => {
+    setImage(null);
+    setText("line the image to the outline");
+  };
   
   
   return (
     <div className="relative flex flex-col items-center justify-center w-screen h-screen bg-white">
-      {/* hidden webcam source */}
+      
+      {/* always visible: webcam and top text, dotted outline, hint button */}
       <Webcam ref={webcamRef} 
       // videoConstraints={{ facingMode: { exact: "environment" } }}
       className="absolute opacity-0 pointer-events-none" />
 
-      {/* visible canvas */}
       <canvas
         ref={canvasRef}
         style={{ width: `${canvasSize.width}px`, height: `${canvasSize.height}px` }}
         className="absolute rounded-lg shadow-lg"
       />
 
-      <div id="caption" className='absolute z-[10] top-10'><p>{text}</p></div>
-      <div id="caption" className='absolute z-[10] top-16'><p>artifact name: {artifact.name}</p></div>
-      <div id="caption" className='absolute z-[10] top-24'><p>exhibit name: {artifact.exhibit}</p></div>
-      {/* Buttons */}
-      <div className="absolute bottom-10 flex flex-col gap-4">
-        <button onClick={captureImage} className="bg-white text-black px-4 py-2 rounded-md">
-          Take Picture
-        </button>
-      </div>
-
-      {image && (
-      <div
-          className="absolute inset-0 flex justify-center items-center pointer-events-none"
-        >
-        <svg
-        key={Number(showStroke)}
-          className="w-[40svh] h-auto rounded-md stroke-animation"
-          width="100" height="100" viewBox="0 0 100 100" fill="none" 
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          {svgPaths && svgPaths.length > 0 ? (
-            svgPaths.map((d, index) => (
-              <path
-                key={index}
-                d={d} // Use stored SVG `d` strings
-                pathLength={100}
-                stroke="white"
-                strokeWidth="0.8svh"
-                strokeLinejoin="round"
-              />
-            ))
-          ) : (
-            <text x="10" y="50" fill="white">Loading...</text>
-          )}
-              </svg>
-            </div>
-          )}
-
-      <div
-          className="absolute inset-0 flex justify-center items-center pointer-events-none"
-        >
+      <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
         <svg
           className="w-[40svh] h-auto rounded-md z-[10]"
           width="100" height="100" viewBox="0 0 100 100" fill="none" 
@@ -233,22 +192,65 @@ export default function Camera({ artifact }: CameraProps) {
                 strokeWidth="0.1svh"
                 strokeLinejoin="round"
               />
-            ))
-          ) : (
-            <text x="10" y="50" fill="white">Loading...</text>
-          )}
-      </svg>
+            ))) : ( <text x="10" y="50" fill="white">Loading...</text> )}
+        </svg>
       </div>
-      
 
+      <div id="caption" className='absolute z-[10] top-10'><p>{text}</p></div>
+      <div id="caption" className='absolute z-[10] top-16'><p>{artifact.name}: {artifact.exhibit}</p></div>
+
+      {/* visible before taking picture: button to take picture */}
+      {!image && (
+      <div className="absolute bottom-10 flex flex-col gap-4">
+        <button onClick={captureImage} className="bg-white text-black px-4 py-2 rounded-md">
+          Take Picture
+        </button>
+      </div>
+      )}
+
+      {/* visible after taking picture: button to take picture */}
       {image && (
+      <>
+      <button onClick={rejectClippedImage} className="absolute bottom-10 bg-white text-black px-4 py-2 rounded-md z-[10]">
+        Retake Picture
+      </button>
+      <button onClick={saveClippedImage} className="absolute bottom-24 bg-white text-black px-4 py-2 rounded-md z-[10]">
+        Submit Picture
+      </button>
+      
+      <div style={{ width: `${canvasSize.width}px`, height: `${canvasSize.height}px` }}
+        className="bg-blue-500 opacity-50 absolute rounded-lg shadow-lg z-[5]"
+      />
+
+      <div className="absolute inset-0 flex justify-center items-center pointer-events-none z-[6]">
+        <svg
+          className="w-[40svh] h-auto rounded-md stroke-animation"
+          width="100" height="100" viewBox="0 0 100 100" fill="none" 
+          xmlns="http://www.w3.org/2000/svg"
+>
+          {svgPaths && svgPaths.length > 0 ? (
+            svgPaths.map((d, index) => (
+              <path
+                key={index}
+                d={d}
+                pathLength={100}
+                stroke="white"
+                strokeWidth="0.8svh"
+                strokeLinejoin="round"
+              />
+            ))
+          ) : ( <text x="10" y="50" fill="white">Loading...</text> )}
+          </svg>
+        </div>
+        
         <div
-          className="absolute inset-0 flex justify-center items-center z-[10]"
-          onClick={() => setImage(null)}
+          className="absolute inset-0 flex justify-center items-center z-[10] pointer-events-none"
         >
           <Image src={image} alt="Captured" className="w-[40svh] h-auto" width={500} height={500} />
         </div>
+        </>
       )}
+      
     </div>
   );
 }
