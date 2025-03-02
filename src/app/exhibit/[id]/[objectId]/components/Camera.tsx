@@ -20,6 +20,15 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
   const [clipPathData, setClipPathData] = useState<Path2D[] | null>(null);
   const [svgPaths, setSvgPaths] = useState<string[] | null>(null);
 
+  const [isWebcamSupported, setIsWebcamSupported] = useState(false);
+
+  useEffect(() => {
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(() => setIsWebcamSupported(true))
+      .catch(() => setIsWebcamSupported(false));
+    console.log("webcam supported:", isWebcamSupported);
+  });
+
   //all svg outlines must have 100x100 coordinate system for simplicity and design freedom in scaling
   const viewBox = { width: 100, height: 100 };
 
@@ -148,7 +157,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
   const saveClippedImage = async () => {
     if (image && image.length > 50) {
       await saveImage(image, artifact.id);
-      console.log("image saved");
+      console.log("image saved " + artifact.id);
       onImageCaptured();
     } else {
       console.error("empty captured image");

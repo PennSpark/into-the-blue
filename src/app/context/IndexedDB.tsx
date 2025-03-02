@@ -88,8 +88,8 @@ export const saveImage = async (imageData: string, imageName: string): Promise<v
 
 
 
-//retrieve last stored image 
-export const loadLastImage = async (): Promise<string | null> => {
+//retrieve last stored image and id (for debugging purposes)
+export const loadLastImage = async (): Promise<{ image: string; name: string } | null> => {
   const db = await openDB();
   const transaction = db.transaction(STORE_NAME, "readonly");
   const store = transaction.objectStore(STORE_NAME);
@@ -101,19 +101,42 @@ export const loadLastImage = async (): Promise<string | null> => {
         resolve(null);
         return;
       }
-      const lastImage = request.result[request.result.length - 1]?.image;
+
+      const sortedEntries = request.result.sort((a, b) => b.timestamp - a.timestamp);
+      const lastEntry = sortedEntries[0];
+      const lastImage = lastEntry?.image;
+      const imageName = lastEntry?.id;
 
       if (!lastImage || typeof lastImage !== "string") {
         reject("Invalid image format in IndexedDB");
         return;
       }
-      resolve(lastImage);
+
+      resolve({ image: lastImage, name: imageName });
     };
 
     request.onerror = () => reject("Failed to load image");
   });
 };
 
+export const loadImageById = async (id: string): Promise<string | null> => {
+  const db = await openDB();
+  const transaction = db.transaction(STORE_NAME, "readonly");
+  const store = transaction.objectStore(STORE_NAME);
+  const request = store.get(id);
+
+  return new Promise((resolve, reject) => {
+    request.onsuccess = () => {
+      if (request.result) {
+        resolve(request.result.image);
+      } else {
+        resolve(null);
+      }
+    };
+
+    request.onerror = () => reject("Failed to load image");
+  });
+};
 
 //retrieve all images
 export const loadAllImages = async (): Promise<string[]> => {

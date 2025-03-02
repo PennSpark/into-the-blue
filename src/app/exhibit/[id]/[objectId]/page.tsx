@@ -5,7 +5,7 @@ import { Artifact } from '../../../types';
 
 import Camera from "./components/Camera";
 import CapturedInterface from './components/CapturedInterface';
-import { loadLastImage } from "../../../context/IndexedDB";
+import { loadImageById } from "../../../context/IndexedDB";
 
 export default function CameraPage() {
     const [data, setData] = useState<Artifact | null>(null);
@@ -32,10 +32,13 @@ export default function CameraPage() {
         fetchData();
     }, [objectId]);
 
-    // When an image is saved, switch to CapturedInterface
     const handleImageCaptured = async () => {
-        const lastImage = await loadLastImage(); // Fetch the saved image
-        setCapturedImage(lastImage); // Update state to trigger UI change
+        const image = await loadImageById(data?.id || "");
+        if (image) {
+            setCapturedImage(image);
+        } else {
+            console.error("failed to load last image");
+        }
     };
 
     return (
