@@ -1,0 +1,8 @@
+[
+    { "name": "rome", "position": [0.8660254, 0.4330127, -0.25], "color": "#ff4444", "path": "/exhibit/rome" },
+    { "name": "egypt", "position": [0.4330127, -0.25, 0.8660254], "color": "#ffbb44", "path": "/exhibit/egypt" },
+    { "name": "asia", "position": [-0.8660254, 0.4330127, 0.25], "color": "#44ff44", "path": "/exhibit/asia" },
+    { "name": "middle east", "position": [-0.4330127, -0.25, -0.8660254], "color": "#4488FF", "path": "/exhibit/middle-east" },
+    { "name": "greece", "position": [0.25, -0.8660254, -0.4330127], "color": "#FF44FF", "path": "/exhibit/greece" },
+    { "name": "assyria", "position": [-0.25, 0.8660254, 0.4330127], "color": "#44FFFF", "path": "/exhibit/assyria" }
+  ]

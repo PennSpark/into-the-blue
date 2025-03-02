@@ -3,6 +3,33 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 
+import regionsData from '../app/regions.json';
+
+const RegionList: React.FC = () => {
+  const router = useRouter();
+
+  const handleRegionClick = (path: string) => {
+    router.push(path);
+  };
+
+  return (
+    <div className="w-full max-w-md flex flex-col gap-4">
+      {regionsData.map((region, index) => (
+        <div 
+          key={index}
+          className="bg-stone-100 rounded-lg p-4 flex items-center justify-between cursor-pointer"
+          onClick={() => handleRegionClick(region.path)}
+        >
+          <div className="text-stone-800 font-medium uppercase">{region.name}</div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default RegionList;
+
+/*
 interface Region {
   name: string;
   displayName: string;
@@ -34,4 +61,4 @@ const RegionList: React.FC<RegionListProps> = ({ regions }) => {
   );
 };
 
-export default RegionList;
+export default RegionList;*/

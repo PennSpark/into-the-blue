@@ -16,3 +16,10 @@ export type Artifact = {
     //other relevant info/fun facts fro 
     userFound: boolean;
 }
+
+export type Region = {
+    name: string;
+    position: [number, number, number];
+    color: string;
+    path: string;
+  };

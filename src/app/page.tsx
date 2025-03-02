@@ -5,15 +5,6 @@ import GlobeWrapper from '@/components/GlobeWrapper';
 import TabNavigation from '@/components/TabNavigation';
 import RegionList from '@/components/RegionList';
 
-// Define all regions shown in the list view
-const regions = [
-  { name: 'rome', displayName: 'ROME', path: '/exhibit/rome' },
-  { name: 'asia', displayName: 'ASIA', path: '/exhibit/asia' },
-  { name: 'middleEast', displayName: 'MIDDLE EAST', path: '/exhibit/middle-east' },
-  { name: 'greece', displayName: 'GREECE', path: '/exhibit/greece' },
-  { name: 'assyria', displayName: 'ASSYRIA', path: '/exhibit/assyria' },
-];
-
 export default function Home() {
   // State for active tab
   const [activeTab, setActiveTab] = useState<'list' | 'map'>('list');
@@ -28,7 +19,7 @@ export default function Home() {
         <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
         
         {activeTab === 'list' ? (
-          <RegionList regions={regions} />
+         <RegionList />
         ) : (
           <div className="w-full max-w-4xl">
             <GlobeWrapper />

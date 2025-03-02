@@ -1,23 +1,17 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Sphere, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { useRouter } from 'next/navigation';
+import { Region } from '../app/types';
+import regionsData from '../app/regions.json';
 
-interface Region {
-  name: string;
-  position: [number, number, number];
-  color: string;
-  path: string;
-}
-
-const regions: Region[] = [
-  { name: 'rome', position: [0.8660254, 0.4330127, -0.25], color: '#ff4444', path: '/exhibit/rome' },
-  { name: 'egypt', position: [0.4330127, -0.25, 0.8660254], color: '#ffbb44', path: '/exhibit/egypt' },
-  { name: 'asia', position: [-0.8660254, 0.4330127, 0.25], color: '#44ff44', path: '/exhibit/asia' }
-];
+const regions: Region[] = regionsData.map(region => ({
+  ...region,
+  position: [region.position[0], region.position[1], region.position[2]] as [number, number, number],
+}));
 
 const Globe = ({ onRegionClick }: { onRegionClick: (region: Region) => void }) => {
   const [hovered, setHovered] = useState<string | null>(null);
