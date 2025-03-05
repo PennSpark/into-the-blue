@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import html2canvas from "html2canvas";
+
 import Sticker from "./Sticker";
 
 import StickerModal from "./StickerModal";
@@ -66,6 +68,17 @@ const StickerBoard: React.FC = () => {
     );
   };
 
+  const captureStickerboard = async () => {
+    if (boardRef.current) {
+      const canvas = await html2canvas(boardRef.current, { backgroundColor: null });
+      const link = document.createElement("a");
+      link.href = canvas.toDataURL("image/png");
+      link.download = "stickerboard.png";
+      link.click();
+      console.log('captured');
+    }
+  };
+
   return (
     <>
     <div
@@ -126,6 +139,7 @@ const StickerBoard: React.FC = () => {
     </button>
 
   </div>
+  <button onClick={captureStickerboard}>capture image</button>
 </div>
 
     </>
