@@ -16,10 +16,10 @@ export default function GridModal({ setMenuSelection, setGridBg }: GridModalProp
         className="w-[7svh] h-[3svh] flex justify-center items-center bg-black rounded-full text-white"
         onClick={() => setMenuSelection(null)}
       >
-        Close
+        close
       </button>
 
-      <div className="w-full h-full overflow-scroll no-scrollbar flex flex-wrap gap-[1.5svh]">
+      <div className="w-full h-[65svh] overflow-scroll no-scrollbar flex flex-wrap gap-[1.5svh]">
         {bgColors.map((color, index) => (
           <div
             key={index}

@@ -34,6 +34,16 @@ const StickerBoard: React.FC = () => {
   const [menuSelection, setMenuSelection] = useState<string | null>(null);
   const [gridBg, setGridBg] = useState<string>("#ffffff");
 
+  const addSticker = (stickerId: string) => {
+    const newSticker: StickerData = {
+      id: stickers.length + 1,
+      src: `/images/${stickerId}`,
+      x: Math.random() * 90 + 5,
+      y: Math.random() * 90 + 5,
+    };
+    setStickers((prev) => [...prev, newSticker]);
+  };
+
   useEffect(() => {
     const randomStickers: StickerData[] = imageList.map((image, index) => ({
       id: index + 1,
@@ -78,7 +88,7 @@ const StickerBoard: React.FC = () => {
     <div className="border-black p-[2svh] min-h-[10svh] flex justify-center items-center">
 
     {/* Modals for each menu item */}
-    {menuSelection === 'sticker' && (<StickerModal/>)}
+    {menuSelection === 'sticker' && (<StickerModal setMenuSelection={setMenuSelection} addSticker={addSticker}/>)}
 
     {menuSelection === 'label' && (<LabelModal/>)}
 
