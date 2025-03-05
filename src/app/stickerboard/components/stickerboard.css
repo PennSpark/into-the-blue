@@ -1,0 +1,17 @@
+.grid-bg {
+    background-size: 81svh auto;
+    background-position: center;
+    background-color: white;
+    background-image: url('/stickerboard/grid.png');
+    background-repeat: repeat;
+}
+
+.no-scrollbar {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE10+ */
+  }
+  
+  .no-scrollbar::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
+  }
+  
