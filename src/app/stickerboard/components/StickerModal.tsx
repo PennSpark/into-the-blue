@@ -1,4 +1,4 @@
-interface StickerModalProps {
+  interface StickerModalProps {
     setMenuSelection: (menu: string | null) => void;
     addSticker: (stickerId: string) => void;
   }

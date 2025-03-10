@@ -70,17 +70,27 @@ const StickerBoard: React.FC = () => {
 
   const captureStickerboard = async () => {
     if (boardRef.current) {
-      const canvas = await html2canvas(boardRef.current, { backgroundColor: null });
+      console.log("Capturing high-resolution screenshot...");
+  
+      const scaleFactor = 3; //increase resolution by 3x
+      const canvas = await html2canvas(boardRef.current, {
+        backgroundColor: null,
+        scale: scaleFactor,
+        useCORS: true,
+      });
+  
       const link = document.createElement("a");
       link.href = canvas.toDataURL("image/png");
       link.download = "stickerboard.png";
       link.click();
-      console.log('captured');
+  
+      console.log("Screenshot captured successfully!");
     }
   };
+  
 
   return (
-    <>
+    <div className='h-[100svh] w-[100svw] pt-[5svh] flex flex-col justify-center items-center bg-gray-300 overflow-hidden'>
     <div
       ref={boardRef}
       className='w-[45svh] h-[80svh] grid-bg rounded-[4svh] shadow-lg relative overflow-hidden'
@@ -142,7 +152,7 @@ const StickerBoard: React.FC = () => {
   <button onClick={captureStickerboard}>capture image</button>
 </div>
 
-    </>
+  </div>
   );
 };
 
