@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
 import html2canvas from "html2canvas";
 
@@ -12,27 +12,26 @@ import GridModal from "./GridModal";
 
 import './stickerboard.css'
 
-const imageList: string[] = [
-  "ani.png",
-  "april.png",
-  "estelle.png",
-  "joyce.png",
-  "mei.png",
-  "nick.png",
-  "ruth.png",
-  "xue.png",
-];
 
 interface StickerData {
   id: number;
-  src: string;
   x: number;
   y: number;
+  src: string;
+  width: number;
+  rotation: number;
+  moveSticker: (id: number, newX: number, newY: number) => void;
+  resizeSticker: (id: number, newWidth: number) => void;
+  rotateSticker: (id: number, newRotation: number) => void;
+  deleteSticker: (id: number) => void;
+  active: boolean;
+  setActiveSticker: (id: number) => void;
 }
 
 const StickerBoard: React.FC = () => {
   const boardRef = useRef<HTMLDivElement>(null);
   const [stickers, setStickers] = useState<StickerData[]>([]);
+  const [activeStickerId, setActiveStickerId] = useState<number | null>(null);
   const [menuSelection, setMenuSelection] = useState<string | null>(null);
   const [gridBg, setGridBg] = useState<string>("#ffffff");
 
@@ -42,19 +41,17 @@ const StickerBoard: React.FC = () => {
       src: `/images/${stickerId}`,
       x: Math.random() * 90 + 5,
       y: Math.random() * 90 + 5,
+      width: 10,
+      rotation: 0,
+      moveSticker: moveSticker,
+      resizeSticker: resizeSticker,
+      rotateSticker: rotateSticker,
+      deleteSticker: deleteSticker,
+      active: true,
+      setActiveSticker: setActiveStickerId,
     };
     setStickers((prev) => [...prev, newSticker]);
   };
-
-  useEffect(() => {
-    const randomStickers: StickerData[] = imageList.map((image, index) => ({
-      id: index + 1,
-      src: `/images/${image}`,
-      x: Math.random() * 90 + 5,
-      y: Math.random() * 90 + 5,
-    }));
-    setStickers(randomStickers);
-  }, []);
 
   const setMenu = (menu: string) => {
     setMenuSelection(menu);
@@ -68,23 +65,47 @@ const StickerBoard: React.FC = () => {
     );
   };
 
+  const resizeSticker = (id: number, newWidth: number) => {
+    setStickers((prev) =>
+      prev.map((sticker) =>
+        sticker.id === id ? { ...sticker, width: newWidth } : sticker
+      )
+    );
+  };
+
+  const rotateSticker = (id: number, newRotation: number) => {
+    setStickers((prev) =>
+      prev.map((sticker) =>
+        sticker.id === id ? { ...sticker, rotation: newRotation } : sticker
+      )
+    );
+  };
+
+  const deleteSticker = (id: number) => {
+    setStickers((prev) => prev.filter((sticker) => sticker.id !== id));
+  };
+
   const captureStickerboard = async () => {
     if (boardRef.current) {
-      console.log("Capturing high-resolution screenshot...");
+      //clear active sticker
+      setActiveStickerId(null);
   
-      const scaleFactor = 3; //increase resolution by 3x
-      const canvas = await html2canvas(boardRef.current, {
-        backgroundColor: null,
-        scale: scaleFactor,
-        useCORS: true,
+      //wait for next frame so that active sticker controls aren't in the pic
+      requestAnimationFrame(async () => {
+        const scaleFactor = 3;
+        const canvas = await html2canvas(boardRef.current, {
+          backgroundColor: null,
+          scale: scaleFactor,
+          useCORS: true,
+        });
+  
+        const link = document.createElement("a");
+        link.href = canvas.toDataURL("image/png");
+        link.download = "stickerboard.png";
+        link.click();
+  
+        console.log("Screenshot captured successfully!");
       });
-  
-      const link = document.createElement("a");
-      link.href = canvas.toDataURL("image/png");
-      link.download = "stickerboard.png";
-      link.click();
-  
-      console.log("Screenshot captured successfully!");
     }
   };
   
@@ -98,19 +119,25 @@ const StickerBoard: React.FC = () => {
     >
       {stickers.map((sticker) => (
         <Sticker
-          key={sticker.id}
-          id={sticker.id}
-          x={sticker.x}
-          y={sticker.y}
-          src={sticker.src}
-          moveSticker={moveSticker}
-          getBoardRef={() => boardRef.current}
+        key={sticker.id}
+        id={sticker.id}
+        x={sticker.x}
+        y={sticker.y}
+        src={sticker.src}
+        width={sticker.width || 10}
+        rotation={sticker.rotation || 0}
+        moveSticker={moveSticker}
+        resizeSticker={resizeSticker}
+        rotateSticker={rotateSticker}
+        deleteSticker={deleteSticker}
+        active={sticker.id === activeStickerId}
+        setActiveSticker={setActiveStickerId}
         />
       ))}
     </div>
     <div className="border-black p-[2svh] min-h-[10svh] flex justify-center items-center">
 
-    {/* Modals for each menu item */}
+{/* modals for menu items */}
     {menuSelection === 'sticker' && (<StickerModal setMenuSelection={setMenuSelection} addSticker={addSticker}/>)}
 
     {menuSelection === 'label' && (<LabelModal/>)}

@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "next": "15.1.6",
     "@react-three/drei": "^10.0.0",
     "@react-three/fiber": "^9.0.4",
     "html2canvas": "^1.4.1",
@@ -18,8 +17,9 @@
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^19.0.0",
-    "three": "^0.173.0",
-    "react-webcam": "^7.2.0"
+    "react-moveable": "^0.56.0",
+    "react-webcam": "^7.2.0",
+    "three": "^0.173.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
