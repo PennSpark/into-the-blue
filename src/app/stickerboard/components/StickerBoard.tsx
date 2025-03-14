@@ -14,6 +14,7 @@ import './stickerboard.css'
 
 
 interface StickerData {
+  isLabel: boolean;
   id: number;
   x: number;
   y: number;
@@ -35,8 +36,9 @@ const StickerBoard: React.FC = () => {
   const [menuSelection, setMenuSelection] = useState<string | null>(null);
   const [gridBg, setGridBg] = useState<string>("#ffffff");
 
-  const addSticker = (stickerId: string) => {
+  const addSticker = (stickerId: string, isLabel: boolean) => {
     const newSticker: StickerData = {
+      isLabel: isLabel,
       id: stickers.length + 1,
       src: `/images/${stickerId}`,
       x: Math.random() * 90 + 5,
@@ -119,6 +121,7 @@ const StickerBoard: React.FC = () => {
     >
       {stickers.map((sticker) => (
         <Sticker
+        isLabel={sticker.isLabel}
         key={sticker.id}
         id={sticker.id}
         x={sticker.x}
@@ -140,7 +143,7 @@ const StickerBoard: React.FC = () => {
 {/* modals for menu items */}
     {menuSelection === 'sticker' && (<StickerModal setMenuSelection={setMenuSelection} addSticker={addSticker}/>)}
 
-    {menuSelection === 'label' && (<LabelModal/>)}
+    {menuSelection === 'label' && (<LabelModal setMenuSelection={setMenuSelection} addSticker={addSticker}/>)}
 
     {menuSelection === 'grid' && (<GridModal setMenuSelection={setMenuSelection} setGridBg={setGridBg}/>)}
 

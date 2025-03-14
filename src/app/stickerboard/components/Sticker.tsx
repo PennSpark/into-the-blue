@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import Moveable from 'react-moveable';
 
 interface StickerProps {
+  isLabel: boolean;
   id: number;
   x: number;
   y: number;
@@ -17,6 +18,7 @@ interface StickerProps {
 }
 
 const Sticker: React.FC<StickerProps> = ({
+  isLabel,
   id,
   x,
   y,
@@ -56,7 +58,7 @@ const Sticker: React.FC<StickerProps> = ({
           width: `${frame.width}%`,
           height: `${(frame.width * 9) / 16}%`,
           transform: `rotate(${frame.rotate}deg)`,
-          backgroundImage: `url(${src})`,
+          backgroundImage: `${!isLabel && `url(${src})`}`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           cursor: active ? 'move' : 'pointer',
@@ -99,7 +101,25 @@ const Sticker: React.FC<StickerProps> = ({
               setFrame((prev) => ({ ...prev, rotate: beforeRotate }));
               rotateSticker(id, beforeRotate);
             }}
-          />
+          >
+            {isLabel && (
+              <div
+              
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: 'rgba(255, 0, 0, 0.8)',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  fontSize: '2rem',
+                }}
+              >
+                Label
+              </div>
+            )
+                }
+          </Moveable>
           {/* delete button */}
           <button
             onClick={() => deleteSticker(id)}

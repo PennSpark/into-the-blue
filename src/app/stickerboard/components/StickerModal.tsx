@@ -1,6 +1,6 @@
   interface StickerModalProps {
     setMenuSelection: (menu: string | null) => void;
-    addSticker: (stickerId: string) => void;
+    addSticker: (stickerId: string, isLabel: boolean) => void;
   }
   
   export default function StickerModal({ setMenuSelection, addSticker }: StickerModalProps) {
@@ -27,7 +27,7 @@
             {imageList.map((image, index) => (
                 <div key={index} 
                 onClick={() => {
-                    addSticker(image);
+                    addSticker(image, false);
                     setMenuSelection(null);
                 }}
                 className="w-[10svw] bg-gray-300 rounded-[1.5svw] shadow-lg" style={{backgroundImage: `url(/images/${image})`, backgroundSize: 'cover', backgroundPosition: 'center'}}></div>
