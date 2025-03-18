@@ -1,17 +1,110 @@
 'use client';
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Sphere, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import { useRouter } from 'next/navigation';
-import { Region } from '../app/types';
-import regionsData from '../app/regions.json';
 
-const regions: Region[] = regionsData.map(region => ({
-  ...region,
-  position: [region.position[0], region.position[1], region.position[2]] as [number, number, number],
-}));
+interface Region {
+  name: string;
+  displayName: string;
+  position: [number, number, number];
+  color: string;
+  path: string;
+  totalObjects: number;
+}
+
+const regions: Region[] = [
+  { 
+    name: 'into-the-blue', 
+    displayName: 'Into the Blue', 
+    position: [0, 0.9, 0.1], 
+    color: '#4da6ff', 
+    path: '/exhibit/into-the-blue',
+    totalObjects: 1
+  },
+  { 
+    name: 'etruscan', 
+    displayName: 'Etruscan', 
+    position: [0.7, 0.7, 0], 
+    color: '#cd853f', 
+    path: '/exhibit/etruscan',
+    totalObjects: 1
+  },
+  { 
+    name: 'greece', 
+    displayName: 'Greece', 
+    position: [0.9, 0.1, 0.3], 
+    color: '#3f7cd8', 
+    path: '/exhibit/greece',
+    totalObjects: 2
+  },
+  { 
+    name: 'rome', 
+    displayName: 'Rome', 
+    position: [0.8, -0.3, 0.4], 
+    color: '#b22222', 
+    path: '/exhibit/rome',
+    totalObjects: 5
+  },
+  { 
+    name: 'eastern-mediterranean', 
+    displayName: 'E. Mediterranean', 
+    position: [0.5, -0.6, 0.5], 
+    color: '#20b2aa', 
+    path: '/exhibit/eastern-mediterranean',
+    totalObjects: 4
+  },
+  { 
+    name: 'asia', 
+    displayName: 'Asia', 
+    position: [-0.3, -0.8, 0.4], 
+    color: '#ff8c00', 
+    path: '/exhibit/asia',
+    totalObjects: 2
+  },
+  { 
+    name: 'special-exhibition-egypt', 
+    displayName: 'Egypt', 
+    position: [0.2, 0.2, -0.9], 
+    color: '#daa520', 
+    path: '/exhibit/egypt',
+    totalObjects: 3
+  },
+  { 
+    name: 'middle-east', 
+    displayName: 'Middle East', 
+    position: [-0.4, 0.3, -0.8], 
+    color: '#9370db', 
+    path: '/exhibit/middle-east',
+    totalObjects: 9
+  },
+  { 
+    name: 'north-america', 
+    displayName: 'North America', 
+    position: [-0.8, 0.4, -0.3], 
+    color: '#32cd32', 
+    path: '/exhibit/north-america',
+    totalObjects: 4
+  },
+  { 
+    name: 'mexico-central-america', 
+    displayName: 'Mexico & C. America', 
+    position: [-0.9, -0.1, -0.2], 
+    color: '#ff6347', 
+    path: '/exhibit/mexico-central-america',
+    totalObjects: 1
+  },
+  { 
+    name: 'africa', 
+    displayName: 'Africa', 
+    position: [-0.6, -0.7, -0.2], 
+    color: '#8b4513', 
+    path: '/exhibit/africa',
+    totalObjects: 4
+  },
+];
 
 const Globe = ({ onRegionClick }: { onRegionClick: (region: Region) => void }) => {
   const [hovered, setHovered] = useState<string | null>(null);
@@ -41,27 +134,30 @@ const Globe = ({ onRegionClick }: { onRegionClick: (region: Region) => void }) =
       {regions.map((region, index) => (
         <group key={index} position={region.position}>
           <Sphere 
-            args={[0.15, 32, 32]}
+            args={[0.12, 32, 32]}
             onPointerOver={() => setHovered(region.name)}
             onPointerOut={() => setHovered(null)}
             onClick={() => handleClick(region)}
-            scale={clicked === region.name ? 1.2 : 1}
+            scale={clicked === region.name ? 1.2 : hovered === region.name ? 1.1 : 1}
           >
             <meshPhongMaterial
               color={region.color}
               transparent
-              opacity={hovered === region.name ? 0.8 : 0.6}
+              opacity={hovered === region.name ? 0.9 : 0.7}
               emissive={clicked === region.name ? "#ffffff" : "#000000"}
               emissiveIntensity={clicked === region.name ? 0.5 : 0}
             />
           </Sphere>
-          <Html position={[0, 0.25, 0]} center>
+          <Html position={[0, 0.2, 0]} center distanceFactor={8}>
             <div className={`
-              text-white px-2 py-1 rounded text-sm transition-all duration-200
-              ${hovered === region.name ? 'bg-black/80 scale-110' : 'bg-black/50'}
+              text-white px-2 py-1 rounded text-xs transition-all duration-200 text-center
+              ${hovered === region.name ? 'bg-black/80 scale-110' : 'bg-black/60'}
               ${clicked === region.name ? 'animate-pulse' : ''}
             `}>
-              {region.name}
+              {region.displayName}
+              <div className="text-[10px] opacity-80">
+                {region.totalObjects} {region.totalObjects === 1 ? 'object' : 'objects'}
+              </div>
             </div>
           </Html>
         </group>
