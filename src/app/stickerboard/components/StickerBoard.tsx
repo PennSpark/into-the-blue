@@ -2,13 +2,15 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import html2canvas from "html2canvas";
 
 import Sticker from "./Sticker";
 
-import StickerModal from "./StickerModal";
-import LabelModal from "./LabelModal";
-import GridModal from "./GridModal";
+// import StickerModal from "./StickerModal";
+// import LabelModal from "./LabelModal";
+// import GridModal from "./GridModal";
+import Modal from "./Modal";
 
 import './stickerboard.css'
 
@@ -36,6 +38,8 @@ const StickerBoard: React.FC = () => {
   const [menuSelection, setMenuSelection] = useState<string | null>(null);
   const [gridBg, setGridBg] = useState<string>("#ffffff");
 
+  const router = useRouter();
+  
   const addSticker = (stickerId: string, isLabel: boolean) => {
     const newSticker: StickerData = {
       isLabel: isLabel,
@@ -113,10 +117,20 @@ const StickerBoard: React.FC = () => {
   
 
   return (
-    <div className='h-[100svh] w-[100svw] pt-[5svh] flex flex-col justify-center items-center bg-gray-300 overflow-hidden'>
+    <div className='relative h-[100svh] w-[100svw] grid-bg-gray flex flex-col justify-center items-center bg-gray-300 overflow-hidden gap-[0.5svh]'>
+    <div className='w-[42.75svh] h-[9svh] py-[2.3svh] flex flex-row justify-between items-center'>
+      <button onClick={() => router.back()}
+        className='round-button h-full flex rounded-full p-[1svh] px-[2svh]'>
+        <Image src='/icons/arrow-stroke.svg' className='w-full h-full' width={100} height={100} alt='back' />
+      </button>
+      <button onClick={captureStickerboard} className='round-button h-full flex justify-center items-center rounded-full p-2 px-3'>
+        <span className='text-[2svh]'>I&apos;m done</span>
+      </button>
+
+    </div>
     <div
       ref={boardRef}
-      className='w-[45svh] h-[80svh] grid-bg rounded-[4svh] shadow-lg relative overflow-hidden'
+      className='w-[42.75svh] h-[76svh] grid-bg rounded-[1svh] shadow-lg relative overflow-visible'
       style={{ backgroundColor: gridBg }}
     >
       {stickers.map((sticker) => (
@@ -138,17 +152,21 @@ const StickerBoard: React.FC = () => {
         />
       ))}
     </div>
+
     <div className="border-black p-[2svh] min-h-[10svh] flex justify-center items-center">
 
 {/* modals for menu items */}
-    {menuSelection === 'sticker' && (<StickerModal setMenuSelection={setMenuSelection} addSticker={addSticker}/>)}
+  {menuSelection && (
+    <Modal
+      setMenuSelection={setMenuSelection}
+      addSticker={menuSelection !== "grid" ? addSticker : undefined}
+      setGridBg={menuSelection === "grid" ? setGridBg : undefined}
+      menuSelection={menuSelection}
+    />
+  )}
 
-    {menuSelection === 'label' && (<LabelModal setMenuSelection={setMenuSelection} addSticker={addSticker}/>)}
-
-    {menuSelection === 'grid' && (<GridModal setMenuSelection={setMenuSelection} setGridBg={setGridBg}/>)}
-
-  <div id="sticker-bar" className="w-full flex flex-row justify-center items-center border border-[0.2svh] border-[#D7E3FF] p-[2svh] gap-[1.5svh] bg-white shadow-lg rounded-full">
-    <button className="flex w-[4svh] h-[4svh]" onClick={() => setMenu('sticker')}>
+  <div id="sticker-bar" className="round-button w-full flex flex-row justify-center items-center p-[1.3svh] px-[2.3svh] gap-[1.5svh] rounded-full">
+    <button className={`flex w-[4.7svh] h-[4.7svh] rounded-full p-[0.7svh] ${menuSelection === 'sticker' ? 'bg-blue-1' : 'bg-blue-5'}`} onClick={() => setMenu('sticker')}>
       <Image
         src={menuSelection === 'sticker' ? 'stickerboard/sticker-button-alt.svg' : 'stickerboard/sticker-button.svg'}
         alt="sticker button"
@@ -158,7 +176,7 @@ const StickerBoard: React.FC = () => {
       />
     </button>
 
-    <button className="flex w-[4svh] h-[4svh]" onClick={() => setMenu('label')}>
+    <button className={`flex w-[4.7svh] h-[4.7svh] rounded-full p-[0.7svh] ${menuSelection === 'label' ? 'bg-blue-1' : 'bg-blue-5'}`} onClick={() => setMenu('label')}>
       <Image
         src={menuSelection === 'label' ? 'stickerboard/label-button-alt.svg' : 'stickerboard/label-button.svg'}
         alt="label button"
@@ -168,7 +186,7 @@ const StickerBoard: React.FC = () => {
       />
     </button>
 
-    <button className="flex w-[4svh] h-[4svh]" onClick={() => setMenu('grid')}>
+    <button className={`flex w-[4.7svh] h-[4.7svh] rounded-full p-[0.7svh] ${menuSelection === 'grid' ? 'bg-blue-1' : 'bg-blue-5'}`} onClick={() => setMenu('grid')}>
       <Image
         src={menuSelection === 'grid' ? 'stickerboard/grid-button-alt.svg' : 'stickerboard/grid-button.svg'}
         alt="grid button"
@@ -179,7 +197,6 @@ const StickerBoard: React.FC = () => {
     </button>
 
   </div>
-  <button onClick={captureStickerboard}>capture image</button>
 </div>
 
   </div>
