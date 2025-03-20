@@ -19,6 +19,11 @@ export default {
 				"warm-gray": "#EFECE4",
 				gray1: "#414549",
 				gray2: "#686E78",
+
+        "blue-1": "var(--Blue-1)",
+        "blue-3": "var(--Blue-3)",
+        "blue-5": "var(--Blue-5)",
+        "gray-1": "var(--Gray-1)",
 			},
 			fontSize: {
 				body: "1rem",
