@@ -56,9 +56,10 @@ const Sticker: React.FC<StickerProps> = ({
           left: `${frame.translate[0]}%`,
           top: `${frame.translate[1]}%`,
           width: `${frame.width}%`,
-          height: `${(frame.width * 9) / 16}%`,
+          height: `${frame.width * 300 / 360}%`,
           transform: `rotate(${frame.rotate}deg)`,
-          backgroundImage: `${!isLabel && `url(${src})`}`,
+          // backgroundImage: `${!isLabel && `url(${src})`}`,
+          backgroundImage: `${!isLabel ? `url(${src})` : `url(/stickers/${src})`}`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           cursor: active ? 'move' : 'pointer',
@@ -102,7 +103,7 @@ const Sticker: React.FC<StickerProps> = ({
               rotateSticker(id, beforeRotate);
             }}
           >
-            {isLabel && (
+            {/* {isLabel && (
               <div
               
                 style={{
@@ -118,7 +119,7 @@ const Sticker: React.FC<StickerProps> = ({
                 Label
               </div>
             )
-                }
+                } */}
           </Moveable>
           {/* delete button */}
           <button

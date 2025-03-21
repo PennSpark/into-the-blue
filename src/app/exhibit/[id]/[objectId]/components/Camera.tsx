@@ -10,6 +10,8 @@ import { Artifact } from "../../../../types";
 import { Dialog } from '@headlessui/react'; // Optional: You can use any modal dialog library
 import Link from 'next/link';
 
+import ImageCutout from "@/utils/ProcessSticker";
+
 export interface CameraProps {
   artifact: Artifact;
   onImageCaptured: () => void;
@@ -26,6 +28,9 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
   const [hintActive, setHintActive] = useState(false); // State to toggle the hint active state
   const [dialogOpen, setDialogOpen] = useState(false); // State to manage dialog visibility
 
+  const [shouldProcess, setShouldProcess] = useState(false);
+
+
   // Function to toggle hint state
   const toggleHint = () => {
     setHintActive((prev) => !prev);  // Toggle the hint button state
@@ -36,7 +41,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
   const closeDialog = () => setDialogOpen(false);
 
   //all svg outlines must have 100x100 coordinate system for simplicity and design freedom in scaling
-  const viewBox = { width: 100, height: 100 };
+  const viewBox = { width: 300, height: 360 };
 
   const [image, setImage] = useState<string | null>(null);
 
@@ -66,6 +71,10 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
     const svhToPixels = window.innerHeight / 100;
     setCanvasSize({ width: 40 * svhToPixels, height: 60 * svhToPixels });
   }, []);
+
+  useEffect(() => {
+    console.log(artifact.foundImageURL, artifact.svgURL);
+  }, [artifact.foundImageURL, artifact.svgURL]);
 
   useEffect(() => {
     updateCanvasSize();
@@ -113,8 +122,8 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
       if (ctx && video.readyState === 4) {
         //create new canvas for safety + more freedom
         const clipCanvas = document.createElement("canvas");
-        clipCanvas.width = canvasSize.width;
-        clipCanvas.height = canvasSize.width;
+        clipCanvas.width = 300;
+        clipCanvas.height = 360;
         const clipCtx = clipCanvas.getContext("2d");
 
         if (clipCtx) {
@@ -124,7 +133,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
           //scaling factors to put rectangular input into square picture
           const scaleX = clipCanvas.width / viewBox.width;
-          const scaleY = clipCanvas.width / viewBox.height;
+          const scaleY = (clipCanvas.width * 360) / (viewBox.height * 300);
 
           //initially move the canvas to position clippath correctly (nothing drawn yet)
           clipCtx.translate(clipCanvas.width / 2, clipCanvas.height / 2);
@@ -148,27 +157,36 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
           clipCtx.translate(-clipCanvas.width / 2, -clipCanvas.height / 2);
 
           //draw the image
-          clipCtx.drawImage(canvas, 0, -clipCanvas.height / 4, clipCanvas.width, canvasSize.height);
+          clipCtx.drawImage(canvas, 0, -clipCanvas.height * 45 / 360, clipCanvas.width, canvasSize.height);
 
           clipCtx.restore();
           setImage(clipCanvas.toDataURL("image/png"));
           setText("");
+//           const dataUrl = clipCanvas.toDataURL("image/png");
+
+//           setImage(dataUrl);
+// const link = document.createElement("a");
+// link.href = dataUrl;
+// link.download = `${artifact.id}-raw.png`;
+// link.click();
+
         } else {
           console.error("canvas not initialized properly");
         }
       }
     }
+
+    
   };
 
-  const saveClippedImage = async () => {
+  const saveClippedImage = () => {
     if (image && image.length > 50) {
-      await saveImage(image, artifact.id);
-      console.log("image saved");
-      onImageCaptured();
+      setShouldProcess(true);
     } else {
       console.error("empty captured image");
     }
   };
+  
 
   const rejectClippedImage = async () => {
     setImage(null);
@@ -181,10 +199,10 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
       {/* back*/}
 
-
+      <div className='absolute top-5 flex flex-row w-[40svh] h-[10svh] justify-between items-center'>
       <Link href={`/exhibit/${artifact.exhibit.toLowerCase()}`}>
         <button
-          className="absolute top-4 left-4 bg-transparent text-[#89aFEF] rounded-full p-3 shadow-lg z-10 border-none flex items-center justify-center"
+          className="bg-transparent text-[#89aFEF] rounded-full p-3 shadow-lg z-10 border-none flex items-center justify-center"
           aria-label="Go Back"
         >
           <FaArrowLeft className="text-blue-500" />
@@ -194,7 +212,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
       {/* hint button */}
       <button
         onClick={toggleHint}
-        className={`absolute top-4 right-4 rounded-full p-3 shadow-lg z-10 flex items-center gap-2 border-none ${dialogOpen ? 'bg-white text-blue-500' : 'bg-transparent text-blue-500'}`}
+        className={`rounded-full p-3 shadow-lg z-10 flex items-center gap-2 border-none ${dialogOpen ? 'bg-white text-blue-500' : 'bg-transparent text-blue-500'}`}
         aria-label="Hint"
       >
         {dialogOpen ? (
@@ -204,6 +222,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
         )}
         <span className={dialogOpen ? 'text-[#89aFEF]' : 'text-[#89aFEF]'}>Hint</span>
       </button>
+      </div>
 
       {/* Hintbox */}
       {dialogOpen && (
@@ -236,8 +255,9 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
         <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
           <svg
             className="w-[40svh] h-auto rounded-md z-[10]"
-            width="100" height="100" viewBox="0 0 100 100" fill="none"
+            width="300" height="360" viewBox="0 0 300 360" fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            overflow="visible"
           >
             {svgPaths && svgPaths.length > 0 ? (
               svgPaths.map((d, index) => (
@@ -262,7 +282,8 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
       {/* visible before taking picture: white circular button to take picture */}
       {!image && (
-        <div className="absolute bottom-24 flex flex-col gap-4">
+        <>
+        <div className="absolute bottom-10 flex flex-col gap-4">
           <button
             onClick={captureImage}
             className="bg-white text-black rounded-full w-16 h-16 flex items-center justify-center shadow-lg border-none"
@@ -270,6 +291,13 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
           >
           </button>
         </div>
+
+        <div
+        className="absolute inset-0 flex justify-center items-center z-[10] pointer-events-none"
+        >
+        <Image src={"/camera-overlay/" + artifact.id + "-overlay.png"} alt="Captured" className="w-[40svh] h-auto" width={500} height={500} />
+        </div>
+        </>
       )}
 
       {/* visible after taking picture: button to take picture */}
@@ -277,19 +305,16 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
         <>
           {/* Retake Button (Black with white text and outline) */}
           {image && (
+            <div className='absolute bottom-5 flex flex-row w-[40svh] h-[10svh] justify-between items-center'>
             <button
               onClick={rejectClippedImage}
-              className="absolute bottom-10 left-4 bg-black text-white border-2 border-white px-4 py-2 rounded-full z-[10]"
+              className="bg-black text-white border-2 border-white px-4 py-2 rounded-full z-[10]"
             >
               Retake
             </button>
-          )}
-
-          {/* Submit Button (Blue with black text, oval, bottom-right with right-facing arrow) */}
-          {image && (
             <button
               onClick={saveClippedImage}
-              className="absolute bottom-10 right-4 bg-[#89aFEF] text-black px-6 py-2 rounded-full z-[10] flex items-center gap-2"
+              className="bg-[#89aFEF] text-black px-6 py-2 rounded-full z-[10] flex items-center gap-2"
             >
               Confirm
               <svg
@@ -307,6 +332,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
                 />
               </svg>
             </button>
+            </div>
           )}
 
           <div style={{ width: `${canvasSize.width}px`, height: `${canvasSize.height}px` }}
@@ -316,8 +342,9 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
           <div className="absolute inset-0 flex justify-center items-center pointer-events-none z-[6]">
             <svg
               className="w-[40svh] h-auto rounded-md stroke-animation"
-              width="100" height="100" viewBox="0 0 100 100" fill="none"
+              width="300" height="360" viewBox="0 0 300 360" fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              overflow="visible"
             >
               {svgPaths && svgPaths.length > 0 ? (
                 svgPaths.map((d, index) => (
@@ -341,6 +368,19 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
           </div>
         </>
       )}
+
+      {shouldProcess && image && (
+        <ImageCutout
+          imageUrl={image}
+          svgUrl={artifact.svgURL}
+          onReady={async (processedImage) => {
+            await saveImage(processedImage, artifact.id);
+            console.log("processed image saved");
+            onImageCaptured();
+          }}
+        />
+      )}
+
     </div>
   );
 }

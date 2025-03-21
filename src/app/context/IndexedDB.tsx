@@ -43,31 +43,74 @@ export const dataURLtoBlob = (dataURL: string): Blob => {
   return new Blob([arrayBuffer], { type: mimeString });
 };
 
+export const loadImageByName = async (imageName: string): Promise<string | null> => {
+  const db = await openDB();
+  const transaction = db.transaction(STORE_NAME, "readonly");
+  const store = transaction.objectStore(STORE_NAME);
+  const request = store.get(imageName);
+
+  return new Promise((resolve, reject) => {
+    request.onsuccess = () => {
+      const result = request.result;
+      if (result && result.image instanceof Blob) {
+        resolve(URL.createObjectURL(result.image));
+      } else {
+        resolve(null);
+      }
+    };
+    request.onerror = () => reject("Failed to load image by name");
+  });
+};
+
+
 //save image, if image with same name exists replace it (for simplicity's sake)
 export const saveImage = async (imageData: string, imageName: string) => {
   const imageBlob = dataURLtoBlob(imageData);
   const db = await openDB();
 
-  const transaction = db.transaction(STORE_NAME, "readwrite");
-  const store = transaction.objectStore(STORE_NAME);
-
-  const existingImageRequest = store.get(imageName);
-
   return new Promise<void>((resolve, reject) => {
-    existingImageRequest.onsuccess = () => {
-      if (existingImageRequest.result) {
-        store.delete(imageName);
-      }
+    const transaction = db.transaction(STORE_NAME, "readwrite");
+    const store = transaction.objectStore(STORE_NAME);
 
-      store.put({ id: imageName, image: imageBlob, timestamp: Date.now() });
+    const putImage = () => {
+      const putRequest = store.put({ id: imageName, image: imageBlob, timestamp: Date.now() });
 
-      transaction.oncomplete = () => resolve();
-      transaction.onerror = () => reject("Failed to save image");
+      putRequest.onsuccess = () => {
+        // Image put successful
+      };
+
+      putRequest.onerror = () => {
+        reject("Failed to save image");
+      };
     };
 
-    existingImageRequest.onerror = () => reject("Failed to check for existing image");
+    // Check if already exists
+    const getRequest = store.get(imageName);
+
+    getRequest.onsuccess = () => {
+      if (getRequest.result) {
+        const deleteRequest = store.delete(imageName);
+        deleteRequest.onsuccess = () => {
+          putImage();
+        };
+        deleteRequest.onerror = () => reject("Failed to delete old image before saving new one");
+      } else {
+        putImage();
+      }
+    };
+
+    getRequest.onerror = () => reject("Failed to check for existing image");
+
+    transaction.oncomplete = () => {
+      resolve();
+    };
+
+    transaction.onerror = () => {
+      reject("Transaction failed");
+    };
   });
 };
+
 
 
 //retrieve last stored image 
@@ -79,9 +122,10 @@ export const loadLastImage = async (): Promise<string | null> => {
 
   return new Promise((resolve, reject) => {
     request.onsuccess = () => {
-      const images = request.result.map((item: { image: Blob }) =>
-        URL.createObjectURL(item.image)
-      );
+      const images = request.result
+      .filter((item): item is { image: Blob } => item && item.image instanceof Blob)
+      .map((item) => URL.createObjectURL(item.image));
+    
       resolve(images.length ? images[images.length - 1] : null);
     };
     request.onerror = () => reject("Failed to load image");
@@ -97,9 +141,10 @@ export const loadAllImages = async (): Promise<string[]> => {
 
   return new Promise((resolve, reject) => {
     request.onsuccess = () => {
-      const images = request.result.map((item: { image: Blob }) =>
-        URL.createObjectURL(item.image)
-      );
+      const images = request.result
+      .filter((item): item is { image: Blob } => item && item.image instanceof Blob)
+      .map((item) => URL.createObjectURL(item.image));
+    
       resolve(images);
     };
     request.onerror = () => reject("Failed to load images");
@@ -128,9 +173,10 @@ export const modifyArray = async (exhibit: string, objectId: string) => {
 
   return new Promise((resolve, reject) => {
     request.onsuccess = () => {
-      const images = request.result.map((item: { image: Blob }) =>
-        URL.createObjectURL(item.image)
-      );
+      const images = request.result
+      .filter((item): item is { image: Blob } => item && item.image instanceof Blob)
+      .map((item) => URL.createObjectURL(item.image));
+    
       resolve(images);
     };
     request.onerror = () => reject("Failed to load images");
@@ -146,9 +192,10 @@ export const pullArray = async (exhibit: string): Promise<string[]> => {
 
   return new Promise((resolve, reject) => {
     request.onsuccess = () => {
-      const images = request.result.map((item: { image: Blob }) =>
-        URL.createObjectURL(item.image)
-      );
+      const images = request.result
+      .filter((item): item is { image: Blob } => item && item.image instanceof Blob)
+      .map((item) => URL.createObjectURL(item.image));
+    
       resolve(images);
     };
     request.onerror = () => reject("Failed to load images");
@@ -164,9 +211,10 @@ export const loadFoundImages = async (exhibit: string): Promise<string[]> => {
 
   return new Promise((resolve, reject) => {
     request.onsuccess = () => {
-      const images = request.result.map((item: { image: Blob }) =>
-        URL.createObjectURL(item.image)
-      );
+      const images = request.result
+      .filter((item): item is { image: Blob } => item && item.image instanceof Blob)
+      .map((item) => URL.createObjectURL(item.image));
+    
       resolve(images);
     };
     request.onerror = () => reject("Failed to load images");
