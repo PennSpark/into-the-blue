@@ -6,7 +6,7 @@ import ImageCutout from '@/utils/ProcessSticker';
 export default function Home() {
   return (
 
-          // <StickerBoard />
-<ImageCutout imageUrl="/images/test2.png" svgUrl="/images/test2.svg" />
+          <StickerBoard />
+          //<ImageCutout imageUrl="/images/Asia-2-LionLeft.png" svgUrl="/svg-outlines/SVG-_Asia-LionLeft.svg" /> 
   );
 }

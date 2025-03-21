@@ -6,9 +6,10 @@ import { Noise } from "noisejs";
 interface ImageCutoutProps {
   imageUrl: string;
   svgUrl: string;
+  onReady?: (dataUrl: string) => void;
 }
 
-const ImageCutout: React.FC<ImageCutoutProps> = ({ imageUrl, svgUrl }) => {
+const ImageCutout: React.FC<ImageCutoutProps> = ({ imageUrl, svgUrl, onReady }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -70,7 +71,7 @@ const ImageCutout: React.FC<ImageCutoutProps> = ({ imageUrl, svgUrl }) => {
           let { x, y } = pos;
 
           // apply noise
-          const variationStrength = 4;
+          const variationStrength = 0;
           const noiseX = noise.perlin2(x * 0.05, y * 0.05) * variationStrength;
           const noiseY = noise.perlin2(y * 0.05, x * 0.05) * variationStrength;
           x += noiseX;
@@ -93,14 +94,19 @@ const ImageCutout: React.FC<ImageCutoutProps> = ({ imageUrl, svgUrl }) => {
 
       // draw image
       ctx.drawImage(img, borderSize, borderSize, imageWidth, imageHeight);
+
+      if (onReady) {
+        const finalDataUrl = canvas.toDataURL("image/png");
+        onReady(finalDataUrl);
+      }
+      
     };
-  }, [imageUrl, svgUrl]);
+  }, [imageUrl, svgUrl, onReady]);
 
   return (
     <canvas
       ref={canvasRef}
-      className="w-full h-auto"
-      style={{ width: "300px", height: "360px" }}
+      className="hidden invisible"
     />
   );
 };

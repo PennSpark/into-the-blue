@@ -40,11 +40,11 @@ const StickerBoard: React.FC = () => {
 
   const router = useRouter();
   
-  const addSticker = (stickerId: string, isLabel: boolean) => {
+  const addSticker = (stickerSrc: string, isLabel: boolean) => {
     const newSticker: StickerData = {
       isLabel: isLabel,
       id: stickers.length + 1,
-      src: `/images/${stickerId}`,
+      src: stickerSrc,
       x: Math.random() * 90 + 5,
       y: Math.random() * 90 + 5,
       width: 10,
