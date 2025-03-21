@@ -11,7 +11,8 @@ export type Artifact = {
 	id: string;
 	name: string;
 	description: string;
-	imageURL: string;
+	foundImageURL: string;
+	unfoundImageURL: string;
 	svgURL: string;
 	exhibit: string;
 	//other relevant info/fun facts fro

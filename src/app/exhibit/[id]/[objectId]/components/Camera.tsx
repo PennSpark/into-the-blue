@@ -10,6 +10,8 @@ import { Artifact } from "../../../../types";
 import { Dialog } from '@headlessui/react'; // Optional: You can use any modal dialog library
 import Link from 'next/link';
 
+import ImageCutout from "@/utils/ProcessSticker";
+
 export interface CameraProps {
   artifact: Artifact;
   onImageCaptured: () => void;
@@ -35,6 +37,9 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
   const [hintActive, setHintActive] = useState(false); // State to toggle the hint active state
   const [dialogOpen, setDialogOpen] = useState(false); // State to manage dialog visibility
 
+  const [shouldProcess, setShouldProcess] = useState(false);
+
+
   // Function to toggle hint state
   const toggleHint = () => {
     setHintActive((prev) => !prev);  // Toggle the hint button state
@@ -45,7 +50,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
   const closeDialog = () => setDialogOpen(false);
 
   //all svg outlines must have 100x100 coordinate system for simplicity and design freedom in scaling
-  const viewBox = { width: 100, height: 100 };
+  const viewBox = { width: 300, height: 360 };
 
   const [image, setImage] = useState<string | null>(null);
   const [text, setText] = useState<string>("Line up the image to the outline");
@@ -75,6 +80,10 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
     const svhToPixels = window.innerHeight / 100;
     setCanvasSize({ width: 40 * svhToPixels, height: 60 * svhToPixels });
   }, []);
+
+  useEffect(() => {
+    console.log(artifact.foundImageURL, artifact.svgURL);
+  }, [artifact.foundImageURL, artifact.svgURL]);
 
   useEffect(() => {
     updateCanvasSize();
@@ -123,8 +132,8 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
       if (ctx && video.readyState === 4) {
         //create new canvas for safety + more freedom
         const clipCanvas = document.createElement("canvas");
-        clipCanvas.width = canvasSize.width;
-        clipCanvas.height = canvasSize.width;
+        clipCanvas.width = 300;
+        clipCanvas.height = 360;
         const clipCtx = clipCanvas.getContext("2d");
 
         if (clipCtx) {
@@ -134,7 +143,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
           //scaling factors to put rectangular input into square picture
           const scaleX = clipCanvas.width / viewBox.width;
-          const scaleY = clipCanvas.width / viewBox.height;
+          const scaleY = (clipCanvas.width * 360) / (viewBox.height * 300);
 
           //initially move the canvas to position clippath correctly (nothing drawn yet)
           clipCtx.translate(clipCanvas.width / 2, clipCanvas.height / 2);
@@ -158,7 +167,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
           clipCtx.translate(-clipCanvas.width / 2, -clipCanvas.height / 2);
 
           //draw the image
-          clipCtx.drawImage(canvas, 0, -clipCanvas.height / 4, clipCanvas.width, canvasSize.height);
+          clipCtx.drawImage(canvas, 0, -clipCanvas.height * 45 / 360, clipCanvas.width, canvasSize.height);
 
           clipCtx.restore();
           setImage(clipCanvas.toDataURL("image/png"));
@@ -170,17 +179,18 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
         }
       }
     }
+
+    
   };
 
-  const saveClippedImage = async () => {
+  const saveClippedImage = () => {
     if (image && image.length > 50) {
-      await saveImage(image, artifact.id);
-      console.log("image saved");
-      onImageCaptured();
+      setShouldProcess(true);
     } else {
       console.error("empty captured image");
     }
   };
+  
 
   const rejectClippedImage = async () => {
     setImage(null);
@@ -194,10 +204,10 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
       {/* back*/}
 
-
+      <div className='absolute top-5 flex flex-row w-[40svh] h-[10svh] justify-between items-center'>
       <Link href={`/exhibit/${artifact.exhibit.toLowerCase()}`}>
         <button
-          className="absolute top-4 left-4 bg-transparent text-[#89aFEF] rounded-full p-3 shadow-lg z-10 border-none flex items-center justify-center"
+          className="bg-transparent text-[#89aFEF] rounded-full p-3 shadow-lg z-10 border-none flex items-center justify-center"
           aria-label="Go Back"
         >
           <FaArrowLeft style={{ width: "20px", height: "18px" }} />
@@ -222,6 +232,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
           Hint
         </span>
       </button>
+      </div>
 
       {/* Hintbox */}
       {dialogOpen && (
