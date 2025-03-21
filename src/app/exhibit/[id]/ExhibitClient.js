@@ -248,10 +248,10 @@ export default function ExhibitClient({ exhibit, id }) {
 							href="/stickerbook"
 						>
 							<div className="max-w-xl mx-auto flex justify-end">
-								<Link href="/stickerbook">
+								<Link href="/stickerboard">
 									<img
 										src="/icons/stickerbook-button.svg"
-										alt="Stickerbook"
+										alt="Sticker Book"
 										className="cursor-pointer hover:opacity-75 focus:saturate-150 transition-all ease-in duration-300"
 									/>
 								</Link>
