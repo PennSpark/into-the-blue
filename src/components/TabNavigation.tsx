@@ -20,12 +20,16 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange })
     const targetRef = activeTab === 'list' ? listBtnRef.current : mapBtnRef.current;
     if (!targetRef) return;
     
-    sliderRef.current.style.width = `${targetRef.offsetWidth}px`;
-    sliderRef.current.style.transform = `translateX(${activeTab === 'list' ? 0 : targetRef.offsetLeft}px)`;
+    const buttonWidth = targetRef.offsetWidth;
+    // Calculate the position relative to the first button
+    const position = activeTab === 'list' ? 0 : buttonWidth;
+    
+    sliderRef.current.style.width = `${buttonWidth}px`;
+    sliderRef.current.style.transform = `translateX(${position}px)`;
   }, [activeTab]);
 
   return (
-    <div className="w-full max-w-md p-1 gray1 bg-blue3 rounded-[28px] flex relative">
+    <div className="w-[248px] h-[34px] max-w-md p-1 gray1 bg-blue3 rounded-[28px] flex relative">
       {/* Animated slider */}
       <div 
         ref={sliderRef}
@@ -36,7 +40,7 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange })
       <button
         ref={listBtnRef}
         className={`flex-1 py-2.5 px-4 text-center font-medium text-sm flex items-center justify-center gap-2 rounded-[24px] z-10 relative ${
-          activeTab === 'list' ? 'text-white' : 'text-gray-700'
+          activeTab === 'list' ? 'text-warm-white' : 'text-gray1'
         }`}
         onClick={() => onTabChange('list')}
       >
@@ -54,7 +58,7 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange })
       <button
         ref={mapBtnRef}
         className={`flex-1 py-2.5 px-4 text-center font-medium text-sm flex items-center justify-center gap-2 rounded-[24px] z-10 relative ${
-          activeTab === 'map' ? 'text-white' : 'text-gray-700'
+          activeTab === 'map' ? 'text-warm-white' : 'text-gray1'
         }`}
         onClick={() => onTabChange('map')}
       >

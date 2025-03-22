@@ -23,7 +23,7 @@ const RegionList: React.FC<RegionListProps> = ({ regions }) => {
   };
 
   return (
-    <div className="w-full max-w-md flex flex-col gap-2">
+    <div className="w-full max-w-md flex flex-col gap-[16px] pb-[16px]">
       {regions.map((region, index) => {
         const completionPercentage =
           region.totalObjects > 0
@@ -35,7 +35,7 @@ const RegionList: React.FC<RegionListProps> = ({ regions }) => {
         return (
           <div
             key={index}
-            className="rounded-xl flex items-center justify-between cursor-pointer relative h-24 overflow-hidden bg-blue3 black"
+            className="rounded-xl flex items-center justify-between cursor-pointer relative h-[100px] overflow-hidden bg-blue3 black"
             onClick={() => handleRegionClick(region.path)}
           >
             {/* Progress bar */}

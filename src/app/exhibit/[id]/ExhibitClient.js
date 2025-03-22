@@ -243,19 +243,18 @@ export default function ExhibitClient({ exhibit, id }) {
 						</div>
 
 						{/* Bottom "Stickerbook" button */}
-						<div
-							className="fixed bottom-0 left-0 right-0 p-4"
-							href="/stickerbook"
+						<div className="fixed bottom-0 w-full px-5 py-3 flex justify-between z-40"
+							style={{
+							background:
+								"linear-gradient(to bottom, rgba(254,252,247,0) 0%, rgba(255,254,253,0.85) 40.5%, #FFFEFD 100%)",
+							}}
 						>
-							<div className="max-w-xl mx-auto flex justify-end">
-								<Link href="/stickerbook">
-									<img
-										src="/icons/stickerbook-button.svg"
-										alt="Stickerbook"
-										className="cursor-pointer hover:opacity-75 focus:saturate-150 transition-all ease-in duration-300"
-									/>
-								</Link>
+							<Link href="/stickerboard">
+							<div className="flex items-center bg-green text-warm-white w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
+								<img src="/icons/stickerbook.svg" alt="Sticker Book" className="w-[26px] h-[25px]" />
+								<p className="font-medium text-base">Sticker Book</p>
 							</div>
+							</Link>
 						</div>
 					</div>
 				</main>

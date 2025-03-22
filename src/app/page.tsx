@@ -115,14 +115,16 @@ export default function Home() {
               "linear-gradient(to bottom, rgba(254,252,247,0) 0%, rgba(255,254,253,0.85) 40.5%, #FFFEFD 100%)",
           }}
         >
-          <Link href="/sticker-book">
-            <div>
-              Sticker Book
+          <Link href="/stickerboard">
+            <div className="flex items-center bg-green text-warm-white w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
+              <img src="/icons/stickerbook.svg" alt="Sticker Book" className="w-[26px] h-[25px]" />
+              <p className="font-medium text-base">Sticker Book</p>
             </div>
           </Link>
           <Link href="/finish">
-            <div>
-              Finish Hunt
+            <div className="flex items-center text-green border-2 border-green w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
+            <p className="font-medium text-base">Finish</p>
+            <img src="/icons/arrow.svg" alt="Finish Hunt" className="w-[26px] h-[25px]" />
             </div>
           </Link>
         </div>
