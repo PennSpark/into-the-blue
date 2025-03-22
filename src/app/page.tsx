@@ -4,6 +4,7 @@ import { useState } from 'react';
 import GlobeWrapper from '@/components/GlobeWrapper';
 import TabNavigation from '@/components/TabNavigation';
 import RegionList from '@/components/RegionList';
+import Link from 'next/link';
 
 // Define all regions based on the provided image
 const regions = [
@@ -91,11 +92,8 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<'list' | 'map'>('list');
   
   return (
-    <div className="min-h-screen p-8 font-[family-name:var(--font-geist-sans)]">
+    <div className="min-h-screen p-8 font-[family-name:var(--font-geist-sans)] bg-warm-white">
       <main className="flex flex-col items-center gap-8">
-        <h1 className="text-3xl font-bold text-center">
-          choose a region to begin
-        </h1>
         
         <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
         
@@ -109,6 +107,25 @@ export default function Home() {
             </div>
           </div>
         )}
+
+        {/* Floating buttons */}
+        <div className="fixed bottom-0 w-full px-5 py-3 flex justify-between z-40"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(254,252,247,0) 0%, rgba(255,254,253,0.85) 40.5%, #FFFEFD 100%)",
+          }}
+        >
+          <Link href="/sticker-book">
+            <div>
+              Sticker Book
+            </div>
+          </Link>
+          <Link href="/finish">
+            <div>
+              Finish Hunt
+            </div>
+          </Link>
+        </div>
       </main>
     </div>
   );

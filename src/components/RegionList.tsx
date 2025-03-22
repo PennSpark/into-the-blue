@@ -35,9 +35,8 @@ const RegionList: React.FC<RegionListProps> = ({ regions }) => {
         return (
           <div
             key={index}
-            className="rounded-xl flex items-center justify-between cursor-pointer relative h-24 overflow-hidden"
+            className="rounded-xl flex items-center justify-between cursor-pointer relative h-24 overflow-hidden bg-blue3 black"
             onClick={() => handleRegionClick(region.path)}
-            style={{ backgroundColor: 'rgba(224, 231, 245, 0.8)' }}
           >
             {/* Progress bar */}
             {completionPercentage > 0 && (
@@ -50,8 +49,7 @@ const RegionList: React.FC<RegionListProps> = ({ regions }) => {
                 {allFound ? (
                   /* Full bar for completed regions */
                   <div
-                    className="h-full w-full"
-                    style={{ backgroundColor: 'rgb(99, 155, 255)' }}
+                    className="h-full w-full bg-blue2"
                   ></div>
                 ) : (
                   /* Animated wave edge for incomplete regions */
@@ -63,8 +61,8 @@ const RegionList: React.FC<RegionListProps> = ({ regions }) => {
                     style={{ position: 'absolute', top: 0, left: 0 }}
                   >
                     <path
+                      className="fill-blue2"
                       d="M0,0 L95,0 Q97,20 96,50 Q95,80 95,100 L0,100 Z"
-                      fill="rgb(99, 155, 255)"
                     >
                       <animate 
                         attributeName="d" 
@@ -88,10 +86,10 @@ const RegionList: React.FC<RegionListProps> = ({ regions }) => {
             )}
 
             <div className="flex flex-col p-6 z-10">
-              <div className="text-gray-800 font-medium text-lg">
+              <div className="text-black font-semibold text-lg">
                 {region.displayName}
               </div>
-              <div className="text-gray-600 text-sm">
+              <div className="text-gray1 text-sm">
                 {allFound
                   ? 'All Objects Found!'
                   : `${region.objectsFound}/${region.totalObjects} Objects`}
@@ -125,8 +123,8 @@ const RegionList: React.FC<RegionListProps> = ({ regions }) => {
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
+                      className="fill-blue2"
                       d="M9 16.17L5.53 12.7C5.14 12.31 4.51 12.31 4.12 12.7C3.73 13.09 3.73 13.72 4.12 14.11L8.3 18.29C8.69 18.68 9.32 18.68 9.71 18.29L20.29 7.71C20.68 7.32 20.68 6.69 20.29 6.3C19.9 5.91 19.27 5.91 18.88 6.3L9 16.17Z"
-                      fill="#639BFF"
                     />
                   </svg>
                 </div>

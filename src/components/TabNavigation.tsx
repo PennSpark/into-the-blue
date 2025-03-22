@@ -25,12 +25,11 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange })
   }, [activeTab]);
 
   return (
-    <div className="w-full max-w-md p-1 bg-gray-300 rounded-[28px] flex relative" style={{ background: '#e2e3e7' }}>
+    <div className="w-full max-w-md p-1 gray1 bg-blue3 rounded-[28px] flex relative">
       {/* Animated slider */}
       <div 
         ref={sliderRef}
-        className="absolute top-1 left-1 h-[calc(100%-8px)] bg-gray-600 rounded-[24px] z-0 transition-transform duration-300 ease-in-out"
-        style={{ backgroundColor: '#3b3f47' }}
+        className="absolute top-1 left-1 h-[calc(100%-8px)] warm-white bg-gray1 rounded-[24px] z-0 transition-transform duration-300 ease-in-out"
       ></div>
 
       {/* List tab button */}
