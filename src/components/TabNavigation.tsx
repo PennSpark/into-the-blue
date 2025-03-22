@@ -47,11 +47,11 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange })
         <Image 
           src="/icons/List.svg" 
           alt="List view" 
-          width={20} 
-          height={20} 
+          width={12} 
+          height={9} 
           className={activeTab === 'list' ? 'brightness-0 invert' : ''}
         /> 
-        LIST
+        <p className='text-sm'>LIST</p>
       </button>
 
       {/* Map tab button */}
@@ -65,11 +65,11 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange })
         <Image 
           src="/icons/Map.svg" 
           alt="Map view" 
-          width={20} 
-          height={20} 
+          width={15} 
+          height={14} 
           className={activeTab === 'map' ? 'brightness-0 invert' : ''}
         /> 
-        MAP
+        <p className='text-sm'>MAP</p>
       </button>
     </div>
   );
