@@ -4,12 +4,17 @@ import ExhibitClient from "./ExhibitClient";
 // Generate static paths for your dynamic exhibit pages.
 export async function generateStaticParams() {
 	const exhibits = [
-		{ id: "rome" },
-		{ id: "egypt" },
+		{ id: "into-the-blue" },
+		{ id: "etruscan" },
 		{ id: "greece" },
+		{ id: "rome" },
+		{ id: "eastern-mediterranean" },
 		{ id: "asia" },
+		{ id: "egypt" },
 		{ id: "middle-east" },
-		{ id: "assyria" },
+		{ id: "north-america" },
+		{ id: "mexico-central-america" },
+		{ id: "africa" },
 	];
 	return exhibits.map((exhibit) => ({ id: exhibit.id }));
 }
@@ -21,35 +26,36 @@ async function getExhibitData(id) {
 			name: "Rome",
 			description:
 				"A variety of blue glass was found in Ancient Rome. Some glass objects were known for their ability to hold a variety of contents including oils or perhaps even perfume. Some of these have a decorated survival of blue patina.",
+			userVisited: true,
 			items: [
 				{
 					id: "rome-1",
 					name: "Cinerary Urn",
-					imageURL: "/images/rome/rome-1-unfound.png",
+					imageURL: "/images/artifacts/rome-1-Urn.png",
 					userFound: true,
 				},
 				{
 					id: "rome-2",
 					name: "Flask",
-					imageURL: "/images/rome/rome-2-unfound.png",
+					imageURL: "/images/artifacts/rome-2-Flask.png",
 					userFound: false,
 				},
 				{
 					id: "rome-3",
 					name: "Necklace",
-					imageURL: "/images/rome/rome-3-unfound.png",
+					imageURL: "/images/artifacts/rome-3-Necklace.png",
 					userFound: false,
 				},
 				{
 					id: "rome-4",
 					name: "Bracelet",
-					imageURL: "/images/rome/rome-4-unfound.png",
+					imageURL: "/images/artifacts/rome-4-Bracelet.png",
 					userFound: true,
 				},
 				{
 					id: "rome-5",
 					name: "Perfume Bottle",
-					imageURL: "/images/rome/rome-5-unfound.png",
+					imageURL: "/images/artifacts/rome-5-Perfume.png",
 					userFound: false,
 				},
 			],
@@ -58,6 +64,8 @@ async function getExhibitData(id) {
 		},
 		egypt: {
 			name: "Egypt",
+			userVisited: false,
+			userVisited: false,
 			items: [
 				{ id: "egypt-1", name: "Artifact 1" },
 				{ id: "egypt-2", name: "Artifact 2" },
@@ -67,6 +75,7 @@ async function getExhibitData(id) {
 		},
 		greece: {
 			name: "Greece",
+			userVisited: false,
 			items: [
 				{ id: "greece-1", name: "Artifact 1" },
 				{ id: "greece-2", name: "Artifact 2" },
@@ -77,6 +86,7 @@ async function getExhibitData(id) {
 		},
 		asia: {
 			name: "Asia",
+			userVisited: false,
 			items: [
 				{ id: "asia-1", name: "Artifact 1" },
 				{ id: "asia-2", name: "Artifact 2" },
@@ -89,59 +99,60 @@ async function getExhibitData(id) {
 			name: "Middle East",
 			description:
 				"Archaeologists found a plethora of blue in the Middle East. See examples from early history mostly carved from lapis lazuli. Later cultures used bright blue glaze to decorate pottery and tile.",
+			userVisited: false,
 			items: [
 				{
 					id: "ME-1",
 					name: "Ram in the Thicket",
-					imageURL: "/images/middle-east/ME-1-unfound.png",
+					imageURL: "/images/artifacts/ME-1-Ram.png",
 					userFound: true,
 				},
 				{
 					id: "ME-2",
 					name: "3 Beads",
-					imageURL: "/images/middle-east/ME-2-unfound.png",
+					imageURL: "/images/artifacts/ME-2-3Beads.png",
 					userFound: false,
 				},
 				{
 					id: "ME-3",
 					name: "Diadems of Puabi",
-					imageURL: "/images/middle-east/ME-3-unfound.png",
+					imageURL: "/images/artifacts/ME-3-Diadems.png",
 					userFound: false,
 				},
 				{
 					id: "ME-4",
 					name: "Bottle",
-					imageURL: "/images/middle-east/ME-4-unfound.png",
+					imageURL: "/images/artifacts/ME-4-Bottle.png",
 					userFound: true,
 				},
 				{
 					id: "ME-5",
 					name: "Architectural Decoration",
-					imageURL: "/images/middle-east/ME-5-unfound.png",
+					imageURL: "/images/artifacts/ME-5-ArchDecor.png",
 					userFound: false,
 				},
 				{
 					id: "ME-6",
 					name: "Dish",
-					imageURL: "/images/middle-east/ME-5-unfound.png",
+					imageURL: "/images/artifacts/ME-6-Dish.png",
 					userFound: true,
 				},
 				{
 					id: "ME-7",
 					name: "Bowl",
-					imageURL: "/images/middle-east/ME-5-unfound.png",
+					imageURL: "/images/artifacts/ME-7-Bowl.png",
 					userFound: false,
 				},
 				{
 					id: "ME-8",
 					name: "Tile Mosaic Panel",
-					imageURL: "/images/middle-east/ME-5-unfound.png",
+					imageURL: "/images/artifacts/ME-8-Tile.png",
 					userFound: false,
 				},
 				{
 					id: "ME-9",
 					name: "String of beads",
-					imageURL: "/images/middle-east/ME-5-unfound.png",
+					imageURL: "/images/artifacts/ME-9-StringofBeads.png",
 					userFound: false,
 				},
 			],
@@ -150,6 +161,7 @@ async function getExhibitData(id) {
 		},
 		assyria: {
 			name: "Assyria",
+			userVisited: false,
 			items: [
 				{ id: "assyria-1", name: "Artifact 1" },
 				{ id: "assyria-2", name: "Artifact 2" },
