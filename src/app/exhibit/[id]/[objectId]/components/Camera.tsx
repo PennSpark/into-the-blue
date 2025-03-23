@@ -10,8 +10,6 @@ import { Artifact } from "../../../../types";
 import { Dialog } from '@headlessui/react'; // Optional: You can use any modal dialog library
 import Link from 'next/link';
 
-import ImageCutout from "@/utils/ProcessSticker";
-
 export interface CameraProps {
   artifact: Artifact;
   onImageCaptured: () => void;
@@ -37,9 +35,6 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
   const [hintActive, setHintActive] = useState(false); // State to toggle the hint active state
   const [dialogOpen, setDialogOpen] = useState(false); // State to manage dialog visibility
 
-  const [shouldProcess, setShouldProcess] = useState(false);
-
-
   // Function to toggle hint state
   const toggleHint = () => {
     setHintActive((prev) => !prev);  // Toggle the hint button state
@@ -50,7 +45,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
   const closeDialog = () => setDialogOpen(false);
 
   //all svg outlines must have 100x100 coordinate system for simplicity and design freedom in scaling
-  const viewBox = { width: 300, height: 360 };
+  const viewBox = { width: 100, height: 100 };
 
   const [image, setImage] = useState<string | null>(null);
   const [text, setText] = useState<string>("Line up the image to the outline");
@@ -80,10 +75,6 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
     const svhToPixels = window.innerHeight / 100;
     setCanvasSize({ width: 40 * svhToPixels, height: 60 * svhToPixels });
   }, []);
-
-  useEffect(() => {
-    console.log(artifact.foundImageURL, artifact.svgURL);
-  }, [artifact.foundImageURL, artifact.svgURL]);
 
   useEffect(() => {
     updateCanvasSize();
@@ -132,8 +123,8 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
       if (ctx && video.readyState === 4) {
         //create new canvas for safety + more freedom
         const clipCanvas = document.createElement("canvas");
-        clipCanvas.width = 300;
-        clipCanvas.height = 360;
+        clipCanvas.width = canvasSize.width;
+        clipCanvas.height = canvasSize.width;
         const clipCtx = clipCanvas.getContext("2d");
 
         if (clipCtx) {
@@ -143,7 +134,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
           //scaling factors to put rectangular input into square picture
           const scaleX = clipCanvas.width / viewBox.width;
-          const scaleY = (clipCanvas.width * 360) / (viewBox.height * 300);
+          const scaleY = clipCanvas.width / viewBox.height;
 
           //initially move the canvas to position clippath correctly (nothing drawn yet)
           clipCtx.translate(clipCanvas.width / 2, clipCanvas.height / 2);
@@ -167,7 +158,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
           clipCtx.translate(-clipCanvas.width / 2, -clipCanvas.height / 2);
 
           //draw the image
-          clipCtx.drawImage(canvas, 0, -clipCanvas.height * 45 / 360, clipCanvas.width, canvasSize.height);
+          clipCtx.drawImage(canvas, 0, -clipCanvas.height / 4, clipCanvas.width, canvasSize.height);
 
           clipCtx.restore();
           setImage(clipCanvas.toDataURL("image/png"));
@@ -179,18 +170,17 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
         }
       }
     }
-
-    
   };
 
-  const saveClippedImage = () => {
+  const saveClippedImage = async () => {
     if (image && image.length > 50) {
-      setShouldProcess(true);
+      await saveImage(image, artifact.id);
+      console.log("image saved");
+      onImageCaptured();
     } else {
       console.error("empty captured image");
     }
   };
-  
 
   const rejectClippedImage = async () => {
     setImage(null);
@@ -200,14 +190,16 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
 
   return (
-    <div className="relative flex flex-col items-center justify-center w-screen h-screen bg-black">
+    <div
+  className="relative flex flex-col items-center justify-center w-screen h-screen bg-black overflow-hidden"
+>
 
       {/* back*/}
 
-      <div className='absolute top-5 flex flex-row w-[40svh] h-[10svh] justify-between items-center'>
+
       <Link href={`/exhibit/${artifact.exhibit.toLowerCase()}`}>
         <button
-          className="bg-transparent text-[#89aFEF] rounded-full p-3 shadow-lg z-10 border-none flex items-center justify-center"
+          className="absolute top-4 left-4 bg-transparent text-[#89aFEF] rounded-full p-3 shadow-lg z-10 border-none flex items-center justify-center"
           aria-label="Go Back"
         >
           <FaArrowLeft style={{ width: "20px", height: "18px" }} />
@@ -232,7 +224,6 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
           Hint
         </span>
       </button>
-      </div>
 
       {/* Hintbox */}
       {dialogOpen && (
@@ -289,7 +280,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
          {/* SVG Element */}
 <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
   <svg
-    className="w-full h-full rounded-md z-[10]"
+    className="w-[50%] h-[50%] rounded-md z-[10]"
     viewBox="0 0 100 100"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -339,9 +330,12 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 </div>
 
       {/* instructions */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black text-white py-2 px-2 rounded-full opacity-80 z-[10]">
-        <p style={{ fontSize: '16px' }}>{text}</p>
-      </div>
+      <div
+  className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black text-white py-2 px-2 rounded-full opacity-80 z-[10]"
+  style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+>
+  <p style={{ fontSize: '16px' }}>{text}</p>
+</div>
       </div>
 
 
