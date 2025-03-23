@@ -4,6 +4,7 @@ import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import anime from "animejs";
 import Image from "next/image";
+import { get, set } from "idb-keyval";
 
 // The main exhibit page component.
 export default function ExhibitClient({ exhibit, id }) {
@@ -11,7 +12,23 @@ export default function ExhibitClient({ exhibit, id }) {
 	 * State to handle whether we are showing the "intro sequence"
 	 * or the actual artifact list. Initially `false` = show intro.
 	 */
-	const [showArtifacts, setShowArtifacts] = useState(exhibit.userVisited);
+	const [showArtifacts, setShowArtifacts] = useState(null);
+
+	const hasSeenIntro = async (exhibitId) => {
+		try {
+			return (await get(`seenIntro-${exhibitId}`)) === true;
+		} catch {
+			return false;
+		}
+	};
+
+	const markIntroSeen = async (exhibitId) => {
+		try {
+			await set(`seenIntro-${exhibitId}`, true);
+		} catch (err) {
+			console.error("Failed to store intro state", err);
+		}
+	};
 
 	const introRef = useRef(null);
 
@@ -21,7 +38,8 @@ export default function ExhibitClient({ exhibit, id }) {
 			opacity: [1, 0],
 			duration: 800,
 			easing: "easeInOutQuad",
-			complete: () => {
+			complete: async () => {
+				await markIntroSeen(id);
 				setShowArtifacts(true);
 			},
 		});
@@ -33,6 +51,10 @@ export default function ExhibitClient({ exhibit, id }) {
 	 */
 	useEffect(() => {
 		if (showArtifacts) return; // If we've already transitioned, skip
+
+		hasSeenIntro(id).then((seen) => {
+			setShowArtifacts(seen);
+		});
 
 		// Create an anime timeline for sequential animations
 		const tl = anime.timeline({
@@ -95,7 +117,7 @@ export default function ExhibitClient({ exhibit, id }) {
 				targets: ".intro-enter",
 				opacity: [0, 1],
 			});
-	}, [showArtifacts]);
+	}, [id]);
 
 	// Render the intro screen or the artifact list
 	return !showArtifacts ? (
