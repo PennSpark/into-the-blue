@@ -147,6 +147,7 @@ export default function ExhibitClient({ exhibit, id }) {
 		</div>
 	) : (
 		<main className="min-h-screen w-full relative bg-warm-white">
+			<img src="/images/paper.png" className="w-full h-full absolute z-0" />
 			{/* Top bar */}
 			<div className="sticky top-0 z-10 shadow-md bg-warm-white left-0 right-0 top-0 flex items-center justify-between py-2 px-2 mb-4">
 				{/* Home button*/}
