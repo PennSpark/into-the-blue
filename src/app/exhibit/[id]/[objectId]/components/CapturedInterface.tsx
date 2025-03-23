@@ -8,7 +8,7 @@ export default function CapturedInterface( { image, artifact }: { image: string 
             <p>{artifact.name}</p>
             {image && <Image src={image} alt="Captured" className="w-[40svh] h-auto" width={500} height={500} />}
             {/* this routing not ideal when other exhibits arent one word but oh well i'll revisit*/}
-            <Link href={`/exhibit/${artifact.exhibit.toLowerCase()}`}>Dashboard</Link>
+            <Link href={`/exhibit/${artifact.exhibit.toLowerCase()}`}>djskhfkdjshfkdjshfsd</Link>
         </div>
     )
     }
