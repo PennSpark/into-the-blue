@@ -97,7 +97,7 @@ const RegionList: React.FC<RegionListProps> = ({ regions }) => {
             </div>
 
             {/* Region Icon - Always visible regardless of completion status */}
-            <div className="absolute right-0 h-full opacity-70 z-0">
+            <div className="absolute right-0 h-full opacity-70 z-0 font-FibraOneSemi">
               <img
                 src={`/icons/regions/${region.name
                   .toLowerCase()

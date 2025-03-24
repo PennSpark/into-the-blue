@@ -14,6 +14,7 @@
     "@react-three/fiber": "^9.0.4",
     "animejs": "^3.2.2",
     "html2canvas": "^1.4.1",
+    "idb-keyval": "^6.2.1",
     "install": "^0.13.0",
     "next": "15.1.6",
     "noisejs": "^2.1.0",

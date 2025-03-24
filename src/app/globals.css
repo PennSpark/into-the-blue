@@ -3,9 +3,11 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+	--background: #ffffff;
+	--foreground: #171717;
 
+	
+	--Warm-Gray: #efece4;
   --Blue-1: #3E65C8;
   --Blue-2: #89AFEF;
   --Blue-3: #D5DAE7;
@@ -24,6 +26,16 @@
 	}
 }
 
+@font-face {
+	font-family: "fibra-one-bold";
+	src: url("/fonts/fibra-one/Fibra\ One\ Bold.otf");
+}
+
+@font-face {
+	font-family: "fibra-one-semibold";
+	src: url("/fonts/fibra-one/Fibra\ One\ SemiBold.otf");
+}
+
 /* * {
   border: 1px solid red;
 }
@@ -33,7 +45,6 @@ div {
 } */
 
 body {
-	color: var(--foreground);
-	background: var(--background);
 	font-family: var(--font-dm-sans);
+	letter-spacing: -0.32px;
 }

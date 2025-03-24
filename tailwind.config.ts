@@ -32,6 +32,13 @@ export default {
 				body1: "600",
 				heading1: "700",
 			},
+			fontFamily: {
+				FibraOneBold: ["fibra-one-bold", "Roboto"],
+				FibraOneSemi: ["fibra-one-semibold", "Roboto"],
+			},
+			letterSpacing: {
+				heading: "-0.28px",
+			},
 		},
 	},
 	plugins: [],
