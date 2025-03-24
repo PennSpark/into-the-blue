@@ -7,10 +7,14 @@
   --foreground: #171717;
 
   --Blue-1: #3E65C8;
+  --Blue-2: #89AFEF;
   --Blue-3: #D5DAE7;
+  --Blue-4: #355DC3;
   --Blue-5: #D7E3FF;
   --Warm-White: #FFFEFD;
   --Gray-1: #414549;
+  --Gray-2: #686E78;
+  --Green: #333D37;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -29,18 +29,18 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange })
   }, [activeTab]);
 
   return (
-    <div className="w-[248px] h-[34px] max-w-md p-1 gray1 bg-blue3 rounded-[28px] flex relative">
+    <div className="w-[248px] h-[34px] max-w-md p-1 gray-1 bg-blue-3 rounded-[28px] flex relative">
       {/* Animated slider */}
       <div 
         ref={sliderRef}
-        className="absolute top-1 left-1 h-[calc(100%-8px)] warm-white bg-gray1 rounded-[24px] z-0 transition-transform duration-300 ease-in-out"
+        className="absolute top-1 left-1 h-[calc(100%-8px)] warm-white bg-gray-1 rounded-[24px] z-0 transition-transform duration-300 ease-in-out"
       ></div>
 
       {/* List tab button */}
       <button
         ref={listBtnRef}
         className={`flex-1 py-2.5 px-4 text-center font-medium text-sm flex items-center justify-center gap-2 rounded-[24px] z-10 relative ${
-          activeTab === 'list' ? 'text-warm-white' : 'text-gray1'
+          activeTab === 'list' ? 'text-warm-white' : 'text-gray-1'
         }`}
         onClick={() => onTabChange('list')}
       >
@@ -58,7 +58,7 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange })
       <button
         ref={mapBtnRef}
         className={`flex-1 py-2.5 px-4 text-center font-medium text-sm flex items-center justify-center gap-2 rounded-[24px] z-10 relative ${
-          activeTab === 'map' ? 'text-warm-white' : 'text-gray1'
+          activeTab === 'map' ? 'text-warm-white' : 'text-gray-1'
         }`}
         onClick={() => onTabChange('map')}
       >
