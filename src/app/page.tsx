@@ -115,7 +115,7 @@ export default function Home() {
               "linear-gradient(to bottom, rgba(254,252,247,0) 0%, rgba(255,254,253,0.85) 40.5%, #FFFEFD 100%)",
           }}
         >
-          <Link href="/stickerboard">
+          <Link href="/stickerbook">
             <div className="flex items-center bg-green text-warm-white w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
               <img src="/icons/stickerbook.svg" alt="Sticker Book" className="w-[26px] h-[25px]" />
               <p className="font-medium text-base">Sticker Book</p>
