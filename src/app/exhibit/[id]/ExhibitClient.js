@@ -147,6 +147,7 @@ export default function ExhibitClient({ exhibit, id }) {
 							</p>
 						</div>
 
+
 						{/* Right side placeholder to balance layout */}
 						<div className="w-[45px] h-[45px]" />
 					</div>
