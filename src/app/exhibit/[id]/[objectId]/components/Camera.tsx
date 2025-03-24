@@ -68,8 +68,9 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
   }, [artifact.svgURL]);
 
   const updateCanvasSize = useCallback(() => {
+    const svwToPixels = window.innerWidth / 100;
     const svhToPixels = window.innerHeight / 100;
-    setCanvasSize({ width: 40 * svhToPixels, height: 60 * svhToPixels });
+    setCanvasSize({ width: 100 * svwToPixels, height: 60 * svhToPixels });
   }, []);
 
   useEffect(() => {
@@ -201,12 +202,11 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
       <div className='absolute top-5 flex flex-row w-[40svh] h-[10svh] justify-between items-center'>
       <Link href={`/exhibit/${artifact.exhibit.toLowerCase()}`}>
-        <button
-          className="bg-transparent text-[#89aFEF] rounded-full p-3 shadow-lg z-10 border-none flex items-center justify-center"
-          aria-label="Go Back"
-        >
-          <FaArrowLeft className="text-blue-500" />
-        </button>
+        <img
+            src="/icons/Left-Arrow.svg"
+            alt="Back"
+            className="cursor-pointer"
+          />
       </Link>
 
       {/* hint button */}
@@ -216,11 +216,11 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
         aria-label="Hint"
       >
         {dialogOpen ? (
-          <FaLightbulb className="text-[#89aFEF]" />
+          <FaLightbulb className="text-blue-1" />
         ) : (
-          <FaRegLightbulb className="text-[#89aFEF]" />
+          <FaRegLightbulb className="text-blue-2" />
         )}
-        <span className={dialogOpen ? 'text-[#89aFEF]' : 'text-[#89aFEF]'}>Hint</span>
+        <span className={dialogOpen ? 'text-blue-1' : 'text-blue-2'}>Hint</span>
       </button>
       </div>
 
@@ -228,7 +228,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
       {dialogOpen && (
         <Dialog open={dialogOpen} onClose={closeDialog} className="fixed inset-0 z-20 flex justify-center items-center">
           <div className="bg-white rounded-lg p-6 w-80 max-w-xs flex flex-col justify-center items-center">
-            <h2 className="text-[#3e65c8] font-semibold text-xl mb-4 text-center">Text about the object goes here</h2>
+            <h2 className="text-[#3e65c8] text-lg mb-4 text-center">{artifact.hint || "This artifact doesn't have a hint."}</h2>
             <button
               onClick={closeDialog}
               className="bg-[#3e65c8] text-white rounded-md px-4 py-2 w-full"
@@ -242,19 +242,19 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
 
       {/* Webcam container with relative positioning */}
-      <div className="relative w-[40svh] h-[60svh]">
+      <div className="relative w-[100svw] h-[70svh]">
         <Webcam ref={webcamRef}
           className="absolute opacity-0 pointer-events-none" />
 
         <canvas
           ref={canvasRef}
           style={{ width: `${canvasSize.width}px`, height: `${canvasSize.height}px` }}
-          className="absolute rounded-lg shadow-lg"
+          className="absolute rounded-[10px] shadow-lg"
         />
 
-        <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
+        <div className="absolute inset-0 flex justify-center items-center pointer-events-none"> 
           <svg
-            className="w-[40svh] h-auto rounded-md z-[10]"
+            className="w-[340px] h-auto z-[10]"
             width="300" height="360" viewBox="0 0 300 360" fill="none"
             xmlns="http://www.w3.org/2000/svg"
             overflow="visible"
@@ -275,7 +275,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
         </div>
 
         {/* instructions */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black text-white py-2 px-2 rounded-full opacity-80 z-[10]">
+        <div className="absolute bottom-28 left-1/2 transform -translate-x-1/2 w-[80%] py-2 px-2 rounded-full z-[10] flex justify-center items-center overflow-hidden gap-2.5 px-3 py-2 rounded-[60px] bg-[#393939]/70 backdrop-blur-[7px]">
           <p>{text}</p>
         </div>
       </div>
@@ -283,19 +283,21 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
       {/* visible before taking picture: white circular button to take picture */}
       {!image && (
         <>
-        <div className="absolute bottom-10 flex flex-col gap-4">
+        <div className="absolute bottom-32 flex flex-col gap-4">
           <button
             onClick={captureImage}
-            className="bg-white text-black rounded-full w-16 h-16 flex items-center justify-center shadow-lg border-none"
+            className="bg-gray-2 text-black rounded-full w-[72px] h-[72px] flex items-center justify-center shadow-lg border-none z-[9]"
             aria-label="Take Picture"
           >
+            <div className="bg-white text-black rounded-full w-[56px] h-[56px] flex items-center justify-center shadow-lg border-none z-[10]">
+            </div>
           </button>
         </div>
 
         <div
         className="absolute inset-0 flex justify-center items-center z-[10] pointer-events-none"
         >
-        <Image src={"/camera-overlay/" + artifact.id + "-overlay.png"} alt="Captured" className="w-[40svh] h-auto" width={500} height={500} />
+        <Image src={"/camera-overlay/" + artifact.id + "-overlay.png"} alt="Captured" className="w-[340px] h-auto" width={500} height={500} />
         </div>
         </>
       )}
@@ -341,7 +343,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
           <div className="absolute inset-0 flex justify-center items-center pointer-events-none z-[6]">
             <svg
-              className="w-[40svh] h-auto rounded-md stroke-animation"
+              className="w-[340px] h-auto rounded-md stroke-animation"
               width="300" height="360" viewBox="0 0 300 360" fill="none"
               xmlns="http://www.w3.org/2000/svg"
               overflow="visible"
@@ -353,7 +355,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
                     d={d}
                     pathLength={100}
                     stroke="white"
-                    strokeWidth="0.8svh"
+                    strokeWidth="1.8svh"
                     strokeLinejoin="round"
                   />
                 ))
@@ -364,7 +366,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
           <div
             className="absolute inset-0 flex justify-center items-center z-[10] pointer-events-none"
           >
-            <Image src={image} alt="Captured" className="w-[40svh] h-auto" width={500} height={500} />
+            <Image src={image} alt="Captured" className="w-[340px] h-auto" width={500} height={500} />
           </div>
         </>
       )}

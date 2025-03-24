@@ -6,13 +6,8 @@ import { FaArrowRight, FaLightbulb, FaRegLightbulb, FaUndo } from 'react-icons/f
 
 export default function CapturedInterface({ image, artifact }: { image: string | null, artifact: Artifact }) {
     return (
-        <div
-    className="w-[100svw] h-[100svh] flex flex-col gap-5 items-center relative"
-    style={{
-        background: `linear-gradient(to top, #CBDEFF, white)`,
-        backgroundSize: '100% 100%',
-    }}
->
+        <div className="w-[100svw] h-[100svh] flex flex-col gap-5 items-center relative bg-warm-white">
+
     {/* Dots Layer */}
     <div
         className="absolute top-0 left-0 w-full h-full"
@@ -23,66 +18,92 @@ export default function CapturedInterface({ image, artifact }: { image: string |
         }}
     />
 
+    {/* Gradient Layer */}
+    <div
+        className="absolute top-0 left-0 w-full h-full z-2"
+        style={{
+            background: `linear-gradient(to bottom, white, #CBDEFF)`,
+            backgroundSize: '100% 100%',
+            opacity: 0.85,
+        }}
+    />
+
     {/* Content Layer */}
     <div className="relative z-10">
             {/* Animated Blue Banner */}
             <motion.div
-                className="fixed top-0 left-0 w-full bg-[#89AFEF] text-[#222324] text-center py-8 shadow-md z-50"
-                initial={{ y: '-100%', opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.6 }}
+                className="fixed top-0 left-0 w-full h-[100px] bg-[#89AFEF] text-[#222324] shadow-md z-50 rounded-b-[20px] flex flex-col justify-center items-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3, delay: 0.4 }}
             >
-                <p className="text-base font-medium">You found a</p>
-                <p className="text-xl font-semibold">{artifact.name.toUpperCase()}</p>
+                <p className="text-base font-medium text-gray-1">You found a</p>
+                <p className="text-xl font-semibold text-black">{artifact.name.toUpperCase()}</p>
             </motion.div>
 
             {/* Spacer to ensure content is not hidden behind the fixed banner */}
-            <div className="h-[120px]" />
+            <div className="h-[128px]" />
 
             {/* Animated Artifact Description Box */}
-<motion.div
-    className="text-gray-700 text-center w-full px-6 max-w-md mx-auto"
-    initial={{ y: -50, opacity: 0 }}
-    animate={{ y: 0, opacity: 1 }}
-    transition={{ duration: 0.6, delay: 0.2 }}
->
-    <p className="text-lg font-medium">{artifact.description || "Artifact Description Here"}</p>
-</motion.div>
+            <div className="w-full flex justify-center">
+                <motion.div
+                    className="w-[293px] flex justify-between"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3, delay: 0.4 }}
+                >
+                    <div className='flex flex-col gap-1'>
+                        <p className="text-base font-medium text-gray-1">Time Period</p>
+                        <p className="text-base font-medium text-gray-1">Material</p>
+                    </div>
 
-{/* Image with White Outline */}
-{image && (
-    <div className="relative">
-        <div
-            className="absolute top-0 left-0 w-full h-full border-4 border-white rounded-lg"
-            style={{ zIndex: 1 }}
-        />
-        <Image
-            src={image}
-            alt="Captured"
-            className="w-[40svh] h-auto rounded-lg"
-            width={500}
-            height={500}
-        />
-    </div>
-)}
+                    <div className='text-end flex flex-col justify-start gap-1'>
+                        <p className="text-base font-medium text-black">{artifact.time || "???"}</p>
+                        <p className="text-base font-medium text-black">{artifact.material || "???"}</p>
+                    </div>
+                </motion.div>
+            </div>  
 
-{/* Animated Button with Reload Icon */}
-<motion.div
-    initial={{ y: 50, opacity: 0 }}
-    animate={{ y: 0, opacity: 1 }}
-    transition={{ duration: 0.6, delay: 0.4 }}
-    className="mt-4 flex justify-center"
->
-    <Link
-        href={`/exhibit/${artifact.exhibit.toLowerCase()}`}
-        className="bg-[#333D37] text-white text-[16px] px-6 py-2 rounded-full shadow-md hover:bg-[#444D47] transition flex items-center"
-    >
-        <span className="mr-2">Continue</span>
-        <FaArrowRight style={{ width: "20px", height: "18px" }} />
-    </Link>
-</motion.div>
+            <div className="flex flex-col items-center">
+                {/* Image with White Outline */}
+                {image && (
+                    <motion.div className="relative"
+                        initial={{ y: -25 }}
+                        animate={{ y: 25 }}
+                        transition={{ duration: 0.3, delay: 1 }}
+                    >
+                        <div
+                            className="absolute top-0 left-0 w-full h-full rounded-lg"
+                            style={{ zIndex: 1 }}
+                        />
+                        <Image
+                            src={image}
+                            alt="Captured"
+                            className="w-[340px] h-auto rounded-lg"
+                            width={500}
+                            height={500}
+                        />
+                    </motion.div>
+                )}
+            </div>
 
-        </div>
+            {/* Animated Button with Reload Icon */}
+            <motion.div
+                initial={{ y: 35, opacity: 0 }}
+                animate={{ y: 35, opacity: 1 }}
+                transition={{ duration: 0.3, delay: 0.4 }}
+                className="mt-4 flex justify-center"
+            >
+                <Link
+                    href={`/exhibit/${artifact.exhibit.toLowerCase()}`}
+                    className="bg-[#333D37] text-white text-[16px] px-6 py-2 rounded-full shadow-md hover:bg-[#444D47] transition flex items-center"
+                >
+                    <span className="mr-2">Continue</span>
+                    <FaArrowRight style={{ width: "20px", height: "18px" }} />
+                </Link>
+            </motion.div>
+
+            </div>
         </div>
     );
 }

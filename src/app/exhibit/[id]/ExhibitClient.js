@@ -177,7 +177,7 @@ export default function ExhibitClient({ exhibit, id }) {
 										<Link
 											key={artifact.id}
 											className={`relative flex flex-col items-center w-full p-4 rounded-md cursor-pointer
-              ${artifact.userFound ? "bg-blue2" : "bg-blue3"}`}
+              ${artifact.userFound ? "bg-blue-2" : "bg-blue-3"}`}
 											href={`/exhibit/${id}/${artifact.id}`}
 										>
 											<img
@@ -212,7 +212,7 @@ export default function ExhibitClient({ exhibit, id }) {
 										<Link
 											key={artifact.id}
 											className={`relative flex flex-col items-center w-full p-4 rounded-md cursor-pointer
-              ${artifact.userFound ? "bg-blue2" : "bg-blue3"}`}
+              ${artifact.userFound ? "bg-blue-2" : "bg-blue-3"}`}
 											href={`/exhibit/${id}/${artifact.id}`}
 										>
 											<img

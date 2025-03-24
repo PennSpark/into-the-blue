@@ -10,7 +10,9 @@ export type Exhibit = {
 export type Artifact = {
 	id: string;
 	name: string;
-	description: string;
+	time: string;
+	material: string;
+	hint: string;
 	foundImageURL: string;
 	unfoundImageURL: string;
 	svgURL: string;
