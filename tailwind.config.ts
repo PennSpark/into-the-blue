@@ -22,6 +22,7 @@ export default {
 				"gray-2": "var(--Gray-2)",
 				"warm-gray": "var(--Warm-Gray)",
 				"warm-white": "var(--Warm-White)",
+				"blue-black": "#222324",
 			},
 			fontSize: {
 				body: "1rem",
