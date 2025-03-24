@@ -34,6 +34,9 @@ export default {
 				FibraOneBold: ["fibra-one-bold", "Roboto"],
 				FibraOneSemi: ["fibra-one-semibold", "Roboto"],
 			},
+			letterSpacing: {
+				heading: "-0.28px",
+			},
 		},
 	},
 	plugins: [],
