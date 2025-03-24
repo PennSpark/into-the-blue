@@ -15,6 +15,7 @@ export default {
 				"blue-1": "var(--Blue-1)",
 				"blue-2": "var(--Blue-2)",
 				"blue-3": "var(--Blue-3)",
+				"blue-4": "var(--Blue-4)",
 				"blue-5": "var(--Blue-5)",
 				green: "var(--Green)",
 				"gray-1": "var(--Gray-1)",

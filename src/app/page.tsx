@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import GlobeWrapper from "@/components/GlobeWrapper";
-import TabNavigation from "@/components/TabNavigation";
-import RegionList from "@/components/RegionList";
+import { useState } from 'react';
+import GlobeWrapper from '@/components/GlobeWrapper';
+import TabNavigation from '@/components/TabNavigation';
+import RegionList from '@/components/RegionList';
+import Link from 'next/link';
 
 // Define all regions based on the provided image
 const regions = [
@@ -87,29 +88,47 @@ const regions = [
 ];
 
 export default function Home() {
-	// State for active tab
-	const [activeTab, setActiveTab] = useState<"list" | "map">("list");
+  // State for active tab
+  const [activeTab, setActiveTab] = useState<'list' | 'map'>('list');
+  
+  return (
+    <div className="min-h-screen p-8 font-[family-name:var(--font-geist-sans)] bg-warm-white">
+      <main className="flex flex-col items-center gap-8">
+        
+        <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
+        
+        {activeTab === 'list' ? (
+          <RegionList regions={regions} />
+        ) : (
+          <div className="w-full max-w-4xl">
+            {/* <GlobeWrapper /> */}
+            <div className="text-center text-sm opacity-70 mt-4">
+              map view coming soon
+            </div>
+          </div>
+        )}
 
-	return (
-		<div className="min-h-screen p-8">
-			<main className="flex flex-col items-center gap-8">
-				<h1 className="text-3xl font-bold text-center">
-					choose a region to begin
-				</h1>
-
-				<TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
-
-				{activeTab === "list" ? (
-					<RegionList regions={regions} />
-				) : (
-					<div className="w-full max-w-4xl">
-						<GlobeWrapper />
-						<div className="text-center text-sm opacity-70 mt-4">
-							swipe to see all galleries
-						</div>
-					</div>
-				)}
-			</main>
-		</div>
-	);
+        {/* Floating buttons */}
+        <div className="fixed bottom-0 w-full px-5 py-3 flex justify-between z-40"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(254,252,247,0) 0%, rgba(255,254,253,0.85) 40.5%, #FFFEFD 100%)",
+          }}
+        >
+          <Link href="/stickerboard">
+            <div className="flex items-center bg-green text-warm-white w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
+              <img src="/icons/stickerbook.svg" alt="Sticker Book" className="w-[26px] h-[25px]" />
+              <p className="font-medium text-base">Sticker Book</p>
+            </div>
+          </Link>
+          <Link href="/finish">
+            <div className="flex items-center text-green border-2 border-green w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
+            <p className="font-medium text-base">Finish</p>
+            <img src="/icons/arrow.svg" alt="Finish Hunt" className="w-[26px] h-[25px]" />
+            </div>
+          </Link>
+        </div>
+      </main>
+    </div>
+  );
 }
