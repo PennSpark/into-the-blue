@@ -93,7 +93,7 @@ export default function ExhibitClient({ exhibit, id }) {
 						</div>
 
 						{/* Heading */}
-						<div className="intro-heading font-FibraOneSemi opacity-0">
+						<div className="intro-heading font-FibraOneSemi tracking-heading opacity-0">
 							<h1 className="text-[40px] text-green text-center">
 								{exhibit.name.toUpperCase()}
 							</h1>
@@ -139,7 +139,7 @@ export default function ExhibitClient({ exhibit, id }) {
 
 						{/* Exhibit Title & Found Count */}
 						<div className="artifacts-header text-center">
-							<p className="text-heading1 font-heading1 font-FibraOneBold text-Black p-0">
+							<p className="text-heading1 font-heading1 font-FibraOneBold tracking-heading text-Black p-0">
 								{exhibit.name.toUpperCase()}
 							</p>
 							<p className="text-body font-body1 text-gray-2">
@@ -163,15 +163,6 @@ export default function ExhibitClient({ exhibit, id }) {
               ${artifact.userFound ? "bg-blue-2" : "bg-blue-3"}`}
 										href={`/exhibit/${id}/${artifact.id}`}
 									>
-										{/* <img
-									src={artifact.imageURL}
-									alt={artifact.name}
-									className={
-										artifact.userFound
-											? "max-h-[220px] max-w-[120px] object-contain"
-											: "filter grayscale max-h-[220px] max-w-[120px] object-contain"
-									}
-								/> */}
 										<Image
 											src={artifact.imageURL}
 											alt={artifact.name}
@@ -189,7 +180,7 @@ export default function ExhibitClient({ exhibit, id }) {
 											}
 										/>
 
-										<p className="mt-2 text-body font-body1 text-black text-center">
+										<p className="mt-2 text-body font-body1 text-gray-1 text-center">
 											{artifact.name}
 										</p>
 
@@ -214,16 +205,6 @@ export default function ExhibitClient({ exhibit, id }) {
               ${artifact.userFound ? "bg-blue-2" : "bg-blue-3"}`}
 										href={`/exhibit/${id}/${artifact.id}`}
 									>
-										{/* <img
-									src={artifact.imageURL}
-									alt={artifact.name}
-									className={
-										artifact.userFound
-											? "max-h-[220px] max-w-[120px] object-contain opacity-0 transition-opacity duration-300"
-											: "filter grayscale max-h-[220px] max-w-[120px] object-contain opacity-0 transition-opacity duration-300"
-									}
-									onLoad={(e) => e.currentTarget.classList.remove("opacity-0")}
-								/> */}
 										<Image
 											src={artifact.imageURL}
 											alt={artifact.name}
@@ -241,7 +222,7 @@ export default function ExhibitClient({ exhibit, id }) {
 											}
 										/>
 
-										<p className="mt-2 text-body font-body1 text-black text-center">
+										<p className="mt-2 text-body font-body1 text-gray-1 text-center">
 											{artifact.name}
 										</p>
 

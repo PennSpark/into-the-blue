@@ -44,4 +44,5 @@ div {
 
 body {
 	font-family: var(--font-dm-sans);
+	letter-spacing: -0.32px;
 }
