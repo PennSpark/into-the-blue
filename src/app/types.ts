@@ -10,13 +10,14 @@ export type Exhibit = {
 export type Artifact = {
 	id: string;
 	name: string;
-	description: string;
-	foundImageURL: string;
-	unfoundImageURL: string;
-	svgURL: string;
+	time: string;
+	material: string;
 	exhibit: string;
+	exhibitID: string;
+	imageURL: string;
+	svgURL: string;
 	//other relevant info/fun facts fro
-	userFound: boolean;
+	hint: string;
 };
 
 export type Region = {

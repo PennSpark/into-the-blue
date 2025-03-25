@@ -1,67 +1,49 @@
-import { notFound } from "next/navigation";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import ExhibitClient from "./ExhibitClient";
 
-// Generate static paths for your dynamic exhibit pages.
-export async function generateStaticParams() {
-	const exhibits = [
-		{ id: "into-the-blue" },
-		{ id: "etruscan" },
-		{ id: "greece" },
-		{ id: "rome" },
-		{ id: "eastern-mediterranean" },
-		{ id: "asia" },
-		{ id: "egypt" },
-		{ id: "middle-east" },
-		{ id: "north-america" },
-		{ id: "mexico-central-america" },
-		{ id: "africa" },
-		{ id: "assyria" },
-	];
-	return exhibits.map((exhibit) => ({ id: exhibit.id }));
-}
+export default function ExhibitPageClient() {
+	const { id } = useParams();
 
-// Simulated data fetching based on the exhibit ID.
-async function getExhibitData(id) {
-	const resE = await fetch(
-		`${process.env.NEXT_PUBLIC_BASE_URL}/data/exhibits.json`
-	);
-	const exhibitData = await resE.json();
+  const [exhibit, setExhibit] = useState(null);
 
-	const resA = await fetch(
-		`${process.env.NEXT_PUBLIC_BASE_URL}/data/artifacts.json`
-	);
-	const artifactsData = await resA.json();
+  useEffect(() => {
+    async function fetchData() {
+      try {
+		console.log("id: ", id);
+        const resE = await fetch("/data/exhibits.json");
+        const exhibitData = await resE.json();
+        const resA = await fetch("/data/artifacts.json");
+        const artifactsData = await resA.json();
 
-	const exhibit = exhibitData[id];
-	if (!exhibit) return null;
+        const exhibitItem = exhibitData[id];
+        if (!exhibitItem) {
+          console.error("Exhibit not found");
+          return;
+        }
+        // Map artifact IDs from exhibit.items
+        const artifactIDs = exhibitItem.items.map((item) => item.id);
+        // Match full artifact data
+        const detailedItems = artifactsData.filter((artifact) =>
+          artifactIDs.includes(artifact.id)
+        );
 
-	console.log(exhibit);
-	// Map artifact IDs from exhibit.items
-	const artifactIDs = exhibit.items.map((item) => item.id);
+        setExhibit({
+          ...exhibitItem,
+          items: detailedItems,
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    fetchData();
+  }, [id]);
 
-	// Match full artifact data
-	const detailedItems = artifactsData.filter((artifact) =>
-		artifactIDs.includes(artifact.id)
-	);
+  if (!exhibit) {
+    return <p>Loading...</p>;
+  }
 
-	return {
-		...exhibit,
-		items: detailedItems, // Replace item IDs with full artifact objects
-	};
-}
-
-// The main exhibit page component.
-export default async function ExhibitPage(props) {
-	const { id } = await props.params;
-	const exhibit = await getExhibitData(id);
-
-	if (!exhibit) {
-		// Show a 404 if the exhibit doesn't exist
-		notFound();
-	}
-
-	console.log(exhibit);
-
-	// Render the client component, passing the exhibit data
-	return <ExhibitClient exhibit={exhibit} id={id} />;
+  return <ExhibitClient exhibit={exhibit} id={id} />;
 }
