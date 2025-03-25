@@ -399,7 +399,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
           imageUrl={image}
           svgUrl={artifact.svgURL}
           onReady={async (processedImage) => {
-            await saveImage(processedImage, artifact.id);
+            await saveImage(processedImage, artifact.id, artifact.exhibitID);
             console.log("processed image saved");
             onImageCaptured();
           }}

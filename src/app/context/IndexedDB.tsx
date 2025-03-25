@@ -19,7 +19,7 @@ const METRICS_STORE = "metrics";
 {/* open db, TODO: initialize found objects array */}
 export const openDB = (): Promise<IDBDatabase> => {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, 1);
+    const request = indexedDB.open(DB_NAME, 2); // bump version if needed
 
     request.onupgradeneeded = (event) => {
       const db = (event.target as IDBOpenDBRequest).result;
@@ -29,6 +29,14 @@ export const openDB = (): Promise<IDBDatabase> => {
       if (!db.objectStoreNames.contains(METRICS_STORE)) {
         // Use a stable key so we can update our metric object later.
         db.createObjectStore(METRICS_STORE, { keyPath: "name" });
+      }
+      // NEW: Create store for collected artifacts if not present.
+      if (!db.objectStoreNames.contains("collectedArtifacts")) {
+        db.createObjectStore("collectedArtifacts", { keyPath: "id" });
+      }
+      // NEW: Create store for visited exhibits if not present.
+      if (!db.objectStoreNames.contains("visitedExhibits")) {
+        db.createObjectStore("visitedExhibits", { keyPath: "id" });
       }
     };
 
@@ -69,7 +77,11 @@ export const loadImageByName = async (imageName: string): Promise<string | null>
 
 
 //save image, if image with same name exists replace it (for simplicity's sake)
-export const saveImage = async (imageData: string, imageName: string) => {
+export const saveImage = async (
+  imageData: string,
+  imageName: string,
+  exhibitId?: string
+) => {
   const imageBlob = dataURLtoBlob(imageData);
   const db = await openDB();
 
@@ -79,31 +91,37 @@ export const saveImage = async (imageData: string, imageName: string) => {
 
     const putImage = () => {
       const putRequest = store.put({ id: imageName, image: imageBlob, timestamp: Date.now() });
-
-      putRequest.onsuccess = () => {
-        // Image put successful
+      putRequest.onsuccess = async () => {
+        try {
+          const isNew = await addCollectedArtifact(imageName);
+          if (isNew) {
+            await updateTotalObjectsFound(1);
+          }
+          // If an exhibit ID was provided, mark it as visited.
+          if (exhibitId) {
+            await addVisitedExhibit(exhibitId);
+          }
+          resolve();
+        } catch (e) {
+          reject("Image saved but failed to update collected artifacts or metrics");
+        }
       };
-
       putRequest.onerror = () => {
         reject("Failed to save image");
       };
     };
 
-    // Check if already exists
+    // Check if an image with the same name already exists; if so, delete it first.
     const getRequest = store.get(imageName);
-
     getRequest.onsuccess = () => {
       if (getRequest.result) {
         const deleteRequest = store.delete(imageName);
-        deleteRequest.onsuccess = () => {
-          putImage();
-        };
+        deleteRequest.onsuccess = () => putImage();
         deleteRequest.onerror = () => reject("Failed to delete old image before saving new one");
       } else {
         putImage();
       }
     };
-
     getRequest.onerror = () => reject("Failed to check for existing image");
 
     transaction.oncomplete = () => {
@@ -285,52 +303,84 @@ export const updateTotalObjectsFound = async (increment: number = 1): Promise<vo
 
 // Similarly you can create functions for updating totalExhibitsVisited, startTime and stickerbookViewTime.
 
-export const logDatabaseState = async () => {
-  try {
-    const db = await openDB();
-
-    // Log images store
-    const imageTx = db.transaction(STORE_NAME, "readonly");
-    const imageStore = imageTx.objectStore(STORE_NAME);
-    const imageRequest = imageStore.getAll();
-
-    imageRequest.onsuccess = () => {
-      const images = imageRequest.result;
-      console.log(`📦 Images in '${STORE_NAME}' store:`);
-      images.forEach((entry: any, index: number) => {
-        console.log(`  #${index + 1} — ID: ${entry.id}, Timestamp: ${new Date(entry.timestamp).toLocaleString()}, Blob size: ${entry.image?.size} bytes`);
-      });
-      if (images.length === 0) {
-        console.log("  (No images found)");
-      }
-    };
-
-    imageRequest.onerror = () => {
-      console.error("❌ Failed to retrieve images");
-    };
-
-    // Log metrics store
-    const metricsTx = db.transaction(METRICS_STORE, "readonly");
-    const metricsStore = metricsTx.objectStore(METRICS_STORE);
-    const metricsRequest = metricsStore.get("stats");
-
-    metricsRequest.onsuccess = () => {
-      const metrics = metricsRequest.result;
-      console.log(`📊 Metrics in '${METRICS_STORE}' store:`);
-      if (metrics) {
-        console.table(metrics);
-      } else {
-        console.log("  (No metrics stored)");
-      }
-    };
-
-    metricsRequest.onerror = () => {
-      console.error("❌ Failed to retrieve metrics");
-    };
-  } catch (error) {
-    console.error("⚠️ Error accessing database:", error);
-  }
+export const updateTotalExhibitsVisited = async (increment: number = 1): Promise<void> => {
+  const currentMetrics = await getMetrics();
+  const newMetrics = {
+    totalObjectsFound: currentMetrics?.totalObjectsFound || 0,
+    totalExhibitsVisited: (currentMetrics?.totalExhibitsVisited || 0) + increment,
+    startTime: currentMetrics?.startTime || Date.now(),
+    stickerbookViewTime: currentMetrics?.stickerbookViewTime || 0,
+  };
+  await saveMetrics(newMetrics);
 };
 
+// Modified addCollectedArtifact that returns a boolean indicating if the artifact was new.
+export const addCollectedArtifact = async (artifactId: string): Promise<boolean> => {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction("collectedArtifacts", "readwrite");
+    const store = transaction.objectStore("collectedArtifacts");
 
-//parking lot / helpers
+    // First, check if this artifact is already collected.
+    const getRequest = store.get(artifactId);
+    getRequest.onsuccess = () => {
+      if (getRequest.result) {
+        // Already collected – do nothing.
+        resolve(false);
+      } else {
+        // Not collected yet – add it.
+        const putRequest = store.put({ id: artifactId, timestamp: Date.now() });
+        putRequest.onsuccess = () => resolve(true);
+        putRequest.onerror = () => reject("Failed to add collected artifact");
+      }
+    };
+    getRequest.onerror = () => reject("Failed to check collected artifact");
+  });
+};
+
+export const addVisitedExhibit = async (exhibitId: string): Promise<void> => {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction("visitedExhibits", "readwrite");
+    const store = transaction.objectStore("visitedExhibits");
+
+    // Check if the exhibit is already registered as visited.
+    const request = store.get(exhibitId);
+    request.onsuccess = async () => {
+      if (!request.result) {
+        // Not visited yet: mark as visited and update metric.
+        const addRequest = store.put({ id: exhibitId, timestamp: Date.now() });
+        addRequest.onsuccess = async () => {
+          try {
+            await updateTotalExhibitsVisited(1);
+            resolve();
+          } catch (e) {
+            reject("Failed to update total exhibits visited");
+          }
+        };
+        addRequest.onerror = () => {
+          reject("Failed to add visited exhibit");
+        };
+      } else {
+        // Already visited, do nothing.
+        resolve();
+      }
+    };
+    request.onerror = () => reject("Failed to check visited exhibit");
+  });
+};
+
+export const loadCollectedArtifacts = async (): Promise<string[]> => {
+  const db = await openDB();
+  const transaction = db.transaction("collectedArtifacts", "readonly");
+  const store = transaction.objectStore("collectedArtifacts");
+  const request = store.getAll();
+  return new Promise((resolve, reject) => {
+    request.onsuccess = () => {
+      // Return an array of artifact IDs
+      const artifacts = request.result || [];
+      resolve(artifacts.map((item: { id: string }) => item.id));
+    };
+    request.onerror = () => reject("Failed to load collected artifacts");
+  });
+};

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { getMetrics } from "../context/IndexedDB";
+import { getMetrics, loadCollectedArtifacts, loadImageByName } from "../context/IndexedDB";
 
 export default function StatsPage() {
     const [showContent, setShowContent] = useState(false);
@@ -13,9 +13,10 @@ export default function StatsPage() {
         startTime: Date.now(),
         stickerbookViewTime: 0,
     });
+    const [collectedImages, setCollectedImages] = useState<string[]>([]);
 
     useEffect(() => {
-        // Fade in first content immediately
+// Fade in first content immediately
         setTimeout(() => {
             setShowContent(true);
         }, 100);
@@ -31,6 +32,29 @@ export default function StatsPage() {
         fetchMetrics();
     }, []);
 
+    // Load collected artifacts and randomly pick 3 images.
+    useEffect(() => {
+        async function loadImages() {
+            try {
+                const artifactIds = await loadCollectedArtifacts();
+                if (artifactIds.length === 0) {
+                    setCollectedImages([]);
+                    return;
+                }
+                // Shuffle array randomly
+                const shuffled = artifactIds.sort(() => 0.5 - Math.random());
+                // Pick up to 3
+                const selected = shuffled.slice(0, 3);
+                // Instead of loading images from IndexedDB, form static paths.
+                const images = selected.map(id => `/images/artifacts/${id}.png`);
+                setCollectedImages(images);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        loadImages();
+    }, []);
+
     useEffect(() => {
         const setVh = () => {
             const vh = window.innerHeight * 0.01;
@@ -42,11 +66,11 @@ export default function StatsPage() {
     }, []);
 
     const openSms = () => {
-        // On iOS and Android, this URL scheme should open the native messaging app
+// On iOS and Android, this URL scheme should open the native messaging app
         window.location.href = `sms:&body=I finished the scavenger hunt at the Penn Museum! Plan your visit now at https://penn.museum/`;
     };
 
-    // Calculate elapsed time in seconds
+// Calculate elapsed time in seconds
     const elapsedSeconds = Math.floor((Date.now() - metrics.startTime) / 1000);
 
     // Helper function to format elapsed time.
@@ -73,7 +97,7 @@ export default function StatsPage() {
     // Compeletionist: 36 objects found
     // Collector: 24-35 objects found
     // Investigator: 12-23 objects found
-    
+
     const personality = metrics.totalObjectsFound === 36 ? 'COMPLETIONIST' :
         metrics.totalObjectsFound >= 24 ? 'COLLECTOR' :
         metrics.totalObjectsFound >= 12 ? 'INVESTIGATOR' :
@@ -89,7 +113,7 @@ export default function StatsPage() {
             className="relative w-full overflow-hidden bg-gradient-to-b from-[#d8e3f7] to-[#aec6f0]"
             style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
         >
-            {/* First content */}
+{/* First content */}
             <div className={`absolute inset-0 transition-opacity duration-1000 ${showContent ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
                 <div className="h-full flex flex-col items-center justify-start gap-[30px] z-10">
                     <div className="h-[84%] w- flex flex-col items-center justify-start gap-[36px] m-[20px] p-[32px] px-[20px] bg-warm-white rounded-xl">
@@ -119,9 +143,13 @@ export default function StatsPage() {
                                 <hr className="w-[55vw] border-t border-gray-3" />
                             </div>
                             <div className="flex items-center gap-[26px]">
-                                <Image className="h-[44px] w-auto"
-                                    src="/images/artifacts/Rome-Urn.png" alt="Urn" width={100} height={100} 
-                                />
+                                {collectedImages.length > 0 ? (
+                                    collectedImages.map((url, index) => (
+                                        <Image key={index} className="h-[44px] w-auto" src={url} alt="Collected artifact" width={100} height={100} />
+                                    ))
+                                ) : (
+                                    <p className="text-gray-2 text-[14px]">No artifacts collected yet</p>
+                                )}
                             </div>
                         </div>
                         <div className='flex flex-col items-center gap-[24px]'>
@@ -139,7 +167,7 @@ export default function StatsPage() {
                     <div className="fixed bottom-0 w-full px-5 py-3 flex justify-center gap-[12px] z-40">
                         <Link href="/">
                             <div className="flex items-center bg-warm-white w-fit h-[44px] gap-[6px] px-[16px] rounded-full">
-                                <img src="/icons/left-arrow.svg" alt="Back" className="w-[16px] h-[14px]" />
+                                <img src="/icons/Left-Arrow.svg" alt="Back" className="w-[16px] h-[14px]" />
                             </div>
                         </Link>
                         <button onClick={openSms} className="flex items-center bg-green w-fit h-[44px] gap-[6px] px-[16px] rounded-full">

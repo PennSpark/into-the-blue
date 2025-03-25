@@ -6,12 +6,15 @@ import ExhibitClient from "./ExhibitClient";
 import { getFoundObjectsForExhibit } from "@/app/context/IndexedDB";
 
 export default function ExhibitPageClient() {
-	const { id } = useParams();
+  const { id: rawId } = useParams();
+  // Decode the URL-encoded parameter:
+  const id = decodeURIComponent(rawId).replace(/\s+/g, "-");
   const [exhibit, setExhibit] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
       try {
+        console.log("id: ", id);
         const resE = await fetch("/data/exhibits.json");
         const exhibitData = await resE.json();
         const resA = await fetch("/data/artifacts.json");
@@ -48,10 +51,9 @@ export default function ExhibitPageClient() {
     fetchData();
   }, [id]);
   
-
   if (!exhibit) {
     return <p>Loading...</p>;
   }
-
+  
   return <ExhibitClient exhibit={exhibit} id={id} />;
 }
