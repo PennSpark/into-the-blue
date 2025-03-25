@@ -121,8 +121,8 @@ export default function Home() {
               <p className="font-medium text-base">Sticker Book</p>
             </div>
           </Link>
-          <Link href="/finish">
-            <div className="flex items-center text-green border-2 border-green w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
+          <Link href="/ending">
+            <div className="flex items-center text-green border-2 border-green w-fit h-[44px] gap-[6px] pl-[20px] pr-[16px] rounded-full">
             <p className="font-medium text-base">Finish</p>
             <img src="/icons/arrow.svg" alt="Finish Hunt" className="w-[26px] h-[25px]" />
             </div>

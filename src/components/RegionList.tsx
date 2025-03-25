@@ -86,7 +86,7 @@ const RegionList: React.FC<RegionListProps> = ({ regions }) => {
             )}
 
             <div className="flex flex-col p-6 z-10">
-              <div className="text-black font-semibold text-lg">
+              <div className="text-blue-black font-semibold text-lg">
                 {region.displayName}
               </div>
               <div className="text-gray-1 text-sm">

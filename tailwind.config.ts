@@ -20,6 +20,7 @@ export default {
 				green: "var(--Green)",
 				"gray-1": "var(--Gray-1)",
 				"gray-2": "var(--Gray-2)",
+				"gray-3": "#C8CDD4",
 				"warm-gray": "var(--Warm-Gray)",
 				"warm-white": "var(--Warm-White)",
 				"blue-black": "#222324",

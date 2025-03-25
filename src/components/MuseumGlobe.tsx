@@ -151,7 +151,7 @@ const Globe = ({ onRegionClick }: { onRegionClick: (region: Region) => void }) =
           <Html position={[0, 0.2, 0]} center distanceFactor={8}>
             <div className={`
               text-white px-2 py-1 rounded text-xs transition-all duration-200 text-center
-              ${hovered === region.name ? 'bg-black/80 scale-110' : 'bg-black/60'}
+              ${hovered === region.name ? 'bg-blue-black/80 scale-110' : 'bg-blue-black/60'}
               ${clicked === region.name ? 'animate-pulse' : ''}
             `}>
               {region.displayName}
@@ -199,7 +199,7 @@ const MuseumGlobe = () => {
         />
       </Canvas>
       {isNavigating && (
-        <div className="absolute inset-0 bg-black/20 flex items-center justify-center rounded-xl">
+        <div className="absolute inset-0 bg-blue-black/20 flex items-center justify-center rounded-xl">
           <div className="text-white text-lg animate-pulse">
             Traveling to exhibit...
           </div>

@@ -59,14 +59,14 @@ export default function WelcomePage() {
                         <Image className="w-[31px] h-[31px]"
                             src="/welcome-assets/spark.png" alt="Spark" width={100} height={100} 
                         />
-                        <p className="text-black font-FibraOneSemi text-base">PENN SPARK</p>
+                        <p className="text-blue-black font-FibraOneSemi text-base">PENN SPARK</p>
                         <Image className="w-[16px] h-[16px]"
                             src="/welcome-assets/cross.svg" alt="Spark" width={50} height={50} 
                         />
                         <Image className="w-[31px] h-[31px] padding-l-[1px]"
                             src="/welcome-assets/penn-museum.png" alt="Spark" width={100} height={100} 
                         />
-                        <p className="text-black font-FibraOneSemi text-base">PENN MUSEUM</p>
+                        <p className="text-blue-black font-FibraOneSemi text-base">PENN MUSEUM</p>
                     </div>
                 </div>
             </div>

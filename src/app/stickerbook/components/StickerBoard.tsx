@@ -93,10 +93,10 @@ const StickerBoard: React.FC = () => {
 
   const captureStickerboard = async () => {
     if (boardRef.current) {
-      //clear active sticker
+      // Clear active sticker controls before capture
       setActiveStickerId(null);
-  
-      //wait for next frame so that active sticker controls aren't in the pic
+
+      // Wait for the next frame so active sticker controls aren't visible
       requestAnimationFrame(async () => {
         const scaleFactor = 3;
         const canvas = await html2canvas(boardRef.current, {
@@ -104,17 +104,27 @@ const StickerBoard: React.FC = () => {
           scale: scaleFactor,
           useCORS: true,
         });
-  
-        const link = document.createElement("a");
-        link.href = canvas.toDataURL("image/png");
-        link.download = "stickerboard.png";
-        link.click();
-  
-        console.log("Screenshot captured successfully!");
+
+        // Convert canvas to Data URL, then to Blob and finally to a File object
+        const dataUrl = canvas.toDataURL("image/png");
+        const blob = await (await fetch(dataUrl)).blob();
+        const file = new File([blob], "stickerboard.png", { type: blob.type });
+
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: "Stickerboard",
+            text: "Check out all these artifacts I found at the Penn Museum!",
+          });
+        } else {
+          alert("Sharing is not supported on your device.");
+          console.log("Sharing not supported in this browser.");
+        }
+
+        console.log("Screenshot captured successfully and share dialog opened!");
       });
     }
   };
-  
 
   return (
     <div className='relative h-[100svh] w-[100svw] grid-bg-gray flex flex-col justify-center items-center bg-gray-300 overflow-hidden gap-[0.5svh]'>
@@ -123,8 +133,9 @@ const StickerBoard: React.FC = () => {
         className='round-button h-full flex rounded-full p-[1svh] px-[2svh]'>
         <Image src='/icons/arrow-stroke.svg' className='w-full h-full' width={100} height={100} alt='back' />
       </button>
-      <button onClick={captureStickerboard} className='round-button h-full flex justify-center items-center rounded-full p-2 px-3'>
-        <span className='text-[2svh]'>I&apos;m done</span>
+      <button onClick={captureStickerboard} className='round-button h-full flex rounded-full p-[1svh] px-[2svh]'>
+        {/* <span className='text-[2svh]'>I&apos;m done</span> */}
+        <Image src='/icons/export-black.svg' className='w-full h-full' width={100} height={100} alt='export' />
       </button>
 
     </div>

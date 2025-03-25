@@ -200,7 +200,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
 
   return (
-    <div className="relative flex flex-col items-center justify-center w-screen h-screen bg-black">
+    <div className="relative flex flex-col items-center justify-center w-screen h-screen bg-blue-black">
 
       {/* back*/}
 
@@ -263,7 +263,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
           {/* Webcam Overlay */}
           <div
-            className="absolute inset-0 bg-black z-[5] pointer-events-none"
+            className="absolute inset-0 bg-blue-black z-[5] pointer-events-none"
             style={{
               clipPath: 'inset(0 0 0 0)', // Apply the inverse of the SVG outline clipping
               opacity: 0.3, // Set 50% opacity
@@ -339,7 +339,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 </div>
 
       {/* instructions */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black text-white py-2 px-2 rounded-full opacity-80 z-[10]">
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-blue-black text-white py-2 px-2 rounded-full opacity-80 z-[10]">
         <p style={{ fontSize: '16px' }}>{text}</p>
       </div>
       </div>
@@ -351,7 +351,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
           <div className="absolute bottom-24 flex flex-col gap-4">
             <button
               onClick={captureImage}
-              className="bg-white text-black rounded-full w-14 h-14 flex items-center justify-center shadow-lg border-none ring-2"
+              className="bg-white text-blue-black rounded-full w-14 h-14 flex items-center justify-center shadow-lg border-none ring-2"
               style={{
                 width: '56px',
                 height: '56px',
@@ -372,7 +372,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
             {image && (
               <button
                 onClick={rejectClippedImage}
-                className="absolute bottom-10 left-4 bg-black text-white border-2 border-white px-4 py-2 rounded-full z-[10] flex items-center gap-2"
+                className="absolute bottom-10 left-4 bg-blue-black text-white border-2 border-white px-4 py-2 rounded-full z-[10] flex items-center gap-2"
               >
                 <FaUndo className="text-white" /> Retake
               </button>
@@ -381,12 +381,12 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
             {image && (
               <button
                 onClick={saveClippedImage}
-                className="absolute bottom-10 right-4 bg-[#89aFEF] text-black px-6 py-2 rounded-full z-[10] flex items-center gap-2"
+                className="absolute bottom-10 right-4 bg-[#89aFEF] text-blue-black px-6 py-2 rounded-full z-[10] flex items-center gap-2"
               >
                 Confirm
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4 text-black"
+                  className="w-4 h-4 text-blue-black"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -402,7 +402,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
             )}
 
             <div style={{ width: `${canvasSize.width}px`, height: `${canvasSize.height}px` }}
-              className="bg-black opacity-50 absolute rounded-lg shadow-lg z-[5]"
+              className="bg-blue-black opacity-50 absolute rounded-lg shadow-lg z-[5]"
             />
 
             <div className="absolute inset-0 flex justify-center items-center pointer-events-none z-[6]">
