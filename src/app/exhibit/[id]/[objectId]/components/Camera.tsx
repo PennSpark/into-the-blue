@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
-import { FaArrowLeft, FaLightbulb, FaRegLightbulb, FaUndo } from 'react-icons/fa'; // Importing icons from react-icons
+import { FaArrowLeft, FaLightbulb, FaRegLightbulb } from 'react-icons/fa'; // Importing icons from react-icons
 import { saveImage } from "../../../../context/IndexedDB";
 import Webcam from "react-webcam";
 import Image from "next/image";
@@ -20,7 +20,7 @@ export interface CameraProps {
 export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
 
-  const [imagePath, setImagePath] = useState(`/images/${artifact.exhibit.toLowerCase()}/${artifact.id}-unfound.png`);
+  const [imagePath, setImagePath] = useState(`/images/artifacts/${artifact.id}.png`);
 
   console.log(imagePath)
 
@@ -31,8 +31,6 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
   //need to store svg paths as path2d for clipping and string for svg (i don't like it but we can fix later)
   const [clipPathData, setClipPathData] = useState<Path2D[] | null>(null);
   const [svgPaths, setSvgPaths] = useState<string[] | null>(null);
-  console.log(artifact)
-
 
   const [hintActive, setHintActive] = useState(false); // State to toggle the hint active state
   const [dialogOpen, setDialogOpen] = useState(false); // State to manage dialog visibility
@@ -53,7 +51,19 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
   const viewBox = { width: 300, height: 360 };
 
   const [image, setImage] = useState<string | null>(null);
+
   const [text, setText] = useState<string>("Line up the image to the outline");
+
+  // Set CSS variable for actual viewport height
+      useEffect(() => {
+          const setVh = () => {
+              const vh = window.innerHeight * 0.01;
+              document.documentElement.style.setProperty('--vh', `${vh}px`);
+          };
+          setVh();
+          window.addEventListener('resize', setVh);
+          return () => window.removeEventListener('resize', setVh);
+      }, []);
 
   useEffect(() => {
     fetch(artifact.svgURL)
@@ -62,12 +72,10 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
         const parser = new DOMParser();
         const svgDoc = parser.parseFromString(data, "image/svg+xml");
         const pathElements = svgDoc.querySelectorAll("path");
-        
 
         if (pathElements.length > 0) {
           const dStrings = Array.from(pathElements).map((path) => path.getAttribute("d") || "");
           setSvgPaths(dStrings);
-          console.log(dStrings);
 
           const pathsArray = Array.from(pathElements).map((path) => new Path2D(path.getAttribute("d") || ""));
           setClipPathData(pathsArray);
@@ -82,8 +90,8 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
   }, []);
 
   useEffect(() => {
-    console.log(artifact.foundImageURL, artifact.svgURL);
-  }, [artifact.foundImageURL, artifact.svgURL]);
+    console.log(artifact.imageURL, artifact.svgURL);
+  }, [artifact.imageURL, artifact.svgURL]);
 
   useEffect(() => {
     updateCanvasSize();
@@ -123,7 +131,6 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
   }, [canvasSize, clipPathData]);
 
   const captureImage = async () => {
-
     if (webcamRef.current && canvasRef.current) {
       const video = webcamRef.current.video as HTMLVideoElement;
       const canvas = canvasRef.current;
@@ -172,7 +179,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
           clipCtx.restore();
           setImage(clipCanvas.toDataURL("image/png"));
           setText("");
-          setImagePath("/images/rome/rome-1-found.png");
+          setImagePath(`/images/artifacts/${artifact.id}.png`);
 
         } else {
           console.error("canvas not initialized properly");
@@ -195,245 +202,203 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
   const rejectClippedImage = async () => {
     setImage(null);
     setText("Line up the image to the outline");
-    setImagePath(`/images/${artifact.exhibit.toLowerCase()}/${artifact.id}-unfound.png`);
+    setImagePath(`/images/artifacts/${artifact.id}.png`);
   };
 
 
   return (
-    <div className="relative flex flex-col items-center justify-center w-screen h-screen bg-blue-black">
+    <div className="relative flex flex-col items-center justify-center w-screen h-screen bg-blue-black"
+        style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
+    >
 
       {/* back*/}
 
       <div className='absolute top-5 flex flex-row w-[40svh] h-[10svh] justify-between items-center'>
-      <Link href={`/exhibit/${artifact.exhibit.toLowerCase()}`}>
-        <button
-          className="bg-transparent text-[#89aFEF] rounded-full p-3 shadow-lg z-10 border-none flex items-center justify-center"
-          aria-label="Go Back"
-        >
-          <FaArrowLeft style={{ width: "20px", height: "18px" }} />
-        </button>
+      <Link href={`/exhibit/${artifact.exhibitID}`}>
+	  <img
+            src="/icons/Left-Arrow.svg"
+            alt="Back"
+            className="cursor-pointer"
+          />
       </Link>
 
       {/* hint button */}
       <button
         onClick={toggleHint}
-        className={`absolute top-4 right-4 rounded-full p-3 shadow-lg z-10 flex items-center gap-2 border-none ${dialogOpen ? 'bg-white text-[#3e65c8]' : 'bg-transparent text-[#3e65c8]'}`}
+        className={`rounded-full p-3 shadow-lg z-10 flex items-center gap-2 border-none ${dialogOpen ? 'bg-white text-blue-500' : 'bg-transparent text-blue-500'}`}
         aria-label="Hint"
       >
         {dialogOpen ? (
-          <FaLightbulb className="text-[#3e65c8]" />
+          <FaLightbulb className="text-[#89aFEF]" />
         ) : (
-          <FaRegLightbulb className="text-[#3e65c8]" />
+          <FaRegLightbulb className="text-[#89aFEF]" />
         )}
-        <span
-          style={{ fontSize: '14px' }}
-          className={dialogOpen ? 'text-[#3e65c8]' : 'text-[#3e65c8]'}
-        >
-          Hint
-        </span>
+        <span className={dialogOpen ? 'text-[#89aFEF]' : 'text-[#89aFEF]'}>Hint</span>
       </button>
       </div>
 
       {/* Hintbox */}
-      {dialogOpen && (
+    {dialogOpen && (
         <Dialog open={dialogOpen} onClose={closeDialog} className="fixed inset-0 z-20 flex justify-center items-center">
-          <div className="bg-white rounded-lg p-6 w-80 max-w-xs flex flex-col justify-center items-center">
-            <h2
-              style={{ fontSize: '16px', color: '#3e65c8', fontWeight: '600', textAlign: 'center' }}
-              className="mb-4"
-            >
-              Text about the object goes here
-            </h2>
+        <div className="bg-white rounded-lg p-6 w-80 max-w-xs flex flex-col justify-center items-center">
+            <h2 className="text-[#3e65c8] text-lg mb-4 text-center">{artifact.hint || "This artifact doesn't have a hint."}</h2>
             <button
-              onClick={closeDialog}
-              className="bg-[#3e65c8] text-white rounded-md px-4 py-2 w-full"
+            onClick={closeDialog}
+            className="bg-[#3e65c8] text-white rounded-md px-4 py-2 w-full"
             >
-              OK
+            OK
             </button>
-          </div>
+        </div>
         </Dialog>
-      )}
+    )}
 
 
 
       {/* Webcam container with relative positioning */}
       <div className="relative w-[40svh] h-[60svh]">
-
-        <div className="relative w-full h-full">
-
-          {/* Webcam Overlay */}
-          <div
-            className="absolute inset-0 bg-blue-black z-[5] pointer-events-none"
-            style={{
-              clipPath: 'inset(0 0 0 0)', // Apply the inverse of the SVG outline clipping
-              opacity: 0.3, // Set 50% opacity
-              width: '100%',
-              height: '100%',
-              position: 'absolute', // Ensuring the overlay is outside
-            }}
-          />
-
-
-          <Webcam ref={webcamRef}
-            className="absolute opacity-0 pointer-events-none" />
-
-          <canvas
-            ref={canvasRef}
-            style={{
-              width: `${canvasSize.width}px`,
-              height: `${canvasSize.height}px`,
-            }}
-            className="absolute rounded-lg shadow-lg"
-          />
-
-         {/* SVG Element */}
-<div className="absolute inset-0 flex justify-center items-center pointer-events-none">
-  <svg
-    className="w-full h-full rounded-md z-[10]"
-    viewBox="0 0 100 100"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <clipPath id="clip-path">
-      {svgPaths && svgPaths.length > 0 ? (
-        svgPaths.map((d, index) => (
-          <path key={index} d={d} fill="white" />
-        ))
-      ) : (
-        <circle cx="50" cy="50" r="50" fill="white" /> // Default circle if no svgPaths
-      )}
-    </clipPath>
-
-    {svgPaths && svgPaths.length > 0 ? (
-      svgPaths.map((d, index) => (
-        <path
-          key={index}
-          d={d}
-          pathLength={100}
-          stroke="white"
-          strokeDasharray="0.5 1"
-          strokeWidth="0.1svh"
-          strokeLinejoin="round"
+        <Webcam ref={webcamRef}
+          className="absolute opacity-0 pointer-events-none" />
+        
+        <canvas
+          ref={canvasRef}
+          style={{ width: `${canvasSize.width}px`, height: `${canvasSize.height}px` }}
+          className="absolute rounded-lg shadow-lg"
         />
-      ))
-    ) : (
-      <text x="10" y="50" fill="white">
-        Loading...
-      </text>
-    )}
-  </svg>
-</div>
 
-{/* PNG Image with 30% opacity */}
-<div className="absolute inset-0 flex justify-center items-center pointer-events-none z-[11]">
-  <Image 
-    src={imagePath} 
-    alt="Artifact Image"
-    className="w-[50%] h-[50%] object-contain"  // Use the same size as the SVG
-    width={100} 
-    height={100} 
-    style={{ opacity: 0.5 }}  // Set opacity to 30%
-  />
-</div>
+        <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
+          <svg
+            className="w-[40svh] h-auto rounded-md z-[10]"
+            width="300" height="360" viewBox="0 0 300 360" fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            overflow="visible"
+          >
+            {svgPaths && svgPaths.length > 0 ? (
+              svgPaths.map((d, index) => (
+                <path
+                  key={index}
+                  d={d}
+                  pathLength={100}
+                  stroke="white"
+                  strokeDasharray="0.5 1"
+                  strokeWidth="0.5svh"
+                  strokeLinejoin="round"
+                />
+              ))) : (<text x="10" y="50" fill="white">Loading...</text>)}
+          </svg>
+        </div>
 
-</div>
-
-      {/* instructions */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-blue-black text-white py-2 px-2 rounded-full opacity-80 z-[10]">
-        <p style={{ fontSize: '16px' }}>{text}</p>
+        {/* instructions */}
+        {!image && (
+        <div className="absolute bottom-[4px] left-1/2 transform -translate-x-1/2 w-[95%] z-[10] text-center text-[14px] overflow-hidden px-3 py-2 rounded-[60px] bg-[#393939]/70 backdrop-blur-[7px]">
+          <p>{text}</p>
+        </div>
+        )}
       </div>
-      </div>
-
 
       {/* visible before taking picture: white circular button to take picture */}
-      {
-        !image && (
-          <div className="absolute bottom-24 flex flex-col gap-4">
-            <button
-              onClick={captureImage}
-              className="bg-white text-blue-black rounded-full w-14 h-14 flex items-center justify-center shadow-lg border-none ring-2"
-              style={{
-                width: '56px',
-                height: '56px',
-                boxShadow: '0 0 0 8px #6d6d6d', // Gray ring with hex color
-              }}
-              aria-label="Take Picture"
-            >
-            </button>
-          </div>
-        )
-      }
+      {!image && (
+        <>
+        <div className="absolute bottom-12 flex flex-col gap-4">
+          <button
+            onClick={captureImage}
+            className="bg-gray-2 text-black rounded-full w-[72px] h-[72px] flex items-center justify-center shadow-lg border-none z-[9]"
+            aria-label="Take Picture"
+          >
+            <div className="bg-white text-black rounded-full w-[56px] h-[56px] flex items-center justify-center shadow-lg border-none z-[10]">
+            </div>
+          </button>
+        </div>
+
+
+        <div
+        className="absolute inset-0 flex justify-center items-center z-[10] pointer-events-none"
+        >
+        <Image src={"/camera-overlay/" + artifact.id + ".png"} alt="Captured" className="w-[40svh] h-auto" width={500} height={500} />
+        </div>
+        </>
+      )}
 
       {/* visible after taking picture: button to take picture */}
-      {
-        image && (
-          <>
-            {/* Retake Button (Black with white text and outline) */}
-            {image && (
-              <button
-                onClick={rejectClippedImage}
-                className="absolute bottom-10 left-4 bg-blue-black text-white border-2 border-white px-4 py-2 rounded-full z-[10] flex items-center gap-2"
-              >
-                <FaUndo className="text-white" /> Retake
-              </button>
-            )}
-            {/* Submit Button (Blue with black text, oval, bottom-right with right-facing arrow) */}
-            {image && (
-              <button
-                onClick={saveClippedImage}
-                className="absolute bottom-10 right-4 bg-[#89aFEF] text-blue-black px-6 py-2 rounded-full z-[10] flex items-center gap-2"
-              >
-                Confirm
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-4 h-4 text-blue-black"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M5 12h14M12 5l7 7-7 7"
-                  />
-                </svg>
-              </button>
-            )}
-
-            <div style={{ width: `${canvasSize.width}px`, height: `${canvasSize.height}px` }}
-              className="bg-blue-black opacity-50 absolute rounded-lg shadow-lg z-[5]"
-            />
-
-            <div className="absolute inset-0 flex justify-center items-center pointer-events-none z-[6]">
-              <svg
-                className="w-[40svh] h-auto rounded-md stroke-animation"
-                width="100" height="100" viewBox="0 0 100 100" fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                {svgPaths && svgPaths.length > 0 ? (
-                  svgPaths.map((d, index) => (
-                    <path
-                      key={index}
-                      d={d}
-                      pathLength={100}
-                      stroke="white"
-                      strokeWidth="0.8svh"
-                      strokeLinejoin="round"
-                    />
-                  ))
-                ) : (<text x="10" y="50" fill="white">Loading...</text>)}
-              </svg>
-            </div>
-
-            <div
-              className="absolute inset-0 flex justify-center items-center z-[10] pointer-events-none"
+      {image && (
+        <>
+          {/* Retake Button (Black with white text and outline) */}
+          {image && (
+            <div className="fixed bottom-0 w-full px-5 py-3 flex justify-between z-40">
+            <button
+              onClick={rejectClippedImage}
+              className="bg-black text-white border-2 border-white px-4 py-2 rounded-full z-[10]"
             >
-              <Image src={image} alt="Captured" className="w-[40svh] h-auto" width={500} height={500} />
+              Retake
+            </button>
+            <button
+              onClick={saveClippedImage}
+              className="bg-[#89aFEF] text-black px-6 py-2 rounded-full z-[10] flex items-center gap-2"
+            >
+              Confirm
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-4 text-black"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M5 12h14M12 5l7 7-7 7"
+                />
+              </svg>
+            </button>
             </div>
-          </>
-        )
-      }
-    </div >
+          )}
+
+          <div style={{ width: `${canvasSize.width}px`, height: `${canvasSize.height}px` }}
+            className="bg-blue-500 opacity-50 absolute rounded-lg shadow-lg z-[5]"
+          />
+
+          <div className="absolute inset-0 flex justify-center items-center pointer-events-none z-[6]">
+            <svg
+              className="w-[40svh] h-auto rounded-md stroke-animation"
+              width="300" height="360" viewBox="0 0 300 360" fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              overflow="visible"
+            >
+              {svgPaths && svgPaths.length > 0 ? (
+                svgPaths.map((d, index) => (
+                  <path
+                    key={index}
+                    d={d}
+                    pathLength={100}
+                    stroke="white"
+                    strokeWidth="1.8svh"
+                    strokeLinejoin="round"
+                  />
+                ))
+              ) : (<text x="10" y="50" fill="white">Loading...</text>)}
+            </svg>
+          </div>
+
+          <div
+            className="absolute inset-0 flex justify-center items-center z-[10] pointer-events-none"
+          >
+            <Image src={image} alt="Captured" className="w-[40svh] h-auto" width={500} height={500} />
+          </div>
+        </>
+      )}
+
+      {shouldProcess && image && (
+        <ImageCutout
+          imageUrl={image}
+          svgUrl={artifact.svgURL}
+          onReady={async (processedImage) => {
+            await saveImage(processedImage, artifact.id);
+            console.log("processed image saved");
+            onImageCaptured();
+          }}
+        />
+      )}
+
+    </div>
   );
 }

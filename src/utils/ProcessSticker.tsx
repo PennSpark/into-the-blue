@@ -56,7 +56,7 @@ const ImageCutout: React.FC<ImageCutoutProps> = ({ imageUrl, svgUrl, onReady }) 
         if (!d) return;
 
         const path2D = new Path2D(d);
-        ctx.lineWidth = 4;
+        ctx.lineWidth = 16;
         ctx.stroke(path2D);
         ctx.lineCap = "round";
         ctx.fill(path2D);
