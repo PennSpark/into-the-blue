@@ -278,7 +278,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
                   pathLength={100}
                   stroke="white"
                   strokeDasharray="0.5 1"
-                  strokeWidth="0.1svh"
+                  strokeWidth="0.5svh"
                   strokeLinejoin="round"
                 />
               ))) : (<text x="10" y="50" fill="white">Loading...</text>)}
@@ -296,7 +296,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
       {/* visible before taking picture: white circular button to take picture */}
       {!image && (
         <>
-        <div className="absolute bottom-24 flex flex-col gap-4">
+        <div className="absolute bottom-12 flex flex-col gap-4">
           <button
             onClick={captureImage}
             className="bg-gray-2 text-black rounded-full w-[72px] h-[72px] flex items-center justify-center shadow-lg border-none z-[9]"
@@ -369,7 +369,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
                     d={d}
                     pathLength={100}
                     stroke="white"
-                    strokeWidth="0.8svh"
+                    strokeWidth="1.8svh"
                     strokeLinejoin="round"
                   />
                 ))
