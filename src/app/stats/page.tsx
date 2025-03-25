@@ -167,7 +167,7 @@ export default function StatsPage() {
                     <div className="fixed bottom-0 w-full px-5 py-3 flex justify-center gap-[12px] z-40">
                         <Link href="/">
                             <div className="flex items-center bg-warm-white w-fit h-[44px] gap-[6px] px-[16px] rounded-full">
-                                <img src="/icons/Left-Arrow.svg" alt="Back" className="w-[16px] h-[14px]" />
+                                <img src="/icons/left-arrow-black.svg" alt="Back" className="w-[16px] h-[14px]" />
                             </div>
                         </Link>
                         <button onClick={openSms} className="flex items-center bg-green w-fit h-[44px] gap-[6px] px-[16px] rounded-full">

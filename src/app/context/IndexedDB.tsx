@@ -384,3 +384,27 @@ export const loadCollectedArtifacts = async (): Promise<string[]> => {
     request.onerror = () => reject("Failed to load collected artifacts");
   });
 };
+
+// NEW: Clear collectedArtifacts store
+export const clearCollectedArtifacts = async (): Promise<void> => {
+  const db = await openDB();
+  const transaction = db.transaction("collectedArtifacts", "readwrite");
+  const store = transaction.objectStore("collectedArtifacts");
+  store.clear();
+  return new Promise((resolve, reject) => {
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = () => reject("Failed to clear collected artifacts");
+  });
+};
+
+// NEW: Clear visitedExhibits store
+export const clearVisitedExhibits = async (): Promise<void> => {
+  const db = await openDB();
+  const transaction = db.transaction("visitedExhibits", "readwrite");
+  const store = transaction.objectStore("visitedExhibits");
+  store.clear();
+  return new Promise((resolve, reject) => {
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = () => reject("Failed to clear visited exhibits");
+  });
+};

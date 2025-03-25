@@ -1,10 +1,11 @@
 export type Exhibit = {
 	name: string;
+	displayName: string;
 	items: Artifact[];
 	description: string;
 	//description/other info relevant to ui
 	totalObjects: number;
-	foundObjects: number;
+	path: string;
 };
 
 export type Artifact = {

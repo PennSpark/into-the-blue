@@ -148,7 +148,7 @@ export default function ExhibitClient({ exhibit, id }) {
             {/* Heading */}
             <div className="intro-heading font-FibraOneSemi tracking-heading opacity-0">
               <h1 className="text-[40px] text-green text-center">
-                {exhibit.name.toUpperCase()}
+                {exhibit.displayName.toUpperCase()}
               </h1>
               <h2 className="font-bold text-[#333d374D] text-2xl text-center">
                 Gallery
@@ -197,7 +197,7 @@ export default function ExhibitClient({ exhibit, id }) {
             {/* Exhibit Title & Found Count */}
             <div className="artifacts-header text-center">
               <p className="text-heading1 font-heading1 font-FibraOneBold tracking-heading leading-none my-4 text-blue-black p-0">
-                {exhibit.name.toUpperCase()}
+                {exhibit.displayName.toUpperCase()}
               </p>
               <p className="text-body font-body1 text-gray-2">
                 {foundCount}/{exhibit.totalObjects} Objects Found
