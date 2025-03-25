@@ -3,15 +3,32 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { getMetrics } from "../context/IndexedDB";
 
 export default function StatsPage() {
     const [showContent, setShowContent] = useState(false);
-    
+    const [metrics, setMetrics] = useState({
+        totalObjectsFound: 0,
+        totalExhibitsVisited: 0,
+        startTime: Date.now(),
+        stickerbookViewTime: 0,
+    });
+
     useEffect(() => {
         // Fade in first content immediately
         setTimeout(() => {
             setShowContent(true);
         }, 100);
+    }, []);
+
+    useEffect(() => {
+        async function fetchMetrics() {
+            const m = await getMetrics();
+            if (m) {
+                setMetrics(m);
+            }
+        }
+        fetchMetrics();
     }, []);
 
     useEffect(() => {
@@ -28,6 +45,44 @@ export default function StatsPage() {
         // On iOS and Android, this URL scheme should open the native messaging app
         window.location.href = `sms:&body=I finished the scavenger hunt at the Penn Museum! Plan your visit now at https://penn.museum/`;
     };
+
+    // Calculate elapsed time in seconds
+    const elapsedSeconds = Math.floor((Date.now() - metrics.startTime) / 1000);
+
+    // Helper function to format elapsed time.
+    const formatElapsedTime = (seconds: number): string => {
+        if (seconds < 60) {
+            return `${seconds} sec`;
+        }
+        if (seconds < 3600) {
+            const minutes = Math.floor(seconds / 60);
+            return `${minutes} min`;
+        }
+        const hours = Math.floor(seconds / 3600);
+        const remainderSeconds = seconds % 3600;
+        if (remainderSeconds === 0) {
+            return `${hours} hr`;
+        }
+        const minutes = Math.floor(remainderSeconds / 60);
+        return `${hours} hr ${minutes} min`;
+    };
+
+    const formattedTime = formatElapsedTime(elapsedSeconds);
+
+    // Select the personality based on the number of objects found
+    // Compeletionist: 36 objects found
+    // Collector: 24-35 objects found
+    // Investigator: 12-23 objects found
+    
+    const personality = metrics.totalObjectsFound === 36 ? 'COMPLETIONIST' :
+        metrics.totalObjectsFound >= 24 ? 'COLLECTOR' :
+        metrics.totalObjectsFound >= 12 ? 'INVESTIGATOR' :
+        'CURIOUS';
+
+    const personalityDescription = metrics.totalObjectsFound === 36 ? 'You found all 36 objects and completed the scavenger hunt!' :
+        metrics.totalObjectsFound >= 24 ? `You found ${metrics.totalObjectsFound} objects and are a true collector!` :
+        metrics.totalObjectsFound >= 12 ? `You found ${metrics.totalObjectsFound} objects and are quite the investigator!` :
+        `You found ${metrics.totalObjectsFound} objects and are a curious explorer!`;
 
     return (
         <main
@@ -46,15 +101,15 @@ export default function StatsPage() {
                             <div className="flex flex-col items-center gap-[16px] leading-none">
                                 <div className="flex flex-start justify-start gap-[18px]">
                                     <p className="text-[14px] w-[106px] text-gray-2">Objects Found</p>
-                                    <p className="text-[14px] text-blue-4 font-semibold">???</p>
+                                    <p className="text-[14px] text-blue-4 font-semibold">{metrics.totalObjectsFound}</p>
                                 </div>
                                 <div className="flex flex-start justify-start gap-[18px]">
                                     <p className="text-[14px] w-[106px] text-gray-2">Exhibits Visited</p>
-                                    <p className="text-[14px] text-blue-4 font-semibold">???</p>
+                                    <p className="text-[14px] text-blue-4 font-semibold">{metrics.totalExhibitsVisited}</p>
                                 </div>
                                 <div className="flex flex-start justify-start gap-[18px]">
                                     <p className="text-[14px] w-[106px] text-gray-2">Time Elapsed</p>
-                                    <p className="text-[14px] text-blue-4 font-semibold">???</p>
+                                    <p className="text-[14px] text-blue-4 font-semibold">{formattedTime}</p>
                                 </div>
                             </div>
                         </div>
@@ -75,8 +130,8 @@ export default function StatsPage() {
                                 <hr className="w-[55vw] border-t border-gray-3" />
                             </div>
                             <div className="flex flex-col items-center gap-[20px] p-[32px] rounded-[8px] bg-gradient-to-r from-[#ebf2ff] to-[#b9e6ff]">
-                                <p className="font-FibraOneBold text-[24px] leading-none bg-gradient-to-r from-blue-1 to-[#004972] text-transparent bg-clip-text">COMPLETIONIST</p>
-                                <p className="text-gray-2 text-[14px] w-[55vw] text-center font-semibold">You found all 36 objects and completed the scavenger hunt!</p>
+                                <p className="font-FibraOneBold text-[24px] leading-none bg-gradient-to-r from-blue-1 to-[#004972] text-transparent bg-clip-text">{personality}</p>
+                                <p className="text-gray-2 text-[14px] w-[55vw] text-center font-semibold">{personalityDescription}</p>
                             </div>
                         </div>
                     </div>

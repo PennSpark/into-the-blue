@@ -1,12 +1,15 @@
 const DB_NAME = "ImageDatabase";
 const STORE_NAME = "images";
+const METRICS_STORE = "metrics";
 
-{/*IndexedDB Structure*/}
-// ImageDatabase
-// - images
-//   - id (TODO: find out if it's search-able)
-//   - image (Blob)
-//   - timestamp (number)
+/* IndexedDB Structure */
+// - images (store for image blobs)
+// - metrics (store for app metrics)
+//   - name (string, e.g. "stats")
+//   - totalObjectsFound (number)
+//   - totalExhibitsVisited (number)
+//   - startTime (number)
+//   - stickerbookViewTime (number)
 
 // FoundObjectsArrays
 // - exhibit (string)
@@ -23,6 +26,10 @@ export const openDB = (): Promise<IDBDatabase> => {
       if (!db.objectStoreNames.contains(STORE_NAME)) {
         db.createObjectStore(STORE_NAME, { keyPath: "id", autoIncrement: true });
       }
+      if (!db.objectStoreNames.contains(METRICS_STORE)) {
+        // Use a stable key so we can update our metric object later.
+        db.createObjectStore(METRICS_STORE, { keyPath: "name" });
+      }
     };
 
     request.onsuccess = () => resolve(request.result);
@@ -30,16 +37,14 @@ export const openDB = (): Promise<IDBDatabase> => {
   });
 };
 
-//dataurl to blob
+// Utility: Convert a data URL (base64) to a Blob.
 export const dataURLtoBlob = (dataURL: string): Blob => {
   const byteString = atob(dataURL.split(",")[1]);
   const mimeString = dataURL.split(",")[0].split(":")[1].split(";")[0];
   const arrayBuffer = new Uint8Array(byteString.length);
-  
   for (let i = 0; i < byteString.length; i++) {
     arrayBuffer[i] = byteString.charCodeAt(i);
   }
-  
   return new Blob([arrayBuffer], { type: mimeString });
 };
 
@@ -220,3 +225,62 @@ export const loadFoundImages = async (exhibit: string): Promise<string[]> => {
     request.onerror = () => reject("Failed to load images");
   });
 }
+
+// ------------------------
+// Metrics functions
+// ------------------------
+
+// Save (or update) metrics in the database.
+// We use "stats" as the key name.
+export const saveMetrics = async (metrics: {
+  totalObjectsFound: number;
+  totalExhibitsVisited: number;
+  startTime: number;
+  stickerbookViewTime: number;
+}): Promise<void> => {
+  const db = await openDB();
+  const transaction = db.transaction(METRICS_STORE, "readwrite");
+  const store = transaction.objectStore(METRICS_STORE);
+  // Use a fixed key "stats" so you can update it later.
+  const data = { name: "stats", ...metrics };
+  store.put(data);
+  return new Promise((resolve, reject) => {
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = () => reject("Failed to save metrics");
+  });
+};
+
+// Retrieve stored metrics.
+export const getMetrics = async (): Promise<{
+  totalObjectsFound: number;
+  totalExhibitsVisited: number;
+  startTime: number;
+  stickerbookViewTime: number;
+} | null> => {
+  const db = await openDB();
+  const transaction = db.transaction(METRICS_STORE, "readonly");
+  const store = transaction.objectStore(METRICS_STORE);
+  const request = store.get("stats");
+  return new Promise((resolve, reject) => {
+    request.onsuccess = () => {
+      resolve(request.result || null);
+    };
+    request.onerror = () => {
+      reject("Failed to get metrics");
+    };
+  });
+};
+
+// Example: Update the total number of objects found.
+export const updateTotalObjectsFound = async (increment: number = 1): Promise<void> => {
+  const currentMetrics = await getMetrics();
+  const newMetrics = {
+    totalObjectsFound: (currentMetrics?.totalObjectsFound || 0) + increment,
+    totalExhibitsVisited: currentMetrics?.totalExhibitsVisited || 0,
+    startTime: currentMetrics?.startTime || Date.now(),
+    stickerbookViewTime: currentMetrics?.stickerbookViewTime || 0,
+  };
+  await saveMetrics(newMetrics);
+};
+
+// Similarly you can create functions for updating totalExhibitsVisited, startTime and stickerbookViewTime.

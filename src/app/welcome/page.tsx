@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { saveMetrics } from "../context/IndexedDB";
 
 export default function WelcomePage() {
     const [showFirstContent, setShowFirstContent] = useState(false);
@@ -83,7 +84,12 @@ export default function WelcomePage() {
                     />
                 </div>
                 <div className="fixed bottom-0 w-full px-5 py-3 flex justify-end z-40">
-                    <Link href="/">
+                    <Link href="/" onClick={() => saveMetrics({
+                        totalObjectsFound: 0,
+                        totalExhibitsVisited: 0,
+                        startTime: Date.now(),
+                        stickerbookViewTime: 0
+                    })}>
                         <div className="flex items-center bg-blue-1 text-warm-white w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
                             <p className="font-medium text-base">Let's Begin!</p>
                             <img src="/icons/Footprints.svg" alt="Sticker Book" className="w-[22px] h-[22px]" />
