@@ -82,8 +82,8 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
   }, []);
 
   useEffect(() => {
-    console.log(artifact.foundImageURL, artifact.svgURL);
-  }, [artifact.foundImageURL, artifact.svgURL]);
+    console.log(artifact.imageURL, artifact.svgURL);
+  }, [artifact.imageURL, artifact.svgURL]);
 
   useEffect(() => {
     updateCanvasSize();
