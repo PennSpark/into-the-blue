@@ -116,27 +116,6 @@ export const saveImage = async (imageData: string, imageName: string) => {
   });
 };
 
-
-
-//retrieve last stored image 
-export const loadLastImage = async (): Promise<string | null> => {
-  const db = await openDB();
-  const transaction = db.transaction(STORE_NAME, "readonly");
-  const store = transaction.objectStore(STORE_NAME);
-  const request = store.getAll();
-
-  return new Promise((resolve, reject) => {
-    request.onsuccess = () => {
-      const images = request.result
-      .filter((item): item is { image: Blob } => item && item.image instanceof Blob)
-      .map((item) => URL.createObjectURL(item.image));
-    
-      resolve(images.length ? images[images.length - 1] : null);
-    };
-    request.onerror = () => reject("Failed to load image");
-  });
-};
-
 //retrieve all images
 export const loadAllImages = async (): Promise<string[]> => {
   const db = await openDB();
@@ -207,24 +186,45 @@ export const pullArray = async (exhibit: string): Promise<string[]> => {
   });
 }
 
-{/*load images that user found from a certain exhibit*/}
-export const loadFoundImages = async (exhibit: string): Promise<string[]> => {
+const fetchExhibitData = async (): Promise<Record<string, any>> => {
+  const response = await fetch("/data/exhibits.json");
+  if (!response.ok) throw new Error("Failed to load exhibit data");
+  return response.json();
+};
+
+
+export const getFoundObjectsForExhibit = async (exhibitKey: string): Promise<string[]> => {
+  const exhibitData = await fetchExhibitData(); // fetch from public directory
+
   const db = await openDB();
   const transaction = db.transaction(STORE_NAME, "readonly");
   const store = transaction.objectStore(STORE_NAME);
-  const request = store.getAll();
 
-  return new Promise((resolve, reject) => {
-    request.onsuccess = () => {
-      const images = request.result
-      .filter((item): item is { image: Blob } => item && item.image instanceof Blob)
-      .map((item) => URL.createObjectURL(item.image));
-    
-      resolve(images);
-    };
-    request.onerror = () => reject("Failed to load images");
-  });
-}
+  const exhibit = exhibitData[exhibitKey];
+  if (!exhibit) {
+    console.error(`Exhibit "${exhibitKey}" not found`);
+    return [];
+  }
+
+  const allItemIds = exhibit.items.map((item: any) => item.id);
+  const foundIds: string[] = [];
+
+  await Promise.all(allItemIds.map(async (id) => {
+    const getRequest = store.get(id);
+    await new Promise<void>((resolve) => {
+      getRequest.onsuccess = () => {
+        if (getRequest.result && getRequest.result.image instanceof Blob) {
+          foundIds.push(id);
+        }
+        resolve();
+      };
+      getRequest.onerror = () => resolve(); // skip errors
+    });
+  }));
+
+  return foundIds;
+};
+
 
 // ------------------------
 // Metrics functions
@@ -284,3 +284,53 @@ export const updateTotalObjectsFound = async (increment: number = 1): Promise<vo
 };
 
 // Similarly you can create functions for updating totalExhibitsVisited, startTime and stickerbookViewTime.
+
+export const logDatabaseState = async () => {
+  try {
+    const db = await openDB();
+
+    // Log images store
+    const imageTx = db.transaction(STORE_NAME, "readonly");
+    const imageStore = imageTx.objectStore(STORE_NAME);
+    const imageRequest = imageStore.getAll();
+
+    imageRequest.onsuccess = () => {
+      const images = imageRequest.result;
+      console.log(`📦 Images in '${STORE_NAME}' store:`);
+      images.forEach((entry: any, index: number) => {
+        console.log(`  #${index + 1} — ID: ${entry.id}, Timestamp: ${new Date(entry.timestamp).toLocaleString()}, Blob size: ${entry.image?.size} bytes`);
+      });
+      if (images.length === 0) {
+        console.log("  (No images found)");
+      }
+    };
+
+    imageRequest.onerror = () => {
+      console.error("❌ Failed to retrieve images");
+    };
+
+    // Log metrics store
+    const metricsTx = db.transaction(METRICS_STORE, "readonly");
+    const metricsStore = metricsTx.objectStore(METRICS_STORE);
+    const metricsRequest = metricsStore.get("stats");
+
+    metricsRequest.onsuccess = () => {
+      const metrics = metricsRequest.result;
+      console.log(`📊 Metrics in '${METRICS_STORE}' store:`);
+      if (metrics) {
+        console.table(metrics);
+      } else {
+        console.log("  (No metrics stored)");
+      }
+    };
+
+    metricsRequest.onerror = () => {
+      console.error("❌ Failed to retrieve metrics");
+    };
+  } catch (error) {
+    console.error("⚠️ Error accessing database:", error);
+  }
+};
+
+
+//parking lot / helpers
