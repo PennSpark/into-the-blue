@@ -36,7 +36,8 @@ const StickerBoard: React.FC = () => {
   const [stickers, setStickers] = useState<StickerData[]>([]);
   const [activeStickerId, setActiveStickerId] = useState<number | null>(null);
   const [menuSelection, setMenuSelection] = useState<string | null>(null);
-  const [gridBg, setGridBg] = useState<string>("#ffffff");
+  // const [gridBg, setGridBg] = useState<string>("var(--Blue-2)");
+  const [gridBg, setGridBg] = useState<string>("var(--Warm-White)");
 
   const router = useRouter();
   

@@ -120,7 +120,7 @@ export default function StatsPage() {
                             </div>
                             <div className="flex items-center gap-[26px]">
                                 <Image className="h-[44px] w-auto"
-                                    src="/images/artifacts/rome-1-Urn.png" alt="Urn" width={100} height={100} 
+                                    src="/images/artifacts/Rome-Urn.png" alt="Urn" width={100} height={100} 
                                 />
                             </div>
                         </div>
