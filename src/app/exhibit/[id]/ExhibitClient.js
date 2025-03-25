@@ -48,13 +48,19 @@ export default function ExhibitClient({ exhibit, id }) {
 			duration: 600,
 		});
 
+		const arrowY = ["eastern-mediterranean", "mexico-central-america"].includes(
+			id
+		)
+			? 190
+			: 130;
+
 		tl.add({
 			targets: ".intro-symbol",
 			opacity: [0, 1],
 			translateY: [-20, 0],
 		})
 			.add({ targets: ".up-arrow", opacity: [0, 1] }, "-=600")
-			.add({ targets: ".up-arrow", translateY: [0, 130] }, "+=100")
+			.add({ targets: ".up-arrow", translateY: [0, arrowY] }, "+=100")
 			.add({ targets: ".intro-heading", opacity: [0, 1] })
 			.add(
 				{
@@ -139,7 +145,7 @@ export default function ExhibitClient({ exhibit, id }) {
 
 						{/* Exhibit Title & Found Count */}
 						<div className="artifacts-header text-center">
-							<p className="text-heading1 font-heading1 font-FibraOneBold tracking-heading text-Black p-0">
+							<p className="text-heading1 font-heading1 font-FibraOneBold tracking-heading leading-none my-4 text-Black p-0">
 								{exhibit.name.toUpperCase()}
 							</p>
 							<p className="text-body font-body1 text-gray-2">
@@ -147,13 +153,12 @@ export default function ExhibitClient({ exhibit, id }) {
 							</p>
 						</div>
 
-
 						{/* Right side placeholder to balance layout */}
 						<div className="w-[45px] h-[45px]" />
 					</div>
 
 					{/* Artifact Tiles*/}
-					<div className="w-[90%] mx-auto flex flex-row gap-4 justify-center pb-4">
+					<div className="w-[90%] mx-auto flex flex-row gap-4 justify-center pb-[60px]">
 						<div className="w-full mx-auto flex flex-col gap-4 items-center">
 							{exhibit.items
 								.filter((artifact, index) => index % 2 == 0)
@@ -240,20 +245,25 @@ export default function ExhibitClient({ exhibit, id }) {
 						</div>
 					</div>
 
-						{/* Bottom "Stickerbook" button */}
-						<div className="fixed bottom-0 w-full px-5 py-3 flex justify-between z-40"
-							style={{
+					{/* Bottom "Stickerbook" button */}
+					<div
+						className="fixed bottom-0 w-full px-5 py-3 flex justify-between z-40"
+						style={{
 							background:
 								"linear-gradient(to bottom, rgba(254,252,247,0) 0%, rgba(255,254,253,0.85) 40.5%, #FFFEFD 100%)",
-							}}
-						>
-							<Link href="/stickerbook">
+						}}
+					>
+						<Link href="/stickerbook">
 							<div className="flex items-center bg-green text-warm-white w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
-								<img src="/icons/stickerbook.svg" alt="Sticker Book" className="w-[26px] h-[25px]" />
+								<img
+									src="/icons/stickerbook.svg"
+									alt="Sticker Book"
+									className="w-[26px] h-[25px]"
+								/>
 								<p className="font-medium text-base">Sticker Book</p>
 							</div>
-							</Link>
-						</div>
+						</Link>
+					</div>
 				</main>
 			)}
 		</main>
