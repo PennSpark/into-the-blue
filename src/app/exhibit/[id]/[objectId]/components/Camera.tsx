@@ -216,7 +216,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
       <div className='absolute top-5 flex flex-row w-[40svh] h-[10svh] justify-between items-center'>
       <Link href={`/exhibit/${artifact.exhibitID}`}>
 	  <img
-            src="/icons/Left-Arrow.svg"
+            src="/icons/left-arrow-blue.svg"
             alt="Back"
             className="cursor-pointer"
           />
@@ -225,7 +225,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
       {/* hint button */}
       <button
         onClick={toggleHint}
-        className={`rounded-full p-3 shadow-lg z-10 flex items-center gap-2 border-none ${dialogOpen ? 'bg-white text-blue-500' : 'bg-transparent text-blue-500'}`}
+        className={`rounded-full p-3 z-10 flex items-center gap-2 border-none ${dialogOpen ? 'bg-white text-blue-500' : 'bg-transparent text-blue-500'}`}
         aria-label="Hint"
       >
         {dialogOpen ? (
@@ -289,7 +289,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
         {/* instructions */}
         {!image && (
-        <div className="absolute bottom-[4px] left-1/2 transform -translate-x-1/2 w-[95%] z-[10] text-center text-[14px] overflow-hidden px-3 py-2 rounded-[60px] bg-[#393939]/70 backdrop-blur-[7px]">
+        <div className="absolute bottom-[4px] left-1/2 transform -translate-x-1/2 w-[95%] z-[10] text-center text-warm-white text-[14px] overflow-hidden px-3 py-2 rounded-[60px] bg-[#393939]/70 backdrop-blur-[7px]">
           <p>{text}</p>
         </div>
         )}
