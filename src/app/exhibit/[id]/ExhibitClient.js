@@ -145,7 +145,7 @@ export default function ExhibitClient({ exhibit, id }) {
 
 						{/* Exhibit Title & Found Count */}
 						<div className="artifacts-header text-center">
-							<p className="text-heading1 font-heading1 font-FibraOneBold tracking-heading leading-none my-4 text-Black p-0">
+							<p className="text-heading1 font-heading1 font-FibraOneBold tracking-heading leading-none my-4 text-blue-black p-0">
 								{exhibit.name.toUpperCase()}
 							</p>
 							<p className="text-body font-body1 text-gray-2">

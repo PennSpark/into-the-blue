@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { saveMetrics } from "../context/IndexedDB";
 
 export default function WelcomePage() {
     const [showFirstContent, setShowFirstContent] = useState(false);
@@ -59,14 +60,14 @@ export default function WelcomePage() {
                         <Image className="w-[31px] h-[31px]"
                             src="/welcome-assets/spark.png" alt="Spark" width={100} height={100} 
                         />
-                        <p className="text-black font-FibraOneSemi text-base">PENN SPARK</p>
+                        <p className="text-blue-black font-FibraOneSemi text-base">PENN SPARK</p>
                         <Image className="w-[16px] h-[16px]"
                             src="/welcome-assets/cross.svg" alt="Spark" width={50} height={50} 
                         />
                         <Image className="w-[31px] h-[31px] padding-l-[1px]"
                             src="/welcome-assets/penn-museum.png" alt="Spark" width={100} height={100} 
                         />
-                        <p className="text-black font-FibraOneSemi text-base">PENN MUSEUM</p>
+                        <p className="text-blue-black font-FibraOneSemi text-base">PENN MUSEUM</p>
                     </div>
                 </div>
             </div>
@@ -83,7 +84,12 @@ export default function WelcomePage() {
                     />
                 </div>
                 <div className="fixed bottom-0 w-full px-5 py-3 flex justify-end z-40">
-                    <Link href="/">
+                    <Link href="/" onClick={() => saveMetrics({
+                        totalObjectsFound: 0,
+                        totalExhibitsVisited: 0,
+                        startTime: Date.now(),
+                        stickerbookViewTime: 0
+                    })}>
                         <div className="flex items-center bg-blue-1 text-warm-white w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
                             <p className="font-medium text-base">Let's Begin!</p>
                             <img src="/icons/Footprints.svg" alt="Sticker Book" className="w-[22px] h-[22px]" />

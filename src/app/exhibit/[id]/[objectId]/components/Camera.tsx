@@ -207,7 +207,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
 
   return (
-    <div className="relative flex flex-col items-center justify-center w-screen h-screen bg-black"
+    <div className="relative flex flex-col items-center justify-center w-screen h-screen bg-blue-black"
         style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
     >
 
@@ -258,7 +258,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
       <div className="relative w-[40svh] h-[60svh]">
         <Webcam ref={webcamRef}
           className="absolute opacity-0 pointer-events-none" />
-
+        
         <canvas
           ref={canvasRef}
           style={{ width: `${canvasSize.width}px`, height: `${canvasSize.height}px` }}

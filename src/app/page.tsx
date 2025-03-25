@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import GlobeWrapper from '@/components/GlobeWrapper';
 import TabNavigation from '@/components/TabNavigation';
 import RegionList from '@/components/RegionList';
 import Link from 'next/link';
+import { getMetrics } from './context/IndexedDB';
+
 
 // Define all regions based on the provided image
 const regions = [
@@ -90,6 +92,18 @@ const regions = [
 export default function Home() {
   // State for active tab
   const [activeTab, setActiveTab] = useState<'list' | 'map'>('list');
+
+  const [metrics, setMetrics] = useState<{ totalObjectsFound: number }>({ totalObjectsFound: 0 });
+
+  useEffect(() => {
+    async function fetchMetrics() {
+      const m = await getMetrics();
+      if (m) {
+        setMetrics(m);
+      }
+    }
+    fetchMetrics();
+  }, []);
   
   return (
     <div className="min-h-screen p-8 font-[family-name:var(--font-geist-sans)] bg-warm-white">
@@ -121,12 +135,21 @@ export default function Home() {
               <p className="font-medium text-base">Sticker Book</p>
             </div>
           </Link>
-          <Link href="/finish">
-            <div className="flex items-center text-green border-2 border-green w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
-            <p className="font-medium text-base">Finish</p>
-            <img src="/icons/arrow.svg" alt="Finish Hunt" className="w-[26px] h-[25px]" />
-            </div>
-          </Link>
+		  {metrics.totalObjectsFound < 3 ? (
+			<div
+				className="flex items-center w-fit h-[44px] gap-[6px] pl-[20px] pr-[16px] rounded-full text-green border-2 border-green opacity-[30%]">
+				<p className="font-medium text-base">Finish</p>
+				<img src="/icons/arrow.svg" alt="Finish Hunt" className="w-[26px] h-[25px]" />
+				</div>
+		  ) : (
+			<Link href="/ending">
+			<div
+				className="flex items-center w-fit h-[44px] gap-[6px] pl-[20px] pr-[16px] rounded-full text-green border-2 border-green">
+				<p className="font-medium text-base">Finish</p>
+				<img src="/icons/arrow.svg" alt="Finish Hunt" className="w-[26px] h-[25px]" />
+				</div>
+			</Link>
+		  )}
         </div>
       </main>
     </div>
