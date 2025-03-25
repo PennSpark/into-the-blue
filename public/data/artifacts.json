@@ -45,7 +45,7 @@
 	},
 	{
 		"id": "Rome-Urn",
-		"name": "Cinerary urn",
+		"name": "Cinerary Urn",
 		"time": "Late 1st c. CE",
 		"material": "Glass",
 		"exhibit": "Rome",
@@ -111,7 +111,7 @@
 	},
 	{
 		"id": "EM-OilFlask",
-		"name": "Oil flask",
+		"name": "Oil Flask",
 		"time": "600-500 BCE",
 		"material": "Egyptian Blue, Faience",
 		"exhibit": "Eastern Mediterranean",
@@ -177,7 +177,7 @@
 	},
 	{
 		"id": "Egypt-Beads",
-		"name": "String of beads",
+		"name": "String of Beads",
 		"time": "1938-1759 BCE",
 		"material": "Faience, Glass",
 		"exhibit": "Egypt",
@@ -210,7 +210,7 @@
 	},
 	{
 		"id": "ME-3Beads",
-		"name": "3 beads",
+		"name": "Three Beads",
 		"time": "2450 BCE",
 		"material": "Lapis Lazuli",
 		"exhibit": "Middle East",
@@ -276,7 +276,7 @@
 	},
 	{
 		"id": "ME-Tile",
-		"name": "Tile mosaic panel",
+		"name": "Tile Mosaic Panel",
 		"time": "15th-early 16th century CE",
 		"material": "Ceramic, glazed",
 		"exhibit": "Middle East",
@@ -287,7 +287,7 @@
 	},
 	{
 		"id": "ME-String",
-		"name": "String of beads",
+		"name": "String of Beads",
 		"time": "2300 BCE",
 		"material": "Lapis Lazuli",
 		"exhibit": "Middle East",
@@ -320,7 +320,7 @@
 	},
 	{
 		"id": "NA-WomansDress",
-		"name": "Woman's dress",
+		"name": "Woman's Dress",
 		"time": "1880",
 		"material": "Bead",
 		"exhibit": "North America",
@@ -331,7 +331,7 @@
 	},
 	{
 		"id": "NA-JingleDress",
-		"name": "Jingle Powwow dress",
+		"name": "Jingle Powwow Dress",
 		"time": "2013",
 		"material": "Polyester, Cotton",
 		"exhibit": "North America",
@@ -342,7 +342,7 @@
 	},
 	{
 		"id": "MCA-Ear",
-		"name": "Ear ornaments",
+		"name": "Ear Ornaments",
 		"time": "1000-1521 CE",
 		"material": "Turquoise",
 		"exhibit": "Mexico & Central America",
@@ -397,7 +397,7 @@
 	},
 	{
 		"id": "Assyria-Bead",
-		"name": "Beads depicting Pazuzu",
+		"name": "Beads Depicting Pazuzu",
 		"time": "10th-7th century BCE",
 		"material": "Blue Paste",
 		"exhibit": "Assyria",
