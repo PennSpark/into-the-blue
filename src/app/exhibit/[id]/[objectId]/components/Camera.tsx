@@ -150,7 +150,14 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
           //scaling factors to put rectangular input into square picture
           const scaleX = clipCanvas.width / viewBox.width;
-          const scaleY = (clipCanvas.width * 360) / (viewBox.height * 300);
+          const scaleY = (clipCanvas.height) / (viewBox.height);
+
+          console.log("scale");
+          console.log(scaleX, scaleY);
+          console.log("clipcanvas");
+          console.log(clipCanvas.width, clipCanvas.height);
+          console.log("viewbox");
+          console.log(viewBox.width, viewBox.height);
 
           //initially move the canvas to position clippath correctly (nothing drawn yet)
           clipCtx.translate(clipCanvas.width / 2, clipCanvas.height / 2);
@@ -170,11 +177,11 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
           //reset transformations before drawing image onto clipped canvas so image isn't distorted
           clipCtx.translate(viewBox.width / 2, viewBox.height / 2);
-          clipCtx.scale(1 / scaleX, 1 / scaleY);
+          clipCtx.scale(1 / scaleX, 360 / (scaleY * 300));
           clipCtx.translate(-clipCanvas.width / 2, -clipCanvas.height / 2);
 
           //draw the image
-          clipCtx.drawImage(canvas, 0, -clipCanvas.height * 45 / 360, clipCanvas.width, canvasSize.height);
+          clipCtx.drawImage(canvas, 0, 0, clipCanvas.width, clipCanvas.height);
 
           clipCtx.restore();
           setImage(clipCanvas.toDataURL("image/png"));
@@ -261,7 +268,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
         
         <canvas
           ref={canvasRef}
-          style={{ width: `${canvasSize.width}px`, height: `${canvasSize.height}px` }}
+          style={{ width: "40svh", height: "60svh" }}
           className="absolute rounded-lg shadow-lg"
         />
 
