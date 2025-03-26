@@ -4,8 +4,8 @@ import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 
 interface TabNavigationProps {
-  activeTab: 'list' | 'map';
-  onTabChange: (tab: 'list' | 'map') => void;
+  activeTab: 'map' | 'list';
+  onTabChange: (tab: 'map' | 'list') => void;
 }
 
 const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange }) => {
@@ -17,16 +17,25 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange })
   useEffect(() => {
     if (!sliderRef.current) return;
     
-    const targetRef = activeTab === 'list' ? listBtnRef.current : mapBtnRef.current;
+    const targetRef = activeTab === 'map' ? listBtnRef.current : mapBtnRef.current;
     if (!targetRef) return;
     
     const buttonWidth = targetRef.offsetWidth;
     // Calculate the position relative to the first button
-    const position = activeTab === 'list' ? 0 : buttonWidth;
+    const position = activeTab === 'map' ? 0 : buttonWidth;
     
     sliderRef.current.style.width = `${buttonWidth}px`;
     sliderRef.current.style.transform = `translateX(${position}px)`;
   }, [activeTab]);
+
+  // Caption text style properties
+  const captionStyle = {
+    fontFamily: 'DM Sans',
+    fontSize: '14px',
+    fontWeight: 700, // Bold
+    lineHeight: '1',
+    letterSpacing: '-2%'
+  };
 
   return (
     <div className="w-[248px] h-[34px] max-w-md p-1 gray-1 bg-blue-3 rounded-[28px] flex relative">
@@ -36,40 +45,40 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange })
         className="absolute top-1 left-1 h-[calc(100%-8px)] warm-white bg-gray-1 rounded-[24px] z-0 transition-transform duration-300 ease-in-out"
       ></div>
 
-      {/* List tab button */}
-      <button
-        ref={listBtnRef}
-        className={`flex-1 py-2.5 px-4 text-center font-medium text-sm flex items-center justify-center gap-2 rounded-[24px] z-10 relative ${
-          activeTab === 'list' ? 'text-warm-white' : 'text-gray-1'
-        }`}
-        onClick={() => onTabChange('list')}
-      >
-        <Image 
-          src="/icons/List.svg" 
-          alt="List view" 
-          width={20} 
-          height={20} 
-          className={activeTab === 'list' ? 'brightness-0 invert' : ''}
-        /> 
-        LIST
-      </button>
-
       {/* Map tab button */}
       <button
         ref={mapBtnRef}
-        className={`flex-1 py-2.5 px-4 text-center font-medium text-sm flex items-center justify-center gap-2 rounded-[24px] z-10 relative ${
-          activeTab === 'map' ? 'text-warm-white' : 'text-gray-1'
+        className={`flex-1 py-2.5 px-4 text-center flex items-center justify-center gap-2 rounded-[24px] z-10 relative ${
+          activeTab === 'map' ? 'text-white' : 'text-gray1'
         }`}
         onClick={() => onTabChange('map')}
       >
         <Image 
           src="/icons/Map.svg" 
           alt="Map view" 
-          width={20} 
-          height={20} 
+          width={15} 
+          height={14} 
           className={activeTab === 'map' ? 'brightness-0 invert' : ''}
         /> 
-        MAP
+        <span style={captionStyle}>MAP</span>
+      </button>
+
+      {/* List tab button */}
+      <button
+        ref={listBtnRef}
+        className={`flex-1 py-2.5 px-4 text-center flex items-center justify-center gap-2 rounded-[24px] z-10 relative ${
+          activeTab === 'list' ? 'text-warm-white' : 'text-gray1'
+        }`}
+        onClick={() => onTabChange('list')}
+      >
+        <Image 
+          src="/icons/List.svg" 
+          alt="List view" 
+          width={12} 
+          height={9} 
+          className={activeTab === 'list' ? 'brightness-0 invert' : ''}
+        /> 
+        <span style={captionStyle}>LIST</span>
       </button>
     </div>
   );

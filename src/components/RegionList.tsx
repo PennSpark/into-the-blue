@@ -22,6 +22,24 @@ const RegionList: React.FC<RegionListProps> = ({ regions }) => {
     router.push(path);
   };
 
+  // Heading 3 style with DM Sans font
+  const heading3Style = {
+    fontFamily: 'DM Sans',
+    fontSize: '16px',
+    fontWeight: 600,
+    letterSpacing: '-1%',
+    lineHeight: '1'
+  };
+
+  // Body 3 style for object count text
+  const body3Style = {
+    fontFamily: 'DM Sans',
+    fontSize: '16px',
+    fontWeight: 400, // Regular
+    letterSpacing: '-2%',
+    lineHeight: '1'
+  };
+
   return (
     <div className="w-full max-w-md flex flex-col gap-[16px] pb-[16px]">
       {regions.map((region, index) => {
@@ -35,7 +53,7 @@ const RegionList: React.FC<RegionListProps> = ({ regions }) => {
         return (
           <div
             key={index}
-            className="rounded-xl flex items-center justify-between cursor-pointer relative h-[100px] overflow-hidden bg-blue-3 black"
+            className="rounded-xl flex items-center justify-between cursor-pointer relative h-[100px] overflow-hidden bg-blue-3 hover:bg-[#bdcaf0] transition-colors"
             onClick={() => handleRegionClick(region.path)}
           >
             {/* Progress bar */}
@@ -48,15 +66,13 @@ const RegionList: React.FC<RegionListProps> = ({ regions }) => {
               >
                 {allFound ? (
                   /* Full bar for completed regions */
-                  <div
-                    className="h-full w-full bg-blue-2"
-                  ></div>
+                  <div className="h-full w-full bg-blue-2"></div>
                 ) : (
                   /* Animated wave edge for incomplete regions */
-                  <svg 
-                    width="100%" 
-                    height="100%" 
-                    viewBox="0 0 100 100" 
+                  <svg
+                    width="100%"
+                    height="100%"
+                    viewBox="0 0 100 100"
                     preserveAspectRatio="none"
                     style={{ position: 'absolute', top: 0, left: 0 }}
                   >
@@ -64,8 +80,8 @@ const RegionList: React.FC<RegionListProps> = ({ regions }) => {
                       className="fill-blue-2"
                       d="M0,0 L95,0 Q97,20 96,50 Q95,80 95,100 L0,100 Z"
                     >
-                      <animate 
-                        attributeName="d" 
+                      <animate
+                        attributeName="d"
                         values="
                           M0,0 L95,0 Q97,20 96,50 Q95,80 95,100 L0,100 Z;
                           M0,0 L95,0 Q100,30 95,50 Q90,70 95,100 L0,100 Z;
@@ -80,16 +96,15 @@ const RegionList: React.FC<RegionListProps> = ({ regions }) => {
                       />
                     </path>
                   </svg>
-
                 )}
               </div>
             )}
 
             <div className="flex flex-col p-6 z-10">
-              <div className="text-blue-black font-semibold text-lg">
+              <div style={heading3Style} className="text-black mb-1">
                 {region.displayName}
               </div>
-              <div className="text-gray-1 text-sm">
+              <div style={body3Style} className="text-gray1">
                 {allFound
                   ? 'All Objects Found!'
                   : `${region.objectsFound}/${region.totalObjects} Objects`}
@@ -97,34 +112,49 @@ const RegionList: React.FC<RegionListProps> = ({ regions }) => {
             </div>
 
             {/* Region Icon - Always visible regardless of completion status */}
-            <div className="absolute right-0 h-full opacity-70 z-0 font-FibraOneSemi">
-              <img
-                src={`/icons/regions/${region.name
-                  .toLowerCase()
-                  .replace(/\s+/g, '-')}.png`}
-                alt={`${region.displayName} icon`}
-                className="h-full object-cover object-left"
-                style={{ maxWidth: 'none' }}
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = 'none';
-                }}
-              />
-            </div>
+            {!allFound && (
+              <div className="absolute right-0 h-full opacity-70 z-0">
+                <img
+                  src={`/icons/regions/${region.name
+                    .toLowerCase()
+                    .replace(/\s+/g, '-')}.png`}
+                  alt={`${region.displayName} icon`}
+                  className="h-full object-cover object-left"
+                  style={{ maxWidth: 'none' }}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = 'none';
+                  }}
+                />
+              </div>
+            )}
 
-            {/* Checkmark for completed regions */}
+            {/* Checkmark for completed regions with layered circles */}
             {allFound && (
-              <div className="absolute right-4 z-20">
-                <div className="bg-white rounded-full p-2">
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
+              <div className="absolute top-1/2 transform -translate-y-1/2 z-20" style={{ right: "-15px" }}>
+                <div className="flex items-center justify-center">
+                  <svg 
+                    width="58" 
+                    height="58" 
+                    viewBox="0 0 40 40" 
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                   >
-                    <path
-                      className="fill-blue-2"
-                      d="M9 16.17L5.53 12.7C5.14 12.31 4.51 12.31 4.12 12.7C3.73 13.09 3.73 13.72 4.12 14.11L8.3 18.29C8.69 18.68 9.32 18.68 9.71 18.29L20.29 7.71C20.68 7.32 20.68 6.69 20.29 6.3C19.9 5.91 19.27 5.91 18.88 6.3L9 16.17Z"
+                    {/* Base white circle */}
+                    <circle cx="20" cy="20" r="20" fill="white" />
+                    
+                    {/* Middle blue circle */}
+                    <circle cx="20" cy="20" r="14" fill="#8aaeef" />
+                    
+                    {/* Inner white circle */}
+                    <circle cx="20" cy="20" r="11.5" fill="white" />
+                    
+                    {/* Blue checkmark in center */}
+                    <path 
+                      d="M14 20L18 24L26 16"
+                      stroke="#8aaeef" 
+                      strokeWidth="2.5" 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round"
                     />
                   </svg>
                 </div>
