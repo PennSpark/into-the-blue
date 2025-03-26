@@ -15,6 +15,8 @@ export default {
 				blue1: "#3E65C8",
 				blue2: "#89AFEF",
 				blue3: "#D5DAE7",
+				blue4: "#355DC3",
+				blue5: "#D7E3FF",
 				"warm-white": "#FFFEFD",
 				"warm-gray": "#EFECE4",
 				gray1: "#414549",
@@ -28,10 +30,18 @@ export default {
 			fontSize: {
 				body: "1rem",
 				heading1: "1.75rem",
+				button1: ["16px", {
+					lineHeight: "1",
+					letterSpacing: "-0.02em",
+				  }],
 			},
 			fontWeight: {
 				body1: "600",
 				heading1: "700",
+				button1: "500",
+			},
+			fontFamily: {
+				'dm-sans': ['"DM Sans"', 'sans-serif'],
 			},
 		},
 	},

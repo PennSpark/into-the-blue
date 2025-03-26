@@ -28,6 +28,15 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange })
     sliderRef.current.style.transform = `translateX(${position}px)`;
   }, [activeTab]);
 
+  // Caption text style properties
+  const captionStyle = {
+    fontFamily: 'DM Sans',
+    fontSize: '14px',
+    fontWeight: 700, // Bold
+    lineHeight: '1',
+    letterSpacing: '-2%'
+  };
+
   return (
     <div className="w-[248px] h-[34px] max-w-md p-1 gray1 bg-blue3 rounded-[28px] flex relative">
       {/* Animated slider */}
@@ -39,7 +48,7 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange })
       {/* List tab button */}
       <button
         ref={listBtnRef}
-        className={`flex-1 py-2.5 px-4 text-center font-medium text-sm flex items-center justify-center gap-2 rounded-[24px] z-10 relative ${
+        className={`flex-1 py-2.5 px-4 text-center flex items-center justify-center gap-2 rounded-[24px] z-10 relative ${
           activeTab === 'list' ? 'text-warm-white' : 'text-gray1'
         }`}
         onClick={() => onTabChange('list')}
@@ -51,14 +60,14 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange })
           height={9} 
           className={activeTab === 'list' ? 'brightness-0 invert' : ''}
         /> 
-        <p className='text-sm'>LIST</p>
+        <span style={captionStyle}>LIST</span>
       </button>
 
       {/* Map tab button */}
       <button
         ref={mapBtnRef}
-        className={`flex-1 py-2.5 px-4 text-center font-medium text-sm flex items-center justify-center gap-2 rounded-[24px] z-10 relative ${
-          activeTab === 'map' ? 'text-warm-white' : 'text-gray1'
+        className={`flex-1 py-2.5 px-4 text-center flex items-center justify-center gap-2 rounded-[24px] z-10 relative ${
+          activeTab === 'map' ? 'text-cool-white' : 'text-gray1'
         }`}
         onClick={() => onTabChange('map')}
       >
@@ -69,7 +78,7 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange })
           height={14} 
           className={activeTab === 'map' ? 'brightness-0 invert' : ''}
         /> 
-        <p className='text-sm'>MAP</p>
+        <span style={captionStyle}>MAP</span>
       </button>
     </div>
   );

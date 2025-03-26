@@ -1,10 +1,13 @@
 'use client';
 
-import { useState } from 'react';
-import GlobeWrapper from '@/components/GlobeWrapper';
+import { useState, useMemo } from 'react';
 import TabNavigation from '@/components/TabNavigation';
 import RegionList from '@/components/RegionList';
+import ProgressStars from '@/components/ProgressStars';
+import ProgressBar from '@/components/ProgressBar';
+import FinishHuntButton from '@/components/FinishHuntButton';
 import Link from 'next/link';
+import MuseumMap from '@/components/MuseumMap'; // Import the new component
 
 // Define all regions based on the provided image
 const regions = [
@@ -19,28 +22,28 @@ const regions = [
     name: 'etruscan', 
     displayName: 'Etruscan', 
     path: '/exhibit/etruscan',
-    objectsFound: 1,
+    objectsFound: 0,
     totalObjects: 1
   },
   { 
     name: 'greece', 
     displayName: 'Greece', 
     path: '/exhibit/greece',
-    objectsFound: 1,
+    objectsFound: 0,
     totalObjects: 2
   },
   { 
     name: 'rome', 
     displayName: 'Rome', 
     path: '/exhibit/rome',
-    objectsFound: 2,
+    objectsFound: 0,
     totalObjects: 5
   },
   { 
     name: 'eastern-mediterranean', 
     displayName: 'Eastern Mediterranean', 
     path: '/exhibit/eastern-mediterranean',
-    objectsFound: 3,
+    objectsFound: 0,
     totalObjects: 4
   },
   { 
@@ -52,7 +55,7 @@ const regions = [
   },
   { 
     name: 'special-exhibition-egypt', 
-    displayName: 'Special Exhibition: Egypt', 
+    displayName: 'Egypt', 
     path: '/exhibit/egypt',
     objectsFound: 0,
     totalObjects: 3
@@ -85,27 +88,39 @@ const regions = [
     objectsFound: 0,
     totalObjects: 4
   },
+  { 
+    name: 'assyria', 
+    displayName: 'Assyria', 
+    path: '/exhibit/assyria',
+    objectsFound: 0,
+    totalObjects: 1
+  },
 ];
 
 export default function Home() {
   // State for active tab
   const [activeTab, setActiveTab] = useState<'list' | 'map'>('list');
   
+  // Calculate the total objects found and total objects
+  const { totalObjectsFound, totalObjects } = useMemo(() => {
+    const found = regions.reduce((sum, region) => sum + region.objectsFound, 0);
+    const total = regions.reduce((sum, region) => sum + region.totalObjects, 0);
+    return { totalObjectsFound: found, totalObjects: total };
+  }, [regions]);
+  
   return (
-    <div className="min-h-screen p-8 font-[family-name:var(--font-geist-sans)] bg-warm-white">
-      <main className="flex flex-col items-center gap-8">
+    <div className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-warm-white">
+      <ProgressBar objectsFound={totalObjectsFound} totalObjects={totalObjects} />
+      
+      <main className="flex flex-col items-center gap-6 pt-6 px-8 pb-20">
+        <ProgressStars objectsFound={totalObjectsFound} totalObjects={totalObjects} />
         
         <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
         
         {activeTab === 'list' ? (
           <RegionList regions={regions} />
         ) : (
-          <div className="w-full max-w-4xl">
-            <GlobeWrapper />
-            <div className="text-center text-sm opacity-70 mt-4">
-              swipe to see all galleries
-            </div>
-          </div>
+          <MuseumMap regions={regions} />
         )}
 
         {/* Floating buttons */}
@@ -121,12 +136,7 @@ export default function Home() {
               <p className="font-medium text-base">Sticker Book</p>
             </div>
           </Link>
-          <Link href="/finish">
-            <div className="flex items-center text-green border-2 border-green w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
-            <p className="font-medium text-base">Finish</p>
-            <img src="/icons/arrow.svg" alt="Finish Hunt" className="w-[26px] h-[25px]" />
-            </div>
-          </Link>
+          <FinishHuntButton objectsFound={totalObjectsFound} />
         </div>
       </main>
     </div>
