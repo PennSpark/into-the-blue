@@ -140,7 +140,7 @@ const MuseumMap: React.FC<MuseumMapProps> = ({ regions }) => {
     rome: { x: 375, y: 165, width: 100, height: 25, dotX: 420, dotY: 170, labelX: 320, labelY: 125 },
     'eastern-mediterranean': { x: 410, y: 140, width: 100, height: 25, dotX: 455, dotY: 145, labelX: 515, labelY: 175 },
     asia: { x: 380, y: 65, width: 90, height: 40, dotX: 425, dotY: 80, labelX: 345, labelY: 50 },
-    'special-exhibition-egypt': { x: 485, y: 90, width: 100, height: 35, dotX: 530, dotY: 100, labelX: 570, labelY: 60 },
+    'egypt': { x: 485, y: 90, width: 100, height: 35, dotX: 530, dotY: 100, labelX: 570, labelY: 60 },
     'middle-east': { x: 410, y: 300, width: 190, height: 40, dotX: 495, dotY: 310, labelX: 535, labelY: 275 },
     'north-america': { x: 350, y: 345, width: 100, height: 30, dotX: 400, dotY: 355, labelX: 470, labelY: 385 },
     'mexico-central-america': { x: 310, y: 375, width: 100, height: 30, dotX: 360, dotY: 385, labelX: 410, labelY: 410 },
@@ -148,10 +148,19 @@ const MuseumMap: React.FC<MuseumMapProps> = ({ regions }) => {
     assyria: { x: 340, y: 540, width: 100, height: 70, dotX: 390, dotY: 565, labelX: 450, labelY: 595 },
   };
 
+  const missingPositions = regions
+  .map((r) => r.name)
+  .filter((name) => !sectionPositions[name]);
+
+if (missingPositions.length > 0) {
+  console.warn('⚠️ Missing sectionPositions for:', missingPositions);
+}
   const mapSections: MapSection[] = regions.map((region) => {
     const pos = sectionPositions[region.name];
+    const overrideDisplayName = region.name === 'egypt' ? 'Egypt' : region.displayName;
     return {
       ...region,
+      displayName: overrideDisplayName,
       x: pos.x - xOffset,
       y: pos.y,
       width: pos.width,

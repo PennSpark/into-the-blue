@@ -49,7 +49,7 @@ export default {
 				button1: "500",
 			},
 			fontFamily: {
-				'dm-sans': ['"DM Sans"', 'sans-serif']
+				'dm-sans': ['"DM Sans"', 'sans-serif'],
 				FibraOneBold: ["fibra-one-bold", "Roboto"],
 				FibraOneSemi: ["fibra-one-semibold", "Roboto"],
 			},

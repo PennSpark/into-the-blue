@@ -67,7 +67,7 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange })
       <button
         ref={mapBtnRef}
         className={`flex-1 py-2.5 px-4 text-center flex items-center justify-center gap-2 rounded-[24px] z-10 relative ${
-          activeTab === 'map' ? 'text-cool-white' : 'text-gray1'
+          activeTab === 'map' ? 'text-white' : 'text-gray1'
         }`}
         onClick={() => onTabChange('map')}
       >

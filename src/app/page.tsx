@@ -1,10 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import GlobeWrapper from "@/components/GlobeWrapper";
+import { useState, useEffect, useMemo } from "react";
 import TabNavigation from "@/components/TabNavigation";
 import RegionList from "@/components/RegionList";
 import Link from "next/link";
+import MuseumMap from "@/components/MuseumMap";
+import ProgressStars from '@/components/ProgressStars';
+import ProgressBar from '@/components/ProgressBar';
 import { getMetrics, loadCollectedArtifacts } from "./context/IndexedDB";
 
 export default function Home() {
@@ -64,59 +66,66 @@ export default function Home() {
     }
     fetchRegionsData();
   }, []);
-
+  
+  // Calculate the total objects found and total objects
+  const { totalObjectsFound, totalObjects } = useMemo(() => {
+    const found = regions.reduce((sum, region) => sum + region.objectsFound, 0);
+    const total = regions.reduce((sum, region) => sum + region.totalObjects, 0);
+    return { totalObjectsFound: found, totalObjects: total };
+  }, [regions]);
+  
   return (
-    <>
-      <div
-        className="min-h-screen p-8 font-[family-name:var(--font-geist-sans)]"
-        style={{
-          backgroundColor: "rgba(255,254,253,0.85)",  // fallback bg color
-          backgroundImage: "url('/images/paper.png')",
-          backgroundRepeat: "repeat",
-        }}
-      >
-        <main className="flex flex-col items-center gap-8">
-          <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
-          {activeTab === "list" ? (
-            <RegionList regions={regions} />
-          ) : (
-            <div className="w-full max-w-4xl">
-              {/* <GlobeWrapper /> */}
-              <div className="text-center text-sm opacity-70 mt-4">
-                map view coming soon
-              </div>
+    <div 
+      className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-warm-white"
+      style={{
+        backgroundImage: "url('/images/paper.png')",
+        backgroundRepeat: "repeat",
+      }}
+    >
+      <ProgressBar objectsFound={totalObjectsFound} totalObjects={totalObjects} />
+      
+      <main className="flex flex-col items-center gap-6 pt-6 px-8 pb-20">
+        <ProgressStars objectsFound={totalObjectsFound} totalObjects={totalObjects} />
+        
+        <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
+        
+        {activeTab === 'list' ? (
+          <RegionList regions={regions} />
+        ) : (
+          <div className="w-full">
+            <MuseumMap regions={regions} />
+          </div>
+        )}
+
+        {/* Floating buttons */}
+        <div className="fixed bottom-0 w-full px-5 py-3 flex justify-between z-40"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(254,252,247,0) 0%, rgba(255,254,253,0.85) 40.5%, #FFFEFD 100%)",
+          }}
+        >
+          <Link href="/stickerbook">
+            <div className="flex items-center bg-green text-warm-white w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
+              <img src="/icons/stickerbook.svg" alt="Sticker Book" className="w-[26px] h-[25px]" />
+              <p className="font-medium text-base">Sticker Book</p>
             </div>
-          )}
-          {/* Floating buttons */}
-          <div
-            className="fixed bottom-0 w-full px-5 py-3 flex justify-between z-40"
-            style={{
-              background:
-                "linear-gradient(to bottom, rgba(254,252,247,0) 0%, rgba(255,254,253,0.85) 40.5%, #FFFEFD 100%)",
-            }}
-          >
-            <Link href="/stickerbook">
-              <div className="flex items-center bg-green text-warm-white w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
-                <img src="/icons/stickerbook.svg" alt="Sticker Book" className="w-[26px] h-[25px]" />
-                <p className="font-medium text-base">Sticker Book</p>
-              </div>
-            </Link>
-            {metrics.totalObjectsFound < 3 ? (
-              <div className="flex items-center w-fit h-[44px] gap-[6px] pl-[20px] pr-[16px] rounded-full text-green border-2 border-green opacity-[30%]">
+          </Link>
+          
+          {metrics.totalObjectsFound < 3 ? (
+            <div className="flex items-center w-fit h-[44px] gap-[6px] pl-[20px] pr-[16px] rounded-full text-green border-2 border-green opacity-[30%]">
+              <p className="font-medium text-base">Finish</p>
+              <img src="/icons/arrow.svg" alt="Finish Hunt" className="w-[26px] h-[25px]" />
+            </div>
+          ) : (
+            <Link href="/ending">
+              <div className="flex items-center w-fit h-[44px] gap-[6px] pl-[20px] pr-[16px] rounded-full text-green border-2 border-green">
                 <p className="font-medium text-base">Finish</p>
                 <img src="/icons/arrow.svg" alt="Finish Hunt" className="w-[26px] h-[25px]" />
               </div>
-            ) : (
-              <Link href="/ending">
-                <div className="flex items-center w-fit h-[44px] gap-[6px] pl-[20px] pr-[16px] rounded-full text-green border-2 border-green">
-                  <p className="font-medium text-base">Finish</p>
-                  <img src="/icons/arrow.svg" alt="Finish Hunt" className="w-[26px] h-[25px]" />
-                </div>
-              </Link>
-            )}
-          </div>
-        </main>
-      </div>
-    </>
+            </Link>
+          )}
+        </div>
+      </main>
+    </div>
   );
 }
