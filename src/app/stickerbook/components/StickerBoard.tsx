@@ -204,7 +204,7 @@ const StickerBoard: React.FC = () => {
   };
 
   return (
-    <div className='relative h-[100svh] w-[100svw] grid-bg-gray flex flex-col justify-center items-center bg-gray-300 overflow-hidden gap-[0.5svh]'>
+    <div className='relative h-[100svh] w-[100svw] grid-bg-gray flex flex-col justify-center items-center bg-gray-500 overflow-hidden gap-[0.5svh]'>
     <div className='w-[42.75svh] h-[9svh] py-[2.3svh] flex flex-row justify-between items-center'>
       <button onClick={() => router.back()}
         className='round-button h-full flex rounded-full p-[1svh] px-[2svh]'>
