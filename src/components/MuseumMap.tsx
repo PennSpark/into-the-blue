@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 function getLineEndpoint(section: MapSection): { x: number; y: number } {
   const labelWidth = section.displayName.length * 8;
@@ -131,6 +132,7 @@ const Popup: React.FC<PopupProps> = ({ section, position }) => {
 
 const MuseumMap: React.FC<MuseumMapProps> = ({ regions }) => {
   const [activeSection, setActiveSection] = useState<string | null>(null);
+  const router = useRouter();
   const xOffset = 215;
 
   const sectionPositions: Record<string, Omit<MapSection, keyof Region>> = {
@@ -172,8 +174,13 @@ if (missingPositions.length > 0) {
     };
   });
 
+  // Updated toggle function using Next.js router
   const toggleSection = (sectionName: string, path: string) => {
-    activeSection === sectionName ? (window.location.href = path) : setActiveSection(sectionName);
+    if (activeSection === sectionName) {
+      router.push(path); // Navigate using Next.js
+    } else {
+      setActiveSection(sectionName);
+    }
   };
 
   const getPopupPosition = (section: MapSection) => {

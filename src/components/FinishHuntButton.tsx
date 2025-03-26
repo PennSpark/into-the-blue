@@ -28,25 +28,12 @@ const FinishHuntButton: React.FC<FinishHuntButtonProps> = ({ objectsFound = 0 })
     <>
       <div 
         onClick={handleButtonClick}
-        className={`flex items-center ${buttonStyles} w-fit h-[44px] gap-[6px] px-[20px] rounded-full cursor-${insufficientObjectsFound ? 'default' : 'pointer'}`}
+        className={`cursor-${insufficientObjectsFound ? 'default' : 'pointer'} ${insufficientObjectsFound ? 'opacity-50' : ''}`}
       >
-        <p className="font-medium text-base">Finish Hunt</p>
-        <svg 
-          width="24" 
-          height="24" 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          xmlns="http://www.w3.org/2000/svg"
-          className="ml-1"
-        >
-          <path 
-            d="M13.5 4.5L21 12M21 12L13.5 19.5M21 12H3" 
-            stroke={insufficientObjectsFound ? "#9CA3AF" : "#12664F"} 
-            strokeWidth="2" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
-          />
-        </svg>
+        <div className="flex items-center text-green border-2 border-green w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
+          <p className="font-medium text-base">Finish Hunt</p>
+          <img src="/icons/arrow.svg" alt="Finish Hunt" className="w-[26px] h-[25px]" />
+        </div>
       </div>
       
       {/* Confirmation Modal */}

@@ -12,7 +12,7 @@ import { getMetrics, loadCollectedArtifacts } from "./context/IndexedDB";
 
 export default function Home() {
   // State for active tab
-  const [activeTab, setActiveTab] = useState<"list" | "map">("list");
+  const [activeTab, setActiveTab] = useState<"map" | "list">("map");
   const [metrics, setMetrics] = useState<{ totalObjectsFound: number }>({ totalObjectsFound: 0 });
   const [regions, setRegions] = useState([]);
 

@@ -1,0 +1,209 @@
+{
+    "into-the-blue": {
+        "displayName": "Into the Blue",
+        "description": "Your journey Into the Blue around the entire museum starts right here!",
+        "items": [
+            {
+                "id": "ITB-Cloth"
+            }
+        ],
+        "totalObjects": 1,
+        "path": "/exhibit/into-the-blue"
+    },
+    "etruscan": {
+        "displayName": "Etruscan",
+        "description": "Archaeologists found few blues in the Etruscan world. However, there's one object in the gallery that turned blue over time!",
+        "items": [
+            {
+                "id": "Etruscan-Mirror"
+            }
+        ],
+        "totalObjects": 1,
+        "path": "/exhibit/etruscan"
+    },
+    "greece": {
+        "displayName": "Greece",
+        "description": "See if you can find the tiny blue vessels in a gallery of mostly red and black pottery!",
+        "items": [
+            {
+                "id": "Greece-Oinochoe"
+            },
+            {
+                "id": "Greece-Alabastron"
+            }
+        ],
+        "totalObjects": 2,
+        "path": "/exhibit/greece"
+    },
+    "rome": {
+        "displayName": "Rome",
+        "description": "A variety of blue glass was found in Ancient Rome. Some glass objects were known for their ability to hold a variety of contents including oils or perhaps even perfume. Some of these have a decorated survival of blue patina.",
+        "items": [
+            {
+                "id": "Rome-Urn"
+            },
+            {
+                "id": "Rome-Flask"
+            },
+            {
+                "id": "Rome-Bracelet"
+            },
+            {
+                "id": "Rome-Necklace"
+            },
+            {
+                "id": "Rome-Perfume"
+            }
+        ],
+        "totalObjects": 5,
+        "path": "/exhibit/rome"
+    },
+    "eastern-mediterranean": {
+        "displayName": "Eastern Mediterranean",
+        "description": "This gallery houses blue pigments and objects that sailed long distances for trade at ports around the Mediterranean Sea.",
+        "items": [
+            {
+                "id": "EM-Pigment"
+            },
+            {
+                "id": "EM-OilFlask"
+            },
+            {
+                "id": "EM-Lapis"
+            },
+            {
+                "id": "EM-Amulet"
+            }
+        ],
+        "totalObjects": 4,
+        "path": "/exhibit/eastern-mediterranean"
+    },
+    "asia": {
+        "displayName": "Asia",
+        "description": "Blues in this gallery are hiding in plain sight!",
+        "items": [
+            {
+                "id": "Asia-LionRight"
+            },
+            {
+                "id": "Asia-LionLeft"
+            }
+        ],
+        "totalObjects": 2,
+        "path": "/exhibit/asia"
+    },
+    "egypt": {
+        "displayName": "Special Exhibition: Egypt",
+        "description": "There are many blue hues in ancient Egypt, made in lots of creative ways. Can you find the shiny blues we call faience?",
+        "items": [
+            {
+                "id": "Egypt-Collar"
+            },
+            {
+                "id": "Egypt-Beads"
+            },
+            {
+                "id": "Egypt-Cup"
+            }
+        ],
+        "totalObjects": 3,
+        "path": "/exhibit/egypt"
+    },
+    "middle-east": {
+        "displayName": "Middle East",
+        "description": "Archaeologists found a plethora of blue in the Middle East. See examples from early history mostly carved from lapis lazuli. Later cultures used bright blue glaze to decorate pottery and tile.",
+        "items": [
+            {
+                "id": "ME-Ram"
+            },
+            {
+                "id": "ME-3Beads"
+            },
+            {
+                "id": "ME-Diadems"
+            },
+            {
+                "id": "ME-Bottle"
+            },
+            {
+                "id": "ME-Decor"
+            },
+            {
+                "id": "ME-Dish"
+            },
+            {
+                "id": "ME-Bowl"
+            },
+            {
+                "id": "ME-Tile"
+            },
+            {
+                "id": "ME-String"
+            }
+        ],
+        "totalObjects": 9,
+        "path": "/exhibit/middle-east"
+    },
+    "north-america": {
+        "displayName": "North America",
+        "description": "Spot the beautiful variety of blues decorating the textiles from North America!",
+        "items": [
+            {
+                "id": "NA-Cradleboard"
+            },
+            {
+                "id": "NA-Shirt"
+            },
+            {
+                "id": "NA-WomansDress"
+            },
+            {
+                "id": "NA-JingleDress"
+            }
+        ],
+        "totalObjects": 4,
+        "path": "/exhibit/north-america"
+    },
+    "mexico-central-america": {
+        "displayName": "Mexico & Central America",
+        "description": "Most blue color faded from objects found in Mexico & Central America, but one object in this gallery remains bright blue!",
+        "items": [
+            {
+                "id": "MCA-Ear"
+            }
+        ],
+        "totalObjects": 1,
+        "path": "/exhibit/mexico-central-america"
+    },
+    "africa": {
+        "displayName": "Africa",
+        "description": "Blues appear in many forms across the continent. Check out the ways art and fashion include the blue materials of Africa!",
+        "items": [
+            {
+                "id": "Africa-Robe"
+            },
+            {
+                "id": "Africa-Dress"
+            },
+            {
+                "id": "Africa-Beads"
+            },
+            {
+                "id": "Africa-Illu"
+            }
+        ],
+        "totalObjects": 4,
+        "path": "/exhibit/africa"
+    },
+    "assyria": {
+        "displayName": "Assyria",
+        "description": "The Assyrian Empire used blue to communicate wealth, decadence, and power. Blue paints and pigments decorate the halls of palaces and adorned the elite.",
+        "items": [
+            {
+                "id": "Assyria-Bead"
+            }
+        ],
+        "totalObjects": 1,
+        "path": "/exhibit/assyria"
+    }
+}
