@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { getMetrics, saveMetrics } from "../context/IndexedDB";
 
 export default function WelcomePage() {

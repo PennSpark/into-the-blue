@@ -9,8 +9,10 @@ interface StickerData {
   x: number;
   y: number;
   width: number;
+  aspectRatio: number;
   rotation: number;
   isLabel: boolean;
+  src?:string;
 }
 /* IndexedDB Structure */
 // - images (store for image blobs)
@@ -29,7 +31,7 @@ interface StickerData {
 {/* open db, TODO: initialize found objects array */}
 export const openDB = (): Promise<IDBDatabase> => {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, 3); // bump version if needed
+    const request = indexedDB.open(DB_NAME, 4); // bump version if needed
 
     request.onupgradeneeded = (event) => {
       const db = (event.target as IDBOpenDBRequest).result;
@@ -120,7 +122,7 @@ export const saveImage = async (
             await addVisitedExhibit(exhibitId);
           }
           resolve();
-        } catch (e) {
+        } catch {
           reject("Image saved but failed to update collected artifacts or metrics");
         }
       };
@@ -187,7 +189,7 @@ export const clearImages = async () => {
 };
 
 {/*modify exhibit array that user found*/}
-export const modifyArray = async (exhibit: string, objectId: string) => {
+export const modifyArray = async () => {
   const db = await openDB();
   const transaction = db.transaction(STORE_NAME, "readwrite");
   const store = transaction.objectStore(STORE_NAME);
@@ -206,7 +208,7 @@ export const modifyArray = async (exhibit: string, objectId: string) => {
 }
 
 {/*pull array by exhbit*/}
-export const pullArray = async (exhibit: string): Promise<string[]> => {
+export const pullArray = async (): Promise<string[]> => {
   const db = await openDB();
   const transaction = db.transaction(STORE_NAME, "readonly");
   const store = transaction.objectStore(STORE_NAME);
@@ -224,12 +226,23 @@ export const pullArray = async (exhibit: string): Promise<string[]> => {
   });
 }
 
-const fetchExhibitData = async (): Promise<Record<string, any>> => {
+interface ExhibitItem {
+  id: string;
+  // add additional exhibit item properties here if needed
+}
+
+interface Exhibit {
+  displayName: string;
+  description: string;
+  items: ExhibitItem[];
+  path: string;
+}
+
+const fetchExhibitData = async (): Promise<Record<string, Exhibit>> => {
   const response = await fetch("/data/exhibits.json");
   if (!response.ok) throw new Error("Failed to load exhibit data");
   return response.json();
 };
-
 
 export const getFoundObjectsForExhibit = async (exhibitKey: string): Promise<string[]> => {
   const exhibitData = await fetchExhibitData(); // fetch from public directory
@@ -244,7 +257,7 @@ export const getFoundObjectsForExhibit = async (exhibitKey: string): Promise<str
     return [];
   }
 
-  const allItemIds = exhibit.items.map((item: any) => item.id);
+  const allItemIds = exhibit.items.map((item: ExhibitItem) => item.id);
   const foundIds: string[] = [];
 
   await Promise.all(allItemIds.map(async (id) => {
@@ -374,7 +387,7 @@ export const addVisitedExhibit = async (exhibitId: string): Promise<void> => {
           try {
             await updateTotalExhibitsVisited(1);
             resolve();
-          } catch (e) {
+          } catch {
             reject("Failed to update total exhibits visited");
           }
         };
@@ -441,7 +454,7 @@ export const loadAllStickers = async (): Promise<StickerData[]> => {
       const rawStickers = stickerRequest.result;
 
       const stickersWithUrls: StickerData[] = await Promise.all(
-        rawStickers.map(async (s: any) => {
+        rawStickers.map(async (s: StickerData) => {
           try {
             const imgTx = db.transaction("images", "readonly"); // ✅ open a new transaction
             const imageStore = imgTx.objectStore("images");
@@ -515,7 +528,7 @@ export const logDatabaseState = async (): Promise<void> => {
     return new Promise<void>((resolve) => {
       request.onsuccess = () => {
         console.log(`📦 ${storeName} store:`);
-        request.result.forEach((item: any, index: number) => {
+        request.result.forEach((item: unknown, index: number) => {
           console.log(`  #${index + 1}`, item);
         });
         resolve();

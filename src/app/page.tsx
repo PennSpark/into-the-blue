@@ -9,12 +9,23 @@ import ProgressStars from '@/components/ProgressStars';
 import ProgressBar from '@/components/ProgressBar';
 import FinishHuntButton from '@/components/FinishHuntButton';
 import { getMetrics, loadCollectedArtifacts } from "./context/IndexedDB";
+import { Exhibit } from "@/app/types"; // Import the Exhibit type
+
+// Add this interface at the top of your file, or import it if defined elsewhere
+interface Region {
+  name: string;
+  displayName: string;
+  path: string;
+  objectsFound: number;
+  totalObjects: number;
+}
 
 export default function Home() {
   // State for active tab
   const [activeTab, setActiveTab] = useState<"map" | "list">("map");
-  const [metrics, setMetrics] = useState<{ totalObjectsFound: number }>({ totalObjectsFound: 0 });
-  const [regions, setRegions] = useState([]);
+  const [, setMetrics] = useState<{ totalObjectsFound: number }>({ totalObjectsFound: 0 });
+  // Update this line with the proper type
+  const [regions, setRegions] = useState<Region[]>([]);
 
   // Fetch app metrics from IndexedDB.
   useEffect(() => {
@@ -32,21 +43,14 @@ export default function Home() {
     async function fetchRegionsData() {
       try {
         const resExhibits = await fetch("/data/exhibits.json");
-        const exhibitsData = await resExhibits.json();
-        const exhibitsArray = Array.isArray(exhibitsData)
-          ? exhibitsData
-          : exhibitsData.exhibits || Object.values(exhibitsData);
-
-        if (!exhibitsArray || exhibitsArray.length === 0) {
-          throw new Error("Exhibits data is not in the expected format.");
-        }
+        const exhibitsData = await resExhibits.json() as Record<string, Exhibit>;
 
         // Get collected artifact IDs from IndexedDB
         const collectedArtifacts = await loadCollectedArtifacts();
 
         // Map each exhibit to a region
         const computedRegions = Object.entries(exhibitsData).map(([key, exhibit]) => {
-          const totalObjects = exhibit.totalObjects; // Use the value from exhibits.json
+          const totalObjects = exhibit.totalObjects;
           const objectsFound = exhibit.items.filter((item) =>
             collectedArtifacts.includes(item.id)
           ).length;

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { getMetrics, loadCollectedArtifacts, loadImageByName } from "../context/IndexedDB";
+import { getMetrics, loadCollectedArtifacts } from "../context/IndexedDB";
 
 export default function StatsPage() {
     const [showContent, setShowContent] = useState(false);

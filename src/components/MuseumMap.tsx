@@ -11,7 +11,7 @@ function getLineEndpoint(section: MapSection): { x: number; y: number } {
   }
 
   let x = section.labelX;
-  let y = section.labelY + labelHeight / 2;
+  const y = section.labelY + labelHeight / 2;
 
   if (section.labelX > section.dotX) {
     x = section.labelX - linePadding;

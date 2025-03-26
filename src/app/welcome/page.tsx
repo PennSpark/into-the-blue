@@ -146,7 +146,7 @@ export default function WelcomePage() {
                                   });
                               }}>
                             <div className="flex items-center bg-blue-1 text-warm-white w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
-                                <p className="font-medium text-base">Let's Begin!</p>
+                                <p className="font-medium text-base">Let&apos;s Begin!</p>
                                 <img src="/icons/Footprints.svg" alt="Sticker Book" className="w-[22px] h-[22px]" />
                             </div>
                         </Link>

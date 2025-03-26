@@ -120,7 +120,7 @@ export default function ExhibitClient({ exhibit, id }) {
       .add({ targets: ".intro-symbol", translateY: [0, -60] }, "-=600")
       .add({ targets: ".intro-heading", translateY: [0, -60] }, "-=600")
       .add({ targets: ".intro-enter", opacity: [0, 1] });
-  }, [isLoading, showArtifacts]);
+  }, [isLoading, showArtifacts, id]);
 
   // Render the intro screen or the artifact list
   if (isLoading) return null;

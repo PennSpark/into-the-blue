@@ -2,7 +2,7 @@ import { Artifact } from '../../../../types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { FaArrowRight, FaLightbulb, FaRegLightbulb, FaUndo } from 'react-icons/fa';
+import { FaArrowRight } from 'react-icons/fa';
 
 export default function CapturedInterface({ image, artifact }: { image: string | null, artifact: Artifact }) {
     return (
@@ -95,7 +95,7 @@ export default function CapturedInterface({ image, artifact }: { image: string |
                 className="mt-4 flex justify-center"
             >
                 <Link
-                    href={`/exhibit/${artifact.exhibit.toLowerCase()}`}
+                    href={`/exhibit/${artifact.exhibitID}`}
                     className="bg-[#333D37] text-white text-[16px] px-6 py-2 rounded-full shadow-md hover:bg-[#444D47] transition flex items-center"
                 >
                     <span className="mr-2">Continue</span>

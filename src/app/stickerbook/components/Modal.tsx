@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { loadAllImages } from "../../context/IndexedDB";
 
@@ -12,10 +12,9 @@ interface ModalProps {
 
 export default function Modal({ setMenuSelection, addSticker, setGridBg, menuSelection }: ModalProps) {
   const sections = ["sticker", "label", "grid"];
-  const [savedStickers, setSavedStickers] = useState<{ id: string, url: string }[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(sections.indexOf(menuSelection ?? "sticker"));
-  const touchStartX = useRef<number | null>(null);
-  const [swipeDirection, setSwipeDirection] = useState<string | null>(null);
+  const [savedStickers, setSavedStickers] = useState<{ id: string; url: string; }[]>([]);
+  const [, setCurrentIndex] = useState(sections.indexOf(menuSelection ?? "sticker"));
+  // const touchStartX = useRef<number | null>(null);
 
   useEffect(() => {
     const fetchStickers = async () => {
@@ -28,15 +27,15 @@ export default function Modal({ setMenuSelection, addSticker, setGridBg, menuSel
   
   useEffect(() => {
     setCurrentIndex(sections.indexOf(menuSelection ?? "sticker"));
-  }, [menuSelection]);
+  }, [menuSelection, sections]);
 
   // Swipe start (record start position)
-  const handleSwipeStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-  };
+  // const handleSwipeStart = (e: React.TouchEvent) => {
+  //   touchStartX.current = e.touches[0].clientX;
+  // };
 
   // Swipe end (detect direction and update modal)
-  const handleSwipeEnd = (e: React.TouchEvent) => {
+  // const handleSwipeEnd = () => {
     // if (!touchStartX.current) return;
     // const deltaX = e.changedTouches[0].clientX - touchStartX.current;
 
@@ -47,25 +46,25 @@ export default function Modal({ setMenuSelection, addSticker, setGridBg, menuSel
     // }
 
     // touchStartX.current = null;
-  };
+  // };
 
-  const handleSwipe = useCallback(
-    (direction: "left" | "right") => {
-      setCurrentIndex((prevIndex) => {
-        let newIndex = direction === "left" ? prevIndex + 1 : prevIndex - 1;
-        if (newIndex < 0) newIndex = sections.length - 1;
-        if (newIndex >= sections.length) newIndex = 0;
+  // const handleSwipe = useCallback(
+  //   (direction: "left" | "right") => {
+  //     setCurrentIndex((prevIndex) => {
+  //       let newIndex = direction === "left" ? prevIndex + 1 : prevIndex - 1;
+  //       if (newIndex < 0) newIndex = sections.length - 1;
+  //       if (newIndex >= sections.length) newIndex = 0;
 
-        setSwipeDirection(direction);
-        setTimeout(() => {
-          setSwipeDirection(null);
-          setMenuSelection(sections[newIndex]);
-        }, 200); // Small delay for smooth transition
-        return newIndex;
-      });
-    },
-    [setMenuSelection]
-  );
+  //       setSwipeDirection(direction);
+  //       setTimeout(() => {
+  //         setSwipeDirection(null);
+  //         setMenuSelection(sections[newIndex]);
+  //       }, 200); // Small delay for smooth transition
+  //       return newIndex;
+  //     });
+  //   },
+  //   [setMenuSelection, sections]
+  // );
 
   const stickerList = [
     "1.png", "4.png",
@@ -80,11 +79,7 @@ export default function Modal({ setMenuSelection, addSticker, setGridBg, menuSel
 
   return (
     <div
-      className={`modal transition-transform duration-200 ${
-        swipeDirection === "left" ? "animate-slide-left" : swipeDirection === "right" ? "animate-slide-right" : ""
-      }`}
-      onTouchStart={handleSwipeStart}
-      onTouchEnd={handleSwipeEnd}
+      className={`modal transition-transform duration-200`}
     >
     <div id="top-bar" className="w-full h-[4svh] flex items-center">
     <div className="flex-1"></div>

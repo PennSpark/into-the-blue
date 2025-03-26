@@ -10,9 +10,6 @@ const FinishHuntButton: React.FC<FinishHuntButtonProps> = ({ objectsFound = 0 })
   const insufficientObjectsFound = objectsFound < 3;
   
   // Style conditionally based on objects found
-  const buttonStyles = insufficientObjectsFound 
-    ? 'bg-gray-200 text-gray-400' // Light gray and disabled look
-    : 'text-green border-2 border-green'; // Normal active state
   
   const handleButtonClick = () => {
     if (!insufficientObjectsFound) {

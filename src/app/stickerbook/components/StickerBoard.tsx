@@ -79,16 +79,22 @@ const StickerBoard: React.FC = () => {
     });
     loadAllStickers().then(async (saved) => {
       const hydrated = await Promise.all(
-        saved.map(async (s) => ({
-          ...s,
-          src: s.isLabel ? s.imageName : (await loadImageByName(s.imageName)) || "",
-          moveSticker,
-          resizeSticker,
-          rotateSticker,
-          deleteSticker,
-          active: false,
-          setActiveSticker: setActiveStickerId,
-        }))
+        saved.map(async (s) => {
+          // Add aspectRatio if it doesn't exist in the saved sticker
+          const aspectRatio = s.aspectRatio || 1; // Default to 1 if not present
+          
+          return {
+            ...s,
+            src: s.isLabel ? s.imageName : (await loadImageByName(s.imageName)) || "",
+            moveSticker,
+            resizeSticker,
+            rotateSticker,
+            deleteSticker,
+            active: false,
+            setActiveSticker: setActiveStickerId,
+            aspectRatio, // Ensure aspectRatio is explicitly included
+          };
+        })
       );
       setStickers(hydrated);
     });
@@ -103,10 +109,10 @@ const StickerBoard: React.FC = () => {
         const aspectRatio = tempImg.naturalHeight / tempImg.naturalWidth;
         const standardWidth = 40; // Keep your standard width
   
-        const newSticker = {
+        const newSticker: StickerData = {
           id: Date.now(),
           imageName, // save stable ID
-          src: isLabel ? imageName : blobUrl,
+          src: isLabel ? imageName : (blobUrl || ''),
           x: 50 - standardWidth / 2,
           y: 50 - (aspectRatio * standardWidth) / 2,
           width: standardWidth,
@@ -126,7 +132,7 @@ const StickerBoard: React.FC = () => {
       };
   
       // Set the source to trigger the onload event
-      tempImg.src = isLabel ? `/stickers/${imageName}` : blobUrl;
+      tempImg.src = isLabel ? `/stickers/${imageName}` : (blobUrl || '');
     });
   };
 
@@ -184,14 +190,15 @@ const StickerBoard: React.FC = () => {
   };
 
   const captureStickerboard = async () => {
-    if (boardRef.current) {
+    const board = boardRef.current;
+    if (board) {
       // Clear active sticker controls before capture
       setActiveStickerId(null);
 
       // Wait for the next frame so active sticker controls aren't visible
       requestAnimationFrame(async () => {
         const scaleFactor = 3;
-        const canvas = await html2canvas(boardRef.current, {
+        const canvas = await html2canvas(board, {
           backgroundColor: null,
           scale: scaleFactor,
           useCORS: true,

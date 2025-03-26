@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
-import { FaArrowLeft, FaLightbulb, FaRegLightbulb } from 'react-icons/fa'; // Importing icons from react-icons
+import { FaLightbulb, FaRegLightbulb } from 'react-icons/fa'; // Importing icons from react-icons
 import { saveImage } from "../../../../context/IndexedDB";
 import Webcam from "react-webcam";
 import Image from "next/image";
@@ -37,7 +37,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
   const [clipPathData, setClipPathData] = useState<Path2D[] | null>(null);
   const [svgPaths, setSvgPaths] = useState<string[] | null>(null);
 
-  const [hintActive, setHintActive] = useState(false); // State to toggle the hint active state
+  const [, setHintActive] = useState(false); // State to toggle the hint active state
   const [dialogOpen, setDialogOpen] = useState(false); // State to manage dialog visibility
 
   const [shouldProcess, setShouldProcess] = useState(false);
