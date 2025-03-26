@@ -37,16 +37,16 @@ export default function Modal({ setMenuSelection, addSticker, setGridBg, menuSel
 
   // Swipe end (detect direction and update modal)
   const handleSwipeEnd = (e: React.TouchEvent) => {
-    if (!touchStartX.current) return;
-    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+    // if (!touchStartX.current) return;
+    // const deltaX = e.changedTouches[0].clientX - touchStartX.current;
 
-    if (deltaX > 50) {
-      handleSwipe("right");
-    } else if (deltaX < -50) {
-      handleSwipe("left");
-    }
+    // if (deltaX > 50) {
+    //   handleSwipe("right");
+    // } else if (deltaX < -50) {
+    //   handleSwipe("left");
+    // }
 
-    touchStartX.current = null;
+    // touchStartX.current = null;
   };
 
   const handleSwipe = useCallback(
@@ -69,13 +69,13 @@ export default function Modal({ setMenuSelection, addSticker, setGridBg, menuSel
 
   const stickerList = [
     "1.png", "4.png",
-    "5.png", "6.png", "7.png", 
+    "5.png", "7.png", 
     "8.png", "9.png", "10.png",
     "11.png", "12.png", "13.png",
   ];
 
   const bgColors = [
-    "#D7E3FF", "#E16161", "#ACDACA", "#FFC531"
+    "#D7E3FF", "#E16161", "#ACDACA", "#FFC531", "var(--Warm-White)", "#222324"
   ];
 
   return (
@@ -147,12 +147,12 @@ export default function Modal({ setMenuSelection, addSticker, setGridBg, menuSel
 
         {/* Grid Backgrounds Section */}
         {menuSelection === "grid" && setGridBg && (
-            <div className="flex grid grid-cols-2 gap-[1.5svh] w-full">
+            <div className="flex grid grid-cols-2 gap-[2svh] w-full">
             {bgColors.map((color, index) => (
                 <div
                 key={index}
                 style={{ backgroundColor: color }}
-                className="w-full aspect-[1/2] cursor-pointer"
+                className="w-full aspect-[1] cursor-pointer rounded-md"
                 onClick={() => {
                     setGridBg(color);
                     setMenuSelection(null);

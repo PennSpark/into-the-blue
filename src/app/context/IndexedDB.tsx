@@ -29,7 +29,7 @@ interface StickerData {
 {/* open db, TODO: initialize found objects array */}
 export const openDB = (): Promise<IDBDatabase> => {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, 2); // bump version if needed
+    const request = indexedDB.open(DB_NAME, 3); // bump version if needed
 
     request.onupgradeneeded = (event) => {
       const db = (event.target as IDBOpenDBRequest).result;
@@ -557,5 +557,28 @@ export const loadGridBg = async (): Promise<string | null> => {
   return new Promise((resolve, reject) => {
     request.onsuccess = () => resolve(request.result?.color ?? null);
     request.onerror = () => reject("Failed to load grid background");
+  });
+};
+
+// Clear the gridSettings store
+export const clearGridSettings = async (): Promise<void> => {
+  const db = await openDB();
+  const transaction = db.transaction("gridSettings", "readwrite");
+  const store = transaction.objectStore("gridSettings");
+  store.clear();
+  return new Promise((resolve, reject) => {
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = () => reject("Failed to clear grid settings");
+  });
+};
+
+export const clearStickers = async (): Promise<void> => {
+  const db = await openDB();
+  const transaction = db.transaction(STICKERS_STORE, "readwrite");
+  const store = transaction.objectStore(STICKERS_STORE);
+  store.clear();
+  return new Promise((resolve, reject) => {
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = () => reject("Failed to clear stickers");
   });
 };

@@ -8,6 +8,7 @@ interface StickerProps {
   y: number;
   src: string;
   width: number;
+  aspectRatio: number;
   rotation: number;
   moveSticker: (id: number, newX: number, newY: number) => void;
   resizeSticker: (id: number, newWidth: number) => void;
@@ -24,6 +25,7 @@ const Sticker: React.FC<StickerProps> = ({
   y,
   src,
   width,
+  aspectRatio,
   rotation,
   moveSticker,
   resizeSticker,
@@ -39,11 +41,24 @@ const Sticker: React.FC<StickerProps> = ({
     width: width,
   });
 
+  // Debug info
+  // useEffect(() => {
+  //   console.log(`Sticker ${id} rendering:`, { 
+  //     isLabel, src, aspectRatio, 
+  //     height: frame.width * aspectRatio,
+  //     imageUrl: isLabel ? `/stickers/${src}` : src
+  //   });
+  // }, [id, isLabel, src, aspectRatio, frame.width]);
+
   useEffect(() => {
     setFrame({ translate: [x, y], rotate: rotation, width });
   }, [x, y, rotation, width]);
 
-  const stickerHeight = (frame.width * 300) / 360;
+  // Ensure aspectRatio is valid - default to 1 if it's not a valid number
+  const validAspectRatio = !isNaN(aspectRatio) && aspectRatio > 0 ? aspectRatio : 1;
+  
+  // Calculate the height based on the actual aspect ratio of the image
+  const stickerHeight = frame.width * validAspectRatio;
 
   return (
     <>
@@ -64,7 +79,7 @@ const Sticker: React.FC<StickerProps> = ({
           style={{
             width: '100%',
             height: '100%',
-            backgroundImage: `${!isLabel ? `url(${src})` : `url(/stickers/${src})`}`,
+            backgroundImage: isLabel ? `url(/stickers/${src})` : `url(${src})`,
             backgroundSize: 'contain',
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',
@@ -74,23 +89,26 @@ const Sticker: React.FC<StickerProps> = ({
         {/* Delete button (rotated with sticker) */}
         {active && (
           <button
-            onClick={() => deleteSticker(id)}
+            onClick={(e) => {
+              e.stopPropagation();
+              deleteSticker(id);
+            }}
             style={{
               position: 'absolute',
               top: '-12px',
               right: '-12px',
               width: '24px',
               height: '24px',
-              backgroundColor: 'red',
-              color: 'white',
+              backgroundColor: 'var(--Warm-White)',
+              color: 'red',
+              fontWeight: 'bold',
               borderRadius: '50%',
               border: 'none',
               cursor: 'pointer',
-              zIndex: 100,
-              transform: 'rotate(-' + frame.rotate + 'deg)', // counter rotate so it's readable
+              transform: `rotate(-${frame.rotate}deg)`,
             }}
           >
-            ×
+            x
           </button>
         )}
       </div>
@@ -102,6 +120,7 @@ const Sticker: React.FC<StickerProps> = ({
           resizable
           rotatable
           renderDirections={['se']}
+
           onDrag={({ left, top }) => {
             if (!wrapperRef.current || !wrapperRef.current.parentElement) return;
             const boardRect = wrapperRef.current.parentElement.getBoundingClientRect();

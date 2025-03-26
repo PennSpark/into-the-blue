@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { saveMetrics, getMetrics, clearImages, clearCollectedArtifacts, clearVisitedExhibits } from "../context/IndexedDB";
+import { saveMetrics, getMetrics, clearImages, clearCollectedArtifacts, 
+    clearVisitedExhibits, clearGridSettings, clearStickers } from "../context/IndexedDB";
 
 export default function WelcomePage() {
     const [showFirstContent, setShowFirstContent] = useState(false);
@@ -59,6 +60,8 @@ export default function WelcomePage() {
         await clearImages();
         await clearCollectedArtifacts();
         await clearVisitedExhibits();
+        await clearGridSettings();
+        await clearStickers();
         await saveMetrics({
             totalObjectsFound: 0,
             totalExhibitsVisited: 0,
