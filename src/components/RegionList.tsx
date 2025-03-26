@@ -53,7 +53,7 @@ const RegionList: React.FC<RegionListProps> = ({ regions }) => {
         return (
           <div
             key={index}
-            className="rounded-xl flex items-center justify-between cursor-pointer relative h-[100px] overflow-hidden bg-blue-3 black"
+            className="rounded-xl flex items-center justify-between cursor-pointer relative h-[100px] overflow-hidden bg-blue-3 hover:bg-[#bdcaf0] transition-colors"
             onClick={() => handleRegionClick(region.path)}
           >
             {/* Progress bar */}
@@ -66,15 +66,13 @@ const RegionList: React.FC<RegionListProps> = ({ regions }) => {
               >
                 {allFound ? (
                   /* Full bar for completed regions */
-                  <div
-                    className="h-full w-full bg-blue-2"
-                  ></div>
+                  <div className="h-full w-full bg-blue-2"></div>
                 ) : (
                   /* Animated wave edge for incomplete regions */
-                  <svg 
-                    width="100%" 
-                    height="100%" 
-                    viewBox="0 0 100 100" 
+                  <svg
+                    width="100%"
+                    height="100%"
+                    viewBox="0 0 100 100"
                     preserveAspectRatio="none"
                     style={{ position: 'absolute', top: 0, left: 0 }}
                   >
@@ -82,8 +80,8 @@ const RegionList: React.FC<RegionListProps> = ({ regions }) => {
                       className="fill-blue-2"
                       d="M0,0 L95,0 Q97,20 96,50 Q95,80 95,100 L0,100 Z"
                     >
-                      <animate 
-                        attributeName="d" 
+                      <animate
+                        attributeName="d"
                         values="
                           M0,0 L95,0 Q97,20 96,50 Q95,80 95,100 L0,100 Z;
                           M0,0 L95,0 Q100,30 95,50 Q90,70 95,100 L0,100 Z;
@@ -98,7 +96,6 @@ const RegionList: React.FC<RegionListProps> = ({ regions }) => {
                       />
                     </path>
                   </svg>
-
                 )}
               </div>
             )}
