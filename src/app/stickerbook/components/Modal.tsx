@@ -12,7 +12,7 @@ interface ModalProps {
 
 export default function Modal({ setMenuSelection, addSticker, setGridBg, menuSelection }: ModalProps) {
   const sections = ["sticker", "label", "grid"];
-  const [savedStickers, setSavedStickers] = useState<string[]>([]);
+  const [savedStickers, setSavedStickers] = useState<{ id: string, url: string }[]>([]);
   const [currentIndex, setCurrentIndex] = useState(sections.indexOf(menuSelection ?? "sticker"));
   const touchStartX = useRef<number | null>(null);
   const [swipeDirection, setSwipeDirection] = useState<string | null>(null);
@@ -68,13 +68,12 @@ export default function Modal({ setMenuSelection, addSticker, setGridBg, menuSel
   );
 
   const stickerList = [
-    "1.png", "2.png", "3.png", "4.png",
+    "1.png", "4.png",
     "5.png", "6.png", "7.png"
   ];
 
   const bgColors = [
-    "#FFDDC1", "#FFABAB", "#FFC3A0", "#D5AAFF",
-    "#85E3FF", "#B9FBC0", "#FFF1AA", "#FFD1E3",
+    "#D7E3FF", "#E16161", "#ACDACA", "#FFC531"
   ];
 
   return (
@@ -101,24 +100,24 @@ export default function Modal({ setMenuSelection, addSticker, setGridBg, menuSel
     </button>
     </div>
     </div>
-    <div id="contents" className="w-full h-[65svh] overflow-y-scroll">
+    <div id="contents" className="w-full h-[65svh] overflow-y-scroll no-scrollbar">
         {menuSelection === "sticker" && addSticker && (
         <div className="flex grid grid-cols-3 gap-[1.5svh] w-full">
-            {savedStickers.map((image, index) => (
+          {savedStickers.map(({ id, url }) => (
             <div
-                key={index}
-                onClick={() => {
-                addSticker(image, false);
+              key={id}
+              onClick={() => {
+                addSticker(id, false); 
                 setMenuSelection(null);
-                }}
-                className="cursor-pointer w-full aspect-[5/6]"
-                style={{
-                backgroundImage: `url(${image})`,
+              }}
+              className="cursor-pointer w-full aspect-[5/6]"
+              style={{
+                backgroundImage: `url(${url})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
-                }}
+              }}
             ></div>
-            ))}
+          ))}
         </div>
         )}
 
@@ -132,10 +131,11 @@ export default function Modal({ setMenuSelection, addSticker, setGridBg, menuSel
                     addSticker(image, true);
                     setMenuSelection(null);
                 }}
-                className="cursor-pointer shadow-lg h-[10svh] w-full"
+                className="cursor-pointer  h-[10svh] w-full"
                 style={{
                     backgroundImage: `url(/stickers/${image})`,
-                    backgroundSize: "cover",
+                    backgroundSize: "contain",
+                    backgroundRepeat: "no-repeat",
                     backgroundPosition: "center",
                 }}
                 ></div>

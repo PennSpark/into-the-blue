@@ -1,7 +1,17 @@
 const DB_NAME = "ImageDatabase";
 const STORE_NAME = "images";
 const METRICS_STORE = "metrics";
+const STICKERS_STORE = "stickers";
 
+interface StickerData {
+  id: number;
+  imageName: string; 
+  x: number;
+  y: number;
+  width: number;
+  rotation: number;
+  isLabel: boolean;
+}
 /* IndexedDB Structure */
 // - images (store for image blobs)
 // - metrics (store for app metrics)
@@ -30,6 +40,14 @@ export const openDB = (): Promise<IDBDatabase> => {
         // Use a stable key so we can update our metric object later.
         db.createObjectStore(METRICS_STORE, { keyPath: "name" });
       }
+      if (!db.objectStoreNames.contains(STICKERS_STORE)) {
+        // Use a stable key so we can update our metric object later.
+        db.createObjectStore(STICKERS_STORE, { keyPath: "id" });
+      }
+      if (!db.objectStoreNames.contains("gridSettings")) {
+        db.createObjectStore("gridSettings", { keyPath: "id" });
+      }
+      
       // NEW: Create store for collected artifacts if not present.
       if (!db.objectStoreNames.contains("collectedArtifacts")) {
         db.createObjectStore("collectedArtifacts", { keyPath: "id" });
@@ -135,7 +153,7 @@ export const saveImage = async (
 };
 
 //retrieve all images
-export const loadAllImages = async (): Promise<string[]> => {
+export const loadAllImages = async (): Promise<{ id: string, url: string }[]> => {
   const db = await openDB();
   const transaction = db.transaction(STORE_NAME, "readonly");
   const store = transaction.objectStore(STORE_NAME);
@@ -144,9 +162,11 @@ export const loadAllImages = async (): Promise<string[]> => {
   return new Promise((resolve, reject) => {
     request.onsuccess = () => {
       const images = request.result
-      .filter((item): item is { image: Blob } => item && item.image instanceof Blob)
-      .map((item) => URL.createObjectURL(item.image));
-    
+        .filter((item): item is { id: string; image: Blob } => item && item.image instanceof Blob)
+        .map((item) => ({
+          id: item.id,
+          url: URL.createObjectURL(item.image)
+        }));
       resolve(images);
     };
     request.onerror = () => reject("Failed to load images");
@@ -406,5 +426,136 @@ export const clearVisitedExhibits = async (): Promise<void> => {
   return new Promise((resolve, reject) => {
     transaction.oncomplete = () => resolve();
     transaction.onerror = () => reject("Failed to clear visited exhibits");
+  });
+};
+
+export const loadAllStickers = async (): Promise<StickerData[]> => {
+  const db = await openDB();
+
+  const stickerTx = db.transaction("stickers", "readonly");
+  const stickerStore = stickerTx.objectStore("stickers");
+  const stickerRequest = stickerStore.getAll();
+
+  return new Promise((resolve, reject) => {
+    stickerRequest.onsuccess = async () => {
+      const rawStickers = stickerRequest.result;
+
+      const stickersWithUrls: StickerData[] = await Promise.all(
+        rawStickers.map(async (s: any) => {
+          try {
+            const imgTx = db.transaction("images", "readonly"); // ✅ open a new transaction
+            const imageStore = imgTx.objectStore("images");
+            const imgReq = imageStore.get(s.imageName);
+
+            return new Promise<StickerData>((res) => {
+              imgReq.onsuccess = () => {
+                const blob = imgReq.result?.image;
+                const url = blob instanceof Blob ? URL.createObjectURL(blob) : '';
+                res({
+                  ...s,
+                  src: url,
+                });
+              };
+              imgReq.onerror = () => {
+                res({ ...s, src: '' });
+              };
+            });
+          } catch {
+            return { ...s, src: '' };
+          }
+        })
+      );
+
+      resolve(stickersWithUrls);
+    };
+
+    stickerRequest.onerror = () => reject("Failed to load stickers");
+  });
+};
+
+
+export const saveSticker = async (sticker: {
+  id: number;
+  imageName: string;
+  x: number;
+  y: number;
+  width: number;
+  rotation: number;
+  isLabel: boolean;
+}): Promise<void> => {
+  const db = await openDB();
+  const tx = db.transaction("stickers", "readwrite");
+  const store = tx.objectStore("stickers");
+  store.put(sticker);
+  return new Promise((resolve, reject) => {
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject("Failed to save sticker");
+  });
+};
+
+export const deleteStickerById = async (id: number): Promise<void> => {
+  const db = await openDB();
+  const tx = db.transaction(STICKERS_STORE, "readwrite");
+  const store = tx.objectStore(STICKERS_STORE);
+  store.delete(id);
+  return new Promise((resolve, reject) => {
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject("Failed to delete sticker");
+  });
+};
+
+export const logDatabaseState = async (): Promise<void> => {
+  const db = await openDB();
+
+  const logStoreContents = async (storeName: string) => {
+    const tx = db.transaction(storeName, "readonly");
+    const store = tx.objectStore(storeName);
+    const request = store.getAll();
+
+    return new Promise<void>((resolve) => {
+      request.onsuccess = () => {
+        console.log(`📦 ${storeName} store:`);
+        request.result.forEach((item: any, index: number) => {
+          console.log(`  #${index + 1}`, item);
+        });
+        resolve();
+      };
+      request.onerror = () => {
+        console.warn(`❌ Failed to read from ${storeName}`);
+        resolve();
+      };
+    });
+  };
+
+  console.group("📂 IndexedDB State");
+  await Promise.all([
+    logStoreContents("images"),
+    logStoreContents("metrics"),
+    logStoreContents("stickers"),
+    logStoreContents("collectedArtifacts"),
+    logStoreContents("visitedExhibits"),
+  ]);
+  console.groupEnd();
+};
+
+export const saveGridBg = async (color: string): Promise<void> => {
+  const db = await openDB();
+  const tx = db.transaction("gridSettings", "readwrite");
+  const store = tx.objectStore("gridSettings");
+  store.put({ id: "gridBg", color });
+  return new Promise((resolve, reject) => {
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject("Failed to save grid background");
+  });
+};
+
+export const loadGridBg = async (): Promise<string | null> => {
+  const db = await openDB();
+  const tx = db.transaction("gridSettings", "readonly");
+  const store = tx.objectStore("gridSettings");
+  const request = store.get("gridBg");
+  return new Promise((resolve, reject) => {
+    request.onsuccess = () => resolve(request.result?.color ?? null);
+    request.onerror = () => reject("Failed to load grid background");
   });
 };
