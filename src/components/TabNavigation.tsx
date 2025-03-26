@@ -28,6 +28,15 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange })
     sliderRef.current.style.transform = `translateX(${position}px)`;
   }, [activeTab]);
 
+  // Caption text style properties
+  const captionStyle = {
+    fontFamily: 'DM Sans',
+    fontSize: '14px',
+    fontWeight: 700, // Bold
+    lineHeight: '1',
+    letterSpacing: '-2%'
+  };
+
   return (
     <div className="w-[248px] h-[34px] max-w-md p-1 gray-1 bg-blue-3 rounded-[28px] flex relative">
       {/* Animated slider */}
@@ -39,37 +48,37 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange })
       {/* List tab button */}
       <button
         ref={listBtnRef}
-        className={`flex-1 py-2.5 px-4 text-center font-medium text-sm flex items-center justify-center gap-2 rounded-[24px] z-10 relative ${
-          activeTab === 'list' ? 'text-warm-white' : 'text-gray-1'
+        className={`flex-1 py-2.5 px-4 text-center flex items-center justify-center gap-2 rounded-[24px] z-10 relative ${
+          activeTab === 'list' ? 'text-warm-white' : 'text-gray1'
         }`}
         onClick={() => onTabChange('list')}
       >
         <Image 
           src="/icons/List.svg" 
           alt="List view" 
-          width={20} 
-          height={20} 
+          width={12} 
+          height={9} 
           className={activeTab === 'list' ? 'brightness-0 invert' : ''}
         /> 
-        LIST
+        <span style={captionStyle}>LIST</span>
       </button>
 
       {/* Map tab button */}
       <button
         ref={mapBtnRef}
-        className={`flex-1 py-2.5 px-4 text-center font-medium text-sm flex items-center justify-center gap-2 rounded-[24px] z-10 relative ${
-          activeTab === 'map' ? 'text-warm-white' : 'text-gray-1'
+        className={`flex-1 py-2.5 px-4 text-center flex items-center justify-center gap-2 rounded-[24px] z-10 relative ${
+          activeTab === 'map' ? 'text-cool-white' : 'text-gray1'
         }`}
         onClick={() => onTabChange('map')}
       >
         <Image 
           src="/icons/Map.svg" 
           alt="Map view" 
-          width={20} 
-          height={20} 
+          width={15} 
+          height={14} 
           className={activeTab === 'map' ? 'brightness-0 invert' : ''}
         /> 
-        MAP
+        <span style={captionStyle}>MAP</span>
       </button>
     </div>
   );
