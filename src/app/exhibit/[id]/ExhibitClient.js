@@ -184,7 +184,7 @@ export default function ExhibitClient({ exhibit, id }) {
           <div className="sticky top-0 z-10 shadow-md bg-warm-white left-0 right-0 flex items-center justify-between py-2 px-2 mb-4">
             {/* Home button */}
             <Link
-              className="p-[15px] bg-warm-gray rounded-[8px] transition-all ease-in duration-300 hover:bg-[#f2dbb5]"
+              className="p-[15px] bg-warm-gray rounded-[8px] transition-all ease-in duration-300"
               href="/"
             >
               <img

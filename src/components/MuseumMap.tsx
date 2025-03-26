@@ -286,7 +286,7 @@ if (missingPositions.length > 0) {
     });
 
   return (
-    <div className="relative w-full overflow-hidden" style={{ height: 'calc(100vh - 280px)' }}>
+    <div className="relative w-full" style={{ height: 'calc(100vh - 280px)' }}>
       <div style={{ transform: 'scale(0.81)', transformOrigin: 'top left' }}>
         <div className="relative" style={{ height: 800, width: '100%', minWidth: '100%' }} onClick={handleBackgroundClick}>
           {renderShadows()}
