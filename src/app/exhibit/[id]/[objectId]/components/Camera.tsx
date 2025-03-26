@@ -17,6 +17,11 @@ export interface CameraProps {
   onImageCaptured: () => void;
 }
 
+// Add video constraints for using rear camera
+const videoConstraints = {
+    facingMode: "environment"
+};
+
 export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
 
@@ -263,8 +268,11 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
       {/* Webcam container with relative positioning */}
       <div className="relative w-[40svh] h-[60svh]">
-        <Webcam ref={webcamRef}
-          className="absolute opacity-0 pointer-events-none" />
+        <Webcam 
+          ref={webcamRef}
+          videoConstraints={videoConstraints}  // <-- Added prop
+          className="absolute opacity-0 pointer-events-none" 
+        />
         
         <canvas
           ref={canvasRef}

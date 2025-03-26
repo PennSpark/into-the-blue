@@ -119,9 +119,10 @@ export default function WelcomePage() {
                     {hasMetrics ? (
                         <div className="flex gap-3">
                             <Link href="/" onClick={handleStartOver}>
-                                <div className="flex items-center border-2 border-green text-green w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
-                                    <img src="/icons/left-arrow-black.svg" alt="Start Over" className="w-[16px] h-[16px]" />
+                                <div className="flex items-center border-2 border-green text-green w-fit h-[44px] gap-[8px] px-[20px] rounded-full">
                                     <p className="font-medium text-base">Start Over</p>
+                                    <img src="/icons/retake-green.svg" alt="Start Over" className="w-[16px] h-[16px]" />
+
                                 </div>
                             </Link>
                             <Link href="/">
