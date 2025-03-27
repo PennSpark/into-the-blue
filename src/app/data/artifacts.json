@@ -6,8 +6,8 @@
 		"material": "Cotton, Indigo Dye",
 		"exhibit": "Into the Blue",
 		"exhibitID": "into-the-blue",
-		"imageURL": "/images/artifacts/ITB-Cloth.png",
-		"svgURL": "/svg-outlines/SVG-_ITB-Cloth.svg",
+		"imageURL": "/sites/blue/images/artifacts/ITB-Cloth.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_ITB-Cloth.svg",
 		"hint": "Look in the right side case!"
 	},
 	{
@@ -17,8 +17,8 @@
 		"material": "Bronze",
 		"exhibit": "Etruscan",
 		"exhibitID": "etruscan",
-		"imageURL": "/images/artifacts/Etruscan-Mirror.png",
-		"svgURL": "/svg-outlines/SVG-_Etruscan-Mirror.svg",
+		"imageURL": "/sites/blue/images/artifacts/Etruscan-Mirror.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_Etruscan-Mirror.svg",
 		"hint": "Look in the case next to the sarcophagus with reclining man!"
 	},
 	{
@@ -28,8 +28,8 @@
 		"material": "Cored Glass",
 		"exhibit": "Greece",
 		"exhibitID": "greece",
-		"imageURL": "/images/artifacts/Greece-Oinochoe.png",
-		"svgURL": "/svg-outlines/SVG-_Greece-Oinochoe.svg",
+		"imageURL": "/sites/blue/images/artifacts/Greece-Oinochoe.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_Greece-Oinochoe.svg",
 		"hint": "Look near the wall where the Grave Stela is displayed!"
 	},
 	{
@@ -39,8 +39,8 @@
 		"material": "Cored Glass",
 		"exhibit": "Greece",
 		"exhibitID": "greece",
-		"imageURL": "/images/artifacts/Greece-Alabastron.png",
-		"svgURL": "/svg-outlines/SVG-_Greece-Alabastron.svg",
+		"imageURL": "/sites/blue/images/artifacts/Greece-Alabastron.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_Greece-Alabastron.svg",
 		"hint": "Look near the wall where the Grave Stela is displayed!"
 	},
 	{
@@ -50,8 +50,8 @@
 		"material": "Glass",
 		"exhibit": "Rome",
 		"exhibitID": "rome",
-		"imageURL": "/images/artifacts/Rome-Urn.png",
-		"svgURL": "/svg-outlines/SVG-_Rome-Urn.svg",
+		"imageURL": "/sites/blue/images/artifacts/Rome-Urn.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_Rome-Urn.svg",
 		"hint": "This object is featured in its own case near the Etruscan Gallery entrance!"
 	},
 	{
@@ -61,8 +61,8 @@
 		"material": "Glass",
 		"exhibit": "Rome",
 		"exhibitID": "rome",
-		"imageURL": "/images/artifacts/Rome-Flask.png",
-		"svgURL": "/svg-outlines/SVG-_Rome-Flask.svg",
+		"imageURL": "/sites/blue/images/artifacts/Rome-Flask.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_Rome-Flask.svg",
 		"hint": "Look for a flash of bright blue to the left of the Eastern Mediterranean entrance!"
 	},
 	{
@@ -72,8 +72,8 @@
 		"material": "Glass",
 		"exhibit": "Rome",
 		"exhibitID": "rome",
-		"imageURL": "/images/artifacts/Rome-Bracelet.png",
-		"svgURL": "/svg-outlines/SVG-_Rome-Bracelet.svg",
+		"imageURL": "/sites/blue/images/artifacts/Rome-Bracelet.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_Rome-Bracelet.svg",
 		"hint": "Look beneath a painting of olive trees…"
 	},
 	{
@@ -83,8 +83,8 @@
 		"material": "Glass beads",
 		"exhibit": "Rome",
 		"exhibitID": "rome",
-		"imageURL": "/images/artifacts/Rome-Necklace.png",
-		"svgURL": "/svg-outlines/SVG-_Rome-Necklace.svg",
+		"imageURL": "/sites/blue/images/artifacts/Rome-Necklace.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_Rome-Necklace.svg",
 		"hint": "Look beneath a painting of olive trees…"
 	},
 	{
@@ -94,8 +94,8 @@
 		"material": "Glass",
 		"exhibit": "Rome",
 		"exhibitID": "rome",
-		"imageURL": "/images/artifacts/Rome-Perfume.png",
-		"svgURL": "/svg-outlines/SVG-_Rome-Perfume.svg",
+		"imageURL": "/sites/blue/images/artifacts/Rome-Perfume.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_Rome-Perfume.svg",
 		"hint": "Look to the right of the Eastern Mediterranean entrance!"
 	},
 	{
@@ -105,8 +105,8 @@
 		"material": "Blue Pigment",
 		"exhibit": "Eastern Mediterranean",
 		"exhibitID": "eastern-mediterranean",
-		"imageURL": "/images/artifacts/EM-Pigment.png",
-		"svgURL": "/svg-outlines/SVG-_EM-Pigment.svg",
+		"imageURL": "/sites/blue/images/artifacts/EM-Pigment.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_EM-Pigment.svg",
 		"hint": "This object is hidden behind a magnifying glass! "
 	},
 	{
@@ -116,8 +116,8 @@
 		"material": "Egyptian Blue, Faience",
 		"exhibit": "Eastern Mediterranean",
 		"exhibitID": "eastern-mediterranean",
-		"imageURL": "/images/artifacts/EM-OilFlask.png",
-		"svgURL": "/svg-outlines/SVG-_EM-OilFlask.svg",
+		"imageURL": "/sites/blue/images/artifacts/EM-OilFlask.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_EM-OilFlask.svg",
 		"hint": "Look on the wall behind the terracotta sarcophagus!"
 	},
 	{
@@ -127,8 +127,8 @@
 		"material": "Lapis Lazuli",
 		"exhibit": "Eastern Mediterranean",
 		"exhibitID": "eastern-mediterranean",
-		"imageURL": "/images/artifacts/EM-Lapis.png",
-		"svgURL": "/svg-outlines/SVG-_EM-Lapis.svg",
+		"imageURL": "/sites/blue/images/artifacts/EM-Lapis.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_EM-Lapis.svg",
 		"hint": "Look around the shipwreck!"
 	},
 	{
@@ -138,8 +138,8 @@
 		"material": "Faience",
 		"exhibit": "Eastern Mediterranean",
 		"exhibitID": "eastern-mediterranean",
-		"imageURL": "/images/artifacts/EM-Amulet.png",
-		"svgURL": "/svg-outlines/SVG-_EM-Amulet.svg",
+		"imageURL": "/sites/blue/images/artifacts/EM-Amulet.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_EM-Amulet.svg",
 		"hint": "You may encounter this object while learning about the alphabet!"
 	},
 	{
@@ -149,8 +149,8 @@
 		"material": "Enamel, Metal",
 		"exhibit": "Asia",
 		"exhibitID": "asia",
-		"imageURL": "/images/artifacts/Asia-LionRight.png",
-		"svgURL": "/svg-outlines/SVG-_Asia-LionRight.svg",
+		"imageURL": "/sites/blue/images/artifacts/Asia-LionRight.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_Asia-LionRight.svg",
 		"hint": "This lioness and her twin are flanking a doorway!"
 	},
 	{
@@ -160,8 +160,8 @@
 		"material": "Enamel, Metal",
 		"exhibit": "Asia",
 		"exhibitID": "asia",
-		"imageURL": "/images/artifacts/Asia-LionLeft.png",
-		"svgURL": "/svg-outlines/SVG-_Asia-LionLeft.svg",
+		"imageURL": "/sites/blue/images/artifacts/Asia-LionLeft.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_Asia-LionLeft.svg",
 		"hint": "This lioness and her twin are flanking a doorway!"
 	},
 	{
@@ -171,8 +171,8 @@
 		"material": "Faience",
 		"exhibit": "Egypt",
 		"exhibitID": "egypt",
-		"imageURL": "/images/artifacts/Egypt-Collar.png",
-		"svgURL": "/svg-outlines/SVG-_Egypt-Collar.svg",
+		"imageURL": "/sites/blue/images/artifacts/Egypt-Collar.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_Egypt-Collar.svg",
 		"hint": "Look in between two sets of windows!"
 	},
 	{
@@ -182,8 +182,8 @@
 		"material": "Faience, Glass",
 		"exhibit": "Egypt",
 		"exhibitID": "egypt",
-		"imageURL": "/images/artifacts/Egypt-Beads.png",
-		"svgURL": "/svg-outlines/SVG-_Egypt-Beads.svg",
+		"imageURL": "/sites/blue/images/artifacts/Egypt-Beads.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_Egypt-Beads.svg",
 		"hint": "This string of blue beads is displayed alongside several strings of other colors."
 	},
 	{
@@ -193,8 +193,8 @@
 		"material": "Faience",
 		"exhibit": "Egypt",
 		"exhibitID": "egypt",
-		"imageURL": "/images/artifacts/Egypt-Cup.png",
-		"svgURL": "/svg-outlines/SVG-_Egypt-Cup.svg",
+		"imageURL": "/sites/blue/images/artifacts/Egypt-Cup.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_Egypt-Cup.svg",
 		"hint": "This cup is in a case with many jars."
 	},
 	{
@@ -204,8 +204,8 @@
 		"material": "Lapis Lazuli",
 		"exhibit": "Middle East",
 		"exhibitID": "middle-east",
-		"imageURL": "/images/artifacts/ME-Ram.png",
-		"svgURL": "/svg-outlines/SVG-_ME-Ram.svg",
+		"imageURL": "/sites/blue/images/artifacts/ME-Ram.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_ME-Ram.svg",
 		"hint": "This ram is in its own display case near Puabi!"
 	},
 	{
@@ -215,8 +215,8 @@
 		"material": "Lapis Lazuli",
 		"exhibit": "Middle East",
 		"exhibitID": "middle-east",
-		"imageURL": "/images/artifacts/ME-3Beads.png",
-		"svgURL": "/svg-outlines/SVG-_ME-3Beads.svg",
+		"imageURL": "/sites/blue/images/artifacts/ME-3Beads.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_ME-3Beads.svg",
 		"hint": "Look beneath the figure of Puabi!"
 	},
 	{
@@ -226,8 +226,8 @@
 		"material": "Lapis Lazuli",
 		"exhibit": "Middle East",
 		"exhibitID": "middle-east",
-		"imageURL": "/images/artifacts/ME-Diadems.png",
-		"svgURL": "/svg-outlines/SVG-_ME-Diadems.svg",
+		"imageURL": "/sites/blue/images/artifacts/ME-Diadems.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_ME-Diadems.svg",
 		"hint": "Look in the direction Puabi is looking!"
 	},
 	{
@@ -237,8 +237,8 @@
 		"material": "Glass",
 		"exhibit": "Middle East",
 		"exhibitID": "middle-east",
-		"imageURL": "/images/artifacts/ME-Bottle.png",
-		"svgURL": "/svg-outlines/SVG-_ME-Bottle.svg",
+		"imageURL": "/sites/blue/images/artifacts/ME-Bottle.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_ME-Bottle.svg",
 		"hint": "This bottle is part of a set of three bottles!"
 	},
 	{
@@ -248,8 +248,8 @@
 		"material": "Stucco",
 		"exhibit": "Middle East",
 		"exhibitID": "middle-east",
-		"imageURL": "/images/artifacts/ME-Decor.png",
-		"svgURL": "/svg-outlines/SVG-_ME-Decor.svg",
+		"imageURL": "/sites/blue/images/artifacts/ME-Decor.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_ME-Decor.svg",
 		"hint": "Look between the last two rooms of the gallery!"
 	},
 	{
@@ -259,8 +259,8 @@
 		"material": "Artificial Paste, Glaze",
 		"exhibit": "Middle East",
 		"exhibitID": "middle-east",
-		"imageURL": "/images/artifacts/ME-Dish.png",
-		"svgURL": "/svg-outlines/SVG-_ME-Dish.svg",
+		"imageURL": "/sites/blue/images/artifacts/ME-Dish.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_ME-Dish.svg",
 		"hint": "You may see this object on your way out from the last room of the gallery."
 	},
 	{
@@ -270,8 +270,8 @@
 		"material": "Ceramic, Glaze",
 		"exhibit": "Middle East",
 		"exhibitID": "middle-east",
-		"imageURL": "/images/artifacts/ME-Bowl.png",
-		"svgURL": "/svg-outlines/SVG-_ME-Bowl.svg",
+		"imageURL": "/sites/blue/images/artifacts/ME-Bowl.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_ME-Bowl.svg",
 		"hint": "Look in the last room of the gallery!"
 	},
 	{
@@ -281,8 +281,8 @@
 		"material": "Ceramic, glazed",
 		"exhibit": "Middle East",
 		"exhibitID": "middle-east",
-		"imageURL": "/images/artifacts/ME-Tile.png",
-		"svgURL": "/svg-outlines/SVG-_ME-Tile.svg",
+		"imageURL": "/sites/blue/images/artifacts/ME-Tile.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_ME-Tile.svg",
 		"hint": "The tile mosaic panel is large, but hidden behind a corner."
 	},
 	{
@@ -292,8 +292,8 @@
 		"material": "Lapis Lazuli",
 		"exhibit": "Middle East",
 		"exhibitID": "middle-east",
-		"imageURL": "/images/artifacts/ME-String.png",
-		"svgURL": "/svg-outlines/SVG-_ME-String.svg",
+		"imageURL": "/sites/blue/images/artifacts/ME-String.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_ME-String.svg",
 		"hint": "Look closely at a display case of small objects near the gallery entrance. This object is near a group of tiny animal figurines!"
 	},
 	{
@@ -303,8 +303,8 @@
 		"material": "Bead",
 		"exhibit": "North America",
 		"exhibitID": "north-america",
-		"imageURL": "/images/artifacts/NA-Cradleboard.png",
-		"svgURL": "/svg-outlines/SVG-_NA-Cradleboard.svg",
+		"imageURL": "/sites/blue/images/artifacts/NA-Cradleboard.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_NA-Cradleboard.svg",
 		"hint": "Look in between two interactive screens!"
 	},
 	{
@@ -314,8 +314,8 @@
 		"material": "Cotton",
 		"exhibit": "North America",
 		"exhibitID": "north-america",
-		"imageURL": "/images/artifacts/NA-Shirt.png",
-		"svgURL": "/svg-outlines/SVG-_NA-Shirt.svg",
+		"imageURL": "/sites/blue/images/artifacts/NA-Shirt.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_NA-Shirt.svg",
 		"hint": "Look towards the main entrance of the museum!"
 	},
 	{
@@ -325,8 +325,8 @@
 		"material": "Bead",
 		"exhibit": "North America",
 		"exhibitID": "north-america",
-		"imageURL": "/images/artifacts/NA-WomansDress.png",
-		"svgURL": "/svg-outlines/SVG-_NA-WomansDress.svg",
+		"imageURL": "/sites/blue/images/artifacts/NA-WomansDress.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_NA-WomansDress.svg",
 		"hint": "Look in between two interactive screens!"
 	},
 	{
@@ -336,8 +336,8 @@
 		"material": "Polyester, Cotton",
 		"exhibit": "North America",
 		"exhibitID": "north-america",
-		"imageURL": "/images/artifacts/NA-JingleDress.png",
-		"svgURL": "/svg-outlines/SVG-_NA-JingleDress.svg",
+		"imageURL": "/sites/blue/images/artifacts/NA-JingleDress.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_NA-JingleDress.svg",
 		"hint": "Look towards the main entrance of the museum!"
 	},
 	{
@@ -347,8 +347,8 @@
 		"material": "Turquoise",
 		"exhibit": "Mexico & Central America",
 		"exhibitID": "mexico-central-america",
-		"imageURL": "/images/artifacts/MCA-Ear.png",
-		"svgURL": "/svg-outlines/SVG-_MCA-Ear.svg",
+		"imageURL": "/sites/blue/images/artifacts/MCA-Ear.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_MCA-Ear.svg",
 		"hint": "Look to the right of the large sculptures displayed in a corner of the room. "
 	},
 	{
@@ -358,8 +358,8 @@
 		"material": "Cotton",
 		"exhibit": "Africa",
 		"exhibitID": "africa",
-		"imageURL": "/images/artifacts/Africa-Robe.png",
-		"svgURL": "/svg-outlines/SVG-_Africa-Robe.svg",
+		"imageURL": "/sites/blue/images/artifacts/Africa-Robe.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_Africa-Robe.svg",
 		"hint": "Look in a display case that's positioned diagonally!"
 	},
 	{
@@ -369,8 +369,8 @@
 		"material": "Kente Cloth, Velvet, Organza, Beads",
 		"exhibit": "Africa",
 		"exhibitID": "africa",
-		"imageURL": "/images/artifacts/Africa-Dress.png",
-		"svgURL": "/svg-outlines/SVG-_Africa-Dress.svg",
+		"imageURL": "/sites/blue/images/artifacts/Africa-Dress.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_Africa-Dress.svg",
 		"hint": "Look closely at the mannequin in the center of the hallway…"
 	},
 	{
@@ -380,8 +380,8 @@
 		"material": "",
 		"exhibit": "Africa",
 		"exhibitID": "africa",
-		"imageURL": "/images/artifacts/Africa-Beads.png",
-		"svgURL": "/svg-outlines/SVG-_Africa-Beads.svg",
+		"imageURL": "/sites/blue/images/artifacts/Africa-Beads.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_Africa-Beads.svg",
 		"hint": "These beads are in the hallway, next to several bracelets on display."
 	},
 	{
@@ -391,8 +391,8 @@
 		"material": "Vellum, Pigment",
 		"exhibit": "Africa",
 		"exhibitID": "africa",
-		"imageURL": "/images/artifacts/Africa-Illu.png",
-		"svgURL": "/svg-outlines/SVG-_Africa-Illu.svg",
+		"imageURL": "/sites/blue/images/artifacts/Africa-Illu.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_Africa-Illu.svg",
 		"hint": "Look in the room with a large modern sculpture on the wall!"
 	},
 	{
@@ -402,8 +402,8 @@
 		"material": "Blue Paste",
 		"exhibit": "Assyria",
 		"exhibitID": "assyria",
-		"imageURL": "/images/artifacts/Assyria-Bead.png",
-		"svgURL": "/svg-outlines/SVG-_Assyria-Bead.svg",
+		"imageURL": "/sites/blue/images/artifacts/Assyria-Bead.png",
+		"svgURL": "/sites/blue/svg-outlines/SVG-_Assyria-Bead.svg",
 		"hint": "An enlarged blue image near this bead may catch your eye!"
 	}
 ]

@@ -132,7 +132,7 @@ const StickerBoard: React.FC = () => {
       };
   
       // Set the source to trigger the onload event
-      tempImg.src = isLabel ? `/stickers/${imageName}` : (blobUrl || '');
+      tempImg.src = isLabel ? `/sites/blue/stickers/${imageName}` : (blobUrl || '');
     });
   };
 
@@ -230,11 +230,11 @@ const StickerBoard: React.FC = () => {
     <div className='w-[42.75svh] h-[9svh] py-[2.3svh] flex flex-row justify-between items-center'>
       <button onClick={() => router.back()}
         className='round-button h-full flex rounded-full p-[1svh] px-[2svh]'>
-        <Image src='/icons/arrow-stroke.svg' className='w-full h-full' width={100} height={100} alt='back' />
+        <Image src='/sites/blue/icons/arrow-stroke.svg' className='w-full h-full' width={100} height={100} alt='back' />
       </button>
       <button onClick={captureStickerboard} className='round-button h-full flex rounded-full p-[1svh] px-[2svh]'>
         {/* <span className='text-[2svh]'>I&apos;m done</span> */}
-        <Image src='/icons/export-black.svg' className='w-full h-full' width={100} height={100} alt='export' />
+        <Image src='/sites/blue/icons/export-black.svg' className='w-full h-full' width={100} height={100} alt='export' />
       </button>
 
     </div>
@@ -279,7 +279,7 @@ const StickerBoard: React.FC = () => {
   <div id="sticker-bar" className="round-button w-full flex flex-row justify-center items-center p-[1.3svh] px-[2.3svh] gap-[1.5svh] rounded-full">
     <button className={`flex w-[4.7svh] h-[4.7svh] rounded-full p-[0.7svh] ${menuSelection === 'sticker' ? 'bg-blue-1' : 'bg-blue-5'}`} onClick={() => setMenu('sticker')}>
       <Image
-        src={menuSelection === 'sticker' ? '/stickerboard/sticker-button-alt.svg' : '/stickerboard/sticker-button.svg'}
+        src={menuSelection === 'sticker' ? '/sites/blue/stickerboard/sticker-button-alt.svg' : '/sites/blue/stickerboard/sticker-button.svg'}
         alt="sticker button"
         width={50}
         height={50}
@@ -289,7 +289,7 @@ const StickerBoard: React.FC = () => {
 
     <button className={`flex w-[4.7svh] h-[4.7svh] rounded-full p-[0.7svh] ${menuSelection === 'label' ? 'bg-blue-1' : 'bg-blue-5'}`} onClick={() => setMenu('label')}>
       <Image
-        src={menuSelection === 'label' ? '/stickerboard/label-button-alt.svg' : '/stickerboard/label-button.svg'}
+        src={menuSelection === 'label' ? '/sites/blue/stickerboard/label-button-alt.svg' : '/sites/blue/stickerboard/label-button.svg'}
         alt="label button"
         width={50}
         height={50}
@@ -299,7 +299,7 @@ const StickerBoard: React.FC = () => {
 
     <button className={`flex w-[4.7svh] h-[4.7svh] rounded-full p-[0.7svh] ${menuSelection === 'grid' ? 'bg-blue-1' : 'bg-blue-5'}`} onClick={() => setMenu('grid')}>
       <Image
-        src={menuSelection === 'grid' ? '/stickerboard/grid-button-alt.svg' : '/stickerboard/grid-button.svg'}
+        src={menuSelection === 'grid' ? '/sites/blue/stickerboard/grid-button-alt.svg' : '/sites/blue/stickerboard/grid-button.svg'}
         alt="grid button"
         width={50}
         height={50}

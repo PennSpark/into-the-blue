@@ -115,7 +115,7 @@ const RegionList: React.FC<RegionListProps> = ({ regions }) => {
             {!allFound && (
               <div className="absolute right-0 h-full opacity-70 z-0">
                 <img
-                  src={`/icons/regions/${region.name
+                  src={`/sites/blue/icons/regions/${region.name
                     .toLowerCase()
                     .replace(/\s+/g, '-')}.png`}
                   alt={`${region.displayName} icon`}

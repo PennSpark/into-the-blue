@@ -93,7 +93,7 @@ export default function Modal({ setMenuSelection, addSticker, setGridBg, menuSel
         className="flex p-[1svh] justify-end round-button w-[4svh] h-[4svh] rounded-full text-white"
         onClick={() => setMenuSelection(null)}
     >
-        <Image src="/icons/x.svg" alt="close" width={50} height={50} />
+        <Image src="/sites/blue/icons/x.svg" alt="close" width={50} height={50} />
     </button>
     </div>
     </div>
@@ -130,7 +130,7 @@ export default function Modal({ setMenuSelection, addSticker, setGridBg, menuSel
                 }}
                 className="cursor-pointer  h-[10svh] w-full"
                 style={{
-                    backgroundImage: `url(/stickers/${image})`,
+                    backgroundImage: `url(/sites/blue/stickers/${image})`,
                     backgroundSize: "contain",
                     backgroundRepeat: "no-repeat",
                     backgroundPosition: "center",

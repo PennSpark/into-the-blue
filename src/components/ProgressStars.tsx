@@ -19,7 +19,7 @@ const ProgressStars: React.FC<ProgressStarsProps> = ({ objectsFound, totalObject
           {/* First star group (left) - 3+ objects */}
           <div className="flex items-center">
             <img 
-              src={`/icons/${isOneStar ? 'yellow' : 'grey'}-star.svg`} 
+              src={`/sites/blue/icons/${isOneStar ? 'yellow' : 'grey'}-star.svg`} 
               alt="1 star" 
               className="w-6 h-6"
             />
@@ -28,17 +28,17 @@ const ProgressStars: React.FC<ProgressStarsProps> = ({ objectsFound, totalObject
           {/* Third star group (right) - 20+ objects */}
           <div className="flex items-center">
             <img 
-              src={`/icons/${isThreeStars ? 'yellow' : 'grey'}-star.svg`} 
+              src={`/sites/blue/icons/${isThreeStars ? 'yellow' : 'grey'}-star.svg`} 
               alt="3 stars" 
               className="w-6 h-6"
             />
             <img 
-              src={`/icons/${isThreeStars ? 'yellow' : 'grey'}-star.svg`} 
+              src={`/sites/blue/icons/${isThreeStars ? 'yellow' : 'grey'}-star.svg`} 
               alt="" 
               className="w-6 h-6"
             />
             <img 
-              src={`/icons/${isThreeStars ? 'yellow' : 'grey'}-star.svg`} 
+              src={`/sites/blue/icons/${isThreeStars ? 'yellow' : 'grey'}-star.svg`} 
               alt="" 
               className="w-6 h-6"
             />
@@ -48,12 +48,12 @@ const ProgressStars: React.FC<ProgressStarsProps> = ({ objectsFound, totalObject
         {/* Second star group (middle) - 12+ objects - absolutely positioned to center */}
         <div className="absolute left-1/2 transform -translate-x-1/2 top-0 flex items-center">
           <img 
-            src={`/icons/${isTwoStars ? 'yellow' : 'grey'}-star.svg`} 
+            src={`/sites/blue/icons/${isTwoStars ? 'yellow' : 'grey'}-star.svg`} 
             alt="2 stars" 
             className="w-6 h-6"
           />
           <img 
-            src={`/icons/${isTwoStars ? 'yellow' : 'grey'}-star.svg`} 
+            src={`/sites/blue/icons/${isTwoStars ? 'yellow' : 'grey'}-star.svg`} 
             alt="" 
             className="w-6 h-6"
           />

@@ -46,7 +46,7 @@ export default function StatsPage() {
                 // Pick up to 3
                 const selected = shuffled.slice(0, 3);
                 // Instead of loading images from IndexedDB, form static paths.
-                const images = selected.map(id => `/images/artifacts/${id}.png`);
+                const images = selected.map(id => `/sites/blue/images/artifacts/${id}.png`);
                 setCollectedImages(images);
             } catch (err) {
                 console.error(err);
@@ -167,16 +167,16 @@ export default function StatsPage() {
                     <div className="fixed bottom-0 w-full px-5 py-3 flex justify-center gap-[12px] z-40">
                         <Link href="/">
                             <div className="flex items-center bg-warm-white w-fit h-[44px] gap-[6px] px-[16px] rounded-full">
-                                <img src="/icons/left-arrow-black.svg" alt="Back" className="w-[16px] h-[14px]" />
+                                <img src="/sites/blue/icons/left-arrow-black.svg" alt="Back" className="w-[16px] h-[14px]" />
                             </div>
                         </Link>
                         <button onClick={openSms} className="flex items-center bg-green w-fit h-[44px] gap-[6px] px-[16px] rounded-full">
-                            <img src="/icons/export.svg" alt="Share" className="w-[16px] h-[18px]" />
+                            <img src="/sites/blue/icons/export.svg" alt="Share" className="w-[16px] h-[18px]" />
                         </button>
                         <Link href="/stickerbook">
                             <div className="flex items-center bg-green text-warm-white w-fit h-[44px] gap-[6px] pl-[20px] pr-[16px] rounded-full">
                                 <p className="font-medium text-base">Share Sticker Book</p>
-                                <img src="/icons/arrow-white.svg" alt="View Stickerbook" className="w-[26px] h-[25px]" />
+                                <img src="/sites/blue/icons/arrow-white.svg" alt="View Stickerbook" className="w-[26px] h-[25px]" />
                             </div>
                         </Link>
                     </div>

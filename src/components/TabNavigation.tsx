@@ -54,7 +54,7 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange })
         onClick={() => onTabChange('map')}
       >
         <Image 
-          src="/icons/Map.svg" 
+          src="/sites/blue/icons/Map.svg" 
           alt="Map view" 
           width={15} 
           height={14} 
@@ -72,7 +72,7 @@ const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabChange })
         onClick={() => onTabChange('list')}
       >
         <Image 
-          src="/icons/List.svg" 
+          src="/sites/blue/icons/List.svg" 
           alt="List view" 
           width={12} 
           height={9} 

@@ -29,12 +29,12 @@
 
 @font-face {
 	font-family: "fibra-one-bold";
-	src: url("/fonts/fibra-one/FibraOneBold.otf");
+	src: url("/sites/blue/fonts/fibra-one/FibraOneBold.otf");
 }
 
 @font-face {
 	font-family: "fibra-one-semibold";
-	src: url("/fonts/fibra-one/FibraOneSemiBold.otf");
+	src: url("/sites/blue/fonts/fibra-one/FibraOneSemiBold.otf");
 }
 
 /* * {

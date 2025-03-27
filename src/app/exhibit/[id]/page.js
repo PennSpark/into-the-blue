@@ -15,9 +15,9 @@ export default function ExhibitPageClient() {
     async function fetchData() {
       try {
         console.log("id: ", id);
-        const resE = await fetch("/data/exhibits.json");
+        const resE = await fetch("/sites/blue/data/exhibits.json");
         const exhibitData = await resE.json();
-        const resA = await fetch("/data/artifacts.json");
+        const resA = await fetch("/sites/blue/data/artifacts.json");
         const artifactsData = await resA.json();
   
         const exhibitItem = exhibitData[id];

@@ -32,7 +32,7 @@ export default function WelcomePage() {
         >
             {/* Background traces */}
             <div className="absolute inset-0 flex items-center justify-center">
-                {/* <Image src="/welcome-assets/traces.svg" alt="Welcome" width={500} height={500} /> */}
+                {/* <Image src="/sites/blue/welcome-assets/traces.svg" alt="Welcome" width={500} height={500} /> */}
             </div>
 
             {/* First content */}
@@ -42,7 +42,7 @@ export default function WelcomePage() {
                     <Link href="/stats">
                         <div className="flex items-center bg-green text-warm-white w-fit h-[44px] gap-[6px] px-[20px] rounded-full" onClick={updateStickerbookViewTime}>
                             <p className="font-medium text-base">View Stats</p>
-                            <img src="/icons/arrow-white.svg" alt="Right Arrow" className="w-[26px] h-[25px]" />
+                            <img src="/sites/blue/icons/arrow-white.svg" alt="Right Arrow" className="w-[26px] h-[25px]" />
                         </div>
                     </Link>
                 </div>

@@ -29,7 +29,7 @@ const FinishHuntButton: React.FC<FinishHuntButtonProps> = ({ objectsFound = 0 })
       >
         <div className="flex items-center text-green border-2 border-green w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
           <p className="font-medium text-base">Finish Hunt</p>
-          <img src="/icons/arrow.svg" alt="Finish Hunt" className="w-[26px] h-[25px]" />
+          <img src="/sites/blue/icons/arrow.svg" alt="Finish Hunt" className="w-[26px] h-[25px]" />
         </div>
       </div>
       

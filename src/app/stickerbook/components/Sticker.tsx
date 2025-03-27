@@ -46,7 +46,7 @@ const Sticker: React.FC<StickerProps> = ({
   //   console.log(`Sticker ${id} rendering:`, { 
   //     isLabel, src, aspectRatio, 
   //     height: frame.width * aspectRatio,
-  //     imageUrl: isLabel ? `/stickers/${src}` : src
+  //     imageUrl: isLabel ? `/sites/blue/stickers/${src}` : src
   //   });
   // }, [id, isLabel, src, aspectRatio, frame.width]);
 
@@ -79,7 +79,7 @@ const Sticker: React.FC<StickerProps> = ({
           style={{
             width: '100%',
             height: '100%',
-            backgroundImage: isLabel ? `url(/stickers/${src})` : `url(${src})`,
+            backgroundImage: isLabel ? `url(/sites/blue/stickers/${src})` : `url(${src})`,
             backgroundSize: 'contain',
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',

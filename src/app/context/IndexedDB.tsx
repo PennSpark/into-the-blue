@@ -239,7 +239,7 @@ interface Exhibit {
 }
 
 const fetchExhibitData = async (): Promise<Record<string, Exhibit>> => {
-  const response = await fetch("/data/exhibits.json");
+  const response = await fetch("/sites/blue/data/exhibits.json");
   if (!response.ok) throw new Error("Failed to load exhibit data");
   return response.json();
 };

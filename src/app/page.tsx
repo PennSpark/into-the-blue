@@ -42,7 +42,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchRegionsData() {
       try {
-        const resExhibits = await fetch("/data/exhibits.json");
+        const resExhibits = await fetch("/sites/blue/data/exhibits.json");
         const exhibitsData = await resExhibits.json() as Record<string, Exhibit>;
 
         // Get collected artifact IDs from IndexedDB
@@ -83,7 +83,7 @@ export default function Home() {
     <div 
       className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-warm-white"
       style={{
-        backgroundImage: "url('/images/paper.png')",
+        backgroundImage: "url('/sites/blue/images/paper.png')",
         backgroundRepeat: "repeat",
       }}
     >
@@ -111,7 +111,7 @@ export default function Home() {
         >
           <Link href="/stickerbook">
             <div className="flex items-center bg-green text-warm-white w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
-              <img src="/icons/stickerbook.svg" alt="Sticker Book" className="w-[26px] h-[25px]" />
+              <img src="/sites/blue/icons/stickerbook.svg" alt="Sticker Book" className="w-[26px] h-[25px]" />
               <p className="font-medium text-base">Sticker Book</p>
             </div>
           </Link>

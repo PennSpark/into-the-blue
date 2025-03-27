@@ -25,7 +25,7 @@ const videoConstraints = {
 export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
 
-  const [imagePath, setImagePath] = useState(`/images/artifacts/${artifact.id}.png`);
+  const [imagePath, setImagePath] = useState(`/sites/blue/images/artifacts/${artifact.id}.png`);
 
   console.log(imagePath)
 
@@ -191,7 +191,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
           clipCtx.restore();
           setImage(clipCanvas.toDataURL("image/png"));
           setText("");
-          setImagePath(`/images/artifacts/${artifact.id}.png`);
+          setImagePath(`/sites/blue/images/artifacts/${artifact.id}.png`);
 
         } else {
           console.error("canvas not initialized properly");
@@ -214,7 +214,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
   const rejectClippedImage = async () => {
     setImage(null);
     setText("Line up the image to the outline");
-    setImagePath(`/images/artifacts/${artifact.id}.png`);
+    setImagePath(`/sites/blue/images/artifacts/${artifact.id}.png`);
   };
 
 
@@ -228,7 +228,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
       <div className='absolute top-5 flex flex-row w-[40svh] h-[10svh] justify-between items-center'>
       <Link href={`/exhibit/${artifact.exhibitID}`}>
 	  <img
-            src="/icons/left-arrow-blue.svg"
+            src="/sites/blue/icons/left-arrow-blue.svg"
             alt="Back"
             className="cursor-pointer"
           />
@@ -328,7 +328,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
         <div
         className="absolute inset-0 flex justify-center items-center z-[10] pointer-events-none"
         >
-        <Image src={"/camera-overlay/" + artifact.id + ".png"} alt="Captured" className="w-[40svh] h-auto" width={500} height={500} />
+        <Image src={"/sites/blue/camera-overlay/" + artifact.id + ".png"} alt="Captured" className="w-[40svh] h-auto" width={500} height={500} />
         </div>
         </>
       )}

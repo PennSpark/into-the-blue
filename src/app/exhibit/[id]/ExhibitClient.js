@@ -136,11 +136,11 @@ export default function ExhibitClient({ exhibit, id }) {
           <div className="h-full flex flex-col items-center justify-center">
             {/* Ornament / Symbol */}
             <div className="intro-symbol opacity-0 flex flex-col items-center justify-center gap-4">
-              <img src="/exhibit-intro-assets/ornament.svg" alt="Ornament" />
-              <img src="/exhibit-intro-assets/down-arrow.svg" alt="Down" />
+              <img src="/sites/blue/exhibit-intro-assets/ornament.svg" alt="Ornament" />
+              <img src="/sites/blue/exhibit-intro-assets/down-arrow.svg" alt="Down" />
               <img
                 className="up-arrow"
-                src="/exhibit-intro-assets/up-arrow.svg"
+                src="/sites/blue/exhibit-intro-assets/up-arrow.svg"
                 alt="Up"
               />
             </div>
@@ -176,7 +176,7 @@ export default function ExhibitClient({ exhibit, id }) {
       ) : (
         <main className="min-h-screen w-full relative bg-warm-white">
           <img
-            src="/images/paper.png"
+            src="/sites/blue/images/paper.png"
             className="w-full h-full absolute z-0"
             alt="Paper"
           />
@@ -188,7 +188,7 @@ export default function ExhibitClient({ exhibit, id }) {
               href="/"
             >
               <img
-                src="/icons/home.svg"
+                src="/sites/blue/icons/home.svg"
                 alt="Home"
                 className="w-[15px] h-[15px] cursor-pointer"
               />
@@ -232,7 +232,7 @@ export default function ExhibitClient({ exhibit, id }) {
                       width={120}
                       height={220}
                       placeholder="blur"
-                      blurDataURL="/images/placeholder.png"
+                      blurDataURL="/sites/blue/images/placeholder.png"
                       onLoad={(e) =>
                         e.currentTarget.classList.remove("opacity-0")
                       }
@@ -245,7 +245,7 @@ export default function ExhibitClient({ exhibit, id }) {
                     {/* "Found" sticker overlay if artifact is found */}
                     {artifact.userFound && (
                       <img
-                        src="/icons/found.svg"
+                        src="/sites/blue/icons/found.svg"
                         alt="Found"
                         className="absolute m-auto top-0 bottom-0 left-0 right-0 w-21"
                       />
@@ -275,7 +275,7 @@ export default function ExhibitClient({ exhibit, id }) {
                       width={120}
                       height={220}
                       placeholder="blur"
-                      blurDataURL="/images/placeholder.png"
+                      blurDataURL="/sites/blue/images/placeholder.png"
                       onLoad={(e) =>
                         e.currentTarget.classList.remove("opacity-0")
                       }
@@ -288,7 +288,7 @@ export default function ExhibitClient({ exhibit, id }) {
                     {/* "Found" sticker overlay if artifact is found */}
                     {artifact.userFound && (
                       <img
-                        src="/icons/found.svg"
+                        src="/sites/blue/icons/found.svg"
                         alt="Found"
                         className="absolute m-auto top-0 bottom-0 left-0 right-0 w-21"
                       />
@@ -309,7 +309,7 @@ export default function ExhibitClient({ exhibit, id }) {
             <Link href="/stickerbook">
               <div className="flex items-center bg-green text-warm-white w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
                 <img
-                  src="/icons/stickerbook.svg"
+                  src="/sites/blue/icons/stickerbook.svg"
                   alt="Sticker Book"
                   className="w-[26px] h-[25px]"
                 />
