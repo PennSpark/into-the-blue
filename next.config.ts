@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   /* config options here */
   output: 'export',
   basePath: '/sites/blue',
-  trailingSlash: false,
+  trailingSlash: true,
   images: {unoptimized: true},
   typescript: {
     // This ignores TypeScript errors during the build process
