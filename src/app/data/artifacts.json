@@ -30,7 +30,7 @@
 		"exhibitID": "greece",
 		"imageURL": "/sites/blue/images/artifacts/Greece-Oinochoe.png",
 		"svgURL": "/sites/blue/svg-outlines/SVG-_Greece-Oinochoe.svg",
-		"hint": "Look near the wall where the Grave Stela is displayed!"
+		"hint": "Look near the wall where the grave stelae are displayed!"
 	},
 	{
 		"id": "Greece-Alabastron",
@@ -41,12 +41,12 @@
 		"exhibitID": "greece",
 		"imageURL": "/sites/blue/images/artifacts/Greece-Alabastron.png",
 		"svgURL": "/sites/blue/svg-outlines/SVG-_Greece-Alabastron.svg",
-		"hint": "Look near the wall where the Grave Stela is displayed!"
+		"hint": "Look near the wall where the grave stelae are displayed!"
 	},
 	{
 		"id": "Rome-Urn",
 		"name": "Cinerary Urn",
-		"time": "Late 1st c. CE",
+		"time": "Late 1st century CE",
 		"material": "Glass",
 		"exhibit": "Rome",
 		"exhibitID": "rome",
@@ -74,23 +74,23 @@
 		"exhibitID": "rome",
 		"imageURL": "/sites/blue/images/artifacts/Rome-Bracelet.png",
 		"svgURL": "/sites/blue/svg-outlines/SVG-_Rome-Bracelet.svg",
-		"hint": "Look beneath a painting of olive trees…"
+		"hint": "Look beneath a wall mural of bay laurels and a quince tree."
 	},
 	{
 		"id": "Rome-Necklace",
 		"name": "Necklace",
-		"time": "100 BCE - 300 CE",
-		"material": "Glass beads",
+		"time": "100 BCE–300 CE",
+		"material": "Glass Beads",
 		"exhibit": "Rome",
 		"exhibitID": "rome",
 		"imageURL": "/sites/blue/images/artifacts/Rome-Necklace.png",
 		"svgURL": "/sites/blue/svg-outlines/SVG-_Rome-Necklace.svg",
-		"hint": "Look beneath a painting of olive trees…"
+		"hint": "Look beneath a wall mural of bay laurels and a quince tree."
 	},
 	{
 		"id": "Rome-Perfume",
 		"name": "Perfume Bottle",
-		"time": "mid 1st c. CE",
+		"time": "Mid-1st century CE c. CE",
 		"material": "Glass",
 		"exhibit": "Rome",
 		"exhibitID": "rome",
@@ -102,7 +102,7 @@
 		"id": "EM-Pigment",
 		"name": "Pigment",
 		"time": "1250-1200 BCE",
-		"material": "Blue Pigment",
+		"material": "Frit",
 		"exhibit": "Eastern Mediterranean",
 		"exhibitID": "eastern-mediterranean",
 		"imageURL": "/sites/blue/images/artifacts/EM-Pigment.png",
@@ -133,7 +133,7 @@
 	},
 	{
 		"id": "EM-Amulet",
-		"name": "Amulet",
+		"name": "Hathor Amulet",
 		"time": "1200-1075 BCE",
 		"material": "Faience",
 		"exhibit": "Eastern Mediterranean",
@@ -144,25 +144,25 @@
 	},
 	{
 		"id": "Asia-LionRight",
-		"name": "Lioness with Cub (Right)",
-		"time": "17th century CE",
+		"name": "Fu Lion (Right)",
+		"time": "ca. 17th century CE",
 		"material": "Enamel, Metal",
 		"exhibit": "Asia",
 		"exhibitID": "asia",
 		"imageURL": "/sites/blue/images/artifacts/Asia-LionRight.png",
 		"svgURL": "/sites/blue/svg-outlines/SVG-_Asia-LionRight.svg",
-		"hint": "This lioness and her twin are flanking a doorway!"
+		"hint": "This lioness and her cub stand to the right of a doorway!"
 	},
 	{
 		"id": "Asia-LionLeft",
-		"name": "Lioness with Cub (Left)",
-		"time": "17th century CE",
+		"name": "Fu Lion (Left)",
+		"time": "ca. 17th century CE",
 		"material": "Enamel, Metal",
 		"exhibit": "Asia",
 		"exhibitID": "asia",
 		"imageURL": "/sites/blue/images/artifacts/Asia-LionLeft.png",
 		"svgURL": "/sites/blue/svg-outlines/SVG-_Asia-LionLeft.svg",
-		"hint": "This lioness and her twin are flanking a doorway!"
+		"hint": "This lion stands guard at the left of a doorway."
 	},
 	{
 		"id": "Egypt-Collar",
@@ -179,7 +179,7 @@
 		"id": "Egypt-Beads",
 		"name": "String of Beads",
 		"time": "1938-1759 BCE",
-		"material": "Faience, Glass",
+		"material": "Faience, Glass, Amethyst, Carnelian, Garnet, Gold",
 		"exhibit": "Egypt",
 		"exhibitID": "egypt",
 		"imageURL": "/sites/blue/images/artifacts/Egypt-Beads.png",
@@ -189,7 +189,7 @@
 	{
 		"id": "Egypt-Cup",
 		"name": "Cup",
-		"time": "100 BCE - 300 CE",
+		"time": "100 BCE–300 CE",
 		"material": "Faience",
 		"exhibit": "Egypt",
 		"exhibitID": "egypt",
@@ -201,7 +201,7 @@
 		"id": "ME-Ram",
 		"name": "Ram in the Thicket",
 		"time": "2450 BCE",
-		"material": "Lapis Lazuli",
+		"material": "Lapis Lazuli, Gold, Silver, Shell, Copper, Bitumen",
 		"exhibit": "Middle East",
 		"exhibitID": "middle-east",
 		"imageURL": "/sites/blue/images/artifacts/ME-Ram.png",
@@ -210,9 +210,9 @@
 	},
 	{
 		"id": "ME-3Beads",
-		"name": "Three Beads",
+		"name": "Beads",
 		"time": "2450 BCE",
-		"material": "Lapis Lazuli",
+		"material": "Lapis Lazuli, Gold",
 		"exhibit": "Middle East",
 		"exhibitID": "middle-east",
 		"imageURL": "/sites/blue/images/artifacts/ME-3Beads.png",
@@ -223,7 +223,7 @@
 		"id": "ME-Diadems",
 		"name": "Diadems of Puabi",
 		"time": "2450 BCE",
-		"material": "Lapis Lazuli",
+		"material": "Lapis Lazuli, Gold, Bitumen, Silver, Carnelian",
 		"exhibit": "Middle East",
 		"exhibitID": "middle-east",
 		"imageURL": "/sites/blue/images/artifacts/ME-Diadems.png",
@@ -233,7 +233,7 @@
 	{
 		"id": "ME-Bottle",
 		"name": "Bottle",
-		"time": "140 BCE - 225 CE",
+		"time": "140 BCE–225 CE",
 		"material": "Glass",
 		"exhibit": "Middle East",
 		"exhibitID": "middle-east",
@@ -256,7 +256,7 @@
 		"id": "ME-Dish",
 		"name": "Dish",
 		"time": "Late 11th-12th century CE",
-		"material": "Artificial Paste, Glaze",
+		"material": "Stonepaste, Glaze",
 		"exhibit": "Middle East",
 		"exhibitID": "middle-east",
 		"imageURL": "/sites/blue/images/artifacts/ME-Dish.png",
@@ -277,13 +277,13 @@
 	{
 		"id": "ME-Tile",
 		"name": "Tile Mosaic Panel",
-		"time": "15th-early 16th century CE",
-		"material": "Ceramic, glazed",
+		"time": "15th-Early 16th century CE",
+		"material": "Glazed Ceramic",
 		"exhibit": "Middle East",
 		"exhibitID": "middle-east",
 		"imageURL": "/sites/blue/images/artifacts/ME-Tile.png",
 		"svgURL": "/sites/blue/svg-outlines/SVG-_ME-Tile.svg",
-		"hint": "The tile mosaic panel is large, but hidden behind a corner."
+		"hint": "The tile mosaic panel is large but hidden behind a corner."
 	},
 	{
 		"id": "ME-String",
@@ -299,8 +299,8 @@
 	{
 		"id": "NA-Cradleboard",
 		"name": "Cradleboard",
-		"time": "1875",
-		"material": "Bead",
+		"time": "ca. 1875 CE",
+		"material": "Glass Beads, Buckskin, Cotton, Wood",
 		"exhibit": "North America",
 		"exhibitID": "north-america",
 		"imageURL": "/sites/blue/images/artifacts/NA-Cradleboard.png",
@@ -310,7 +310,7 @@
 	{
 		"id": "NA-Shirt",
 		"name": "Woman's T-shirt, Pueblo Revolt",
-		"time": "2010",
+		"time": "2010 CE",
 		"material": "Cotton",
 		"exhibit": "North America",
 		"exhibitID": "north-america",
@@ -321,8 +321,8 @@
 	{
 		"id": "NA-WomansDress",
 		"name": "Woman's Dress",
-		"time": "1880",
-		"material": "Bead",
+		"time": "ca. 1880 CE",
+		"material": "Animal Skin, Glass Beads",
 		"exhibit": "North America",
 		"exhibitID": "north-america",
 		"imageURL": "/sites/blue/images/artifacts/NA-WomansDress.png",
@@ -332,8 +332,8 @@
 	{
 		"id": "NA-JingleDress",
 		"name": "Jingle Powwow Dress",
-		"time": "2013",
-		"material": "Polyester, Cotton",
+		"time": "2013 CE",
+		"material": "Polyester, Cotton, Metal, Cowhide",
 		"exhibit": "North America",
 		"exhibitID": "north-america",
 		"imageURL": "/sites/blue/images/artifacts/NA-JingleDress.png",
@@ -344,12 +344,12 @@
 		"id": "MCA-Ear",
 		"name": "Ear Ornaments",
 		"time": "1000-1521 CE",
-		"material": "Turquoise",
+		"material": "Turquoise, Wood, Wax",
 		"exhibit": "Mexico & Central America",
 		"exhibitID": "mexico-central-america",
 		"imageURL": "/sites/blue/images/artifacts/MCA-Ear.png",
 		"svgURL": "/sites/blue/svg-outlines/SVG-_MCA-Ear.svg",
-		"hint": "Look to the right of the large sculptures displayed in a corner of the room. "
+		"hint": "Look to the left of the large metate (grinding stone)."
 	},
 	{
 		"id": "Africa-Robe",
@@ -365,7 +365,7 @@
 	{
 		"id": "Africa-Dress",
 		"name": "Dress Detail",
-		"time": "2019",
+		"time": "2019 CE",
 		"material": "Kente Cloth, Velvet, Organza, Beads",
 		"exhibit": "Africa",
 		"exhibitID": "africa",
@@ -375,18 +375,18 @@
 	},
 	{
 		"id": "Africa-Beads",
-		"name": "Beads",
-		"time": "",
-		"material": "",
+		"name": "Shroud",
+		"time": "664–332 CE",
+		"material": "Faience",
 		"exhibit": "Africa",
 		"exhibitID": "africa",
 		"imageURL": "/sites/blue/images/artifacts/Africa-Beads.png",
 		"svgURL": "/sites/blue/svg-outlines/SVG-_Africa-Beads.svg",
-		"hint": "These beads are in the hallway, next to several bracelets on display."
+		"hint": "This shroud is in the hallway next to several bracelets on display."
 	},
 	{
 		"id": "Africa-Illu",
-		"name": "Illustrations for a Book",
+		"name": "Trial of Abraham",
 		"time": "1966 CE",
 		"material": "Vellum, Pigment",
 		"exhibit": "Africa",
@@ -397,7 +397,7 @@
 	},
 	{
 		"id": "Assyria-Bead",
-		"name": "Beads Depicting Pazuzu",
+		"name": "Bead Depicting Pazuzu",
 		"time": "10th-7th century BCE",
 		"material": "Blue Paste",
 		"exhibit": "Assyria",

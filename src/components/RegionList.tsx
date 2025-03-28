@@ -42,6 +42,7 @@ const RegionList: React.FC<RegionListProps> = ({ regions }) => {
 
   return (
     <div className="w-full max-w-md flex flex-col gap-[16px] pb-[16px]">
+      <p className="text-center">Tap on a region to begin!</p>
       {regions.map((region, index) => {
         const completionPercentage =
           region.totalObjects > 0

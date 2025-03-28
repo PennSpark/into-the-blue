@@ -1,7 +1,7 @@
 {
     "into-the-blue": {
         "displayName": "Into the Blue",
-        "description": "Your journey Into the Blue around the entire museum starts right here!",
+        "description": "Your journey from Into the Blue around the entire museum starts right here!",
         "items": [
             {
                 "id": "ITB-Cloth"
@@ -12,7 +12,7 @@
     },
     "etruscan": {
         "displayName": "Etruscan",
-        "description": "Archaeologists found few blues in the Etruscan world. However, there's one object in the gallery that turned blue over time!",
+        "description": "Archaeologists haven’t found many examples of blue items made in the Etruscan world, but there are some objects in this gallery that turned blue over time.",
         "items": [
             {
                 "id": "Etruscan-Mirror"
@@ -37,7 +37,7 @@
     },
     "rome": {
         "displayName": "Rome",
-        "description": "A variety of blue glass was found in Ancient Rome. Some glass objects were known for their ability to hold a variety of contents including oils or perhaps even perfume. Some of these have a decorated survival of blue patina.",
+        "description": "Ancient Roman glass vessels held oils and perfumes. Some of these were originally blue, while others have developed a blue patina over time.",
         "items": [
             {
                 "id": "Rome-Urn"
@@ -94,7 +94,7 @@
     },
     "egypt": {
         "displayName": "Special Exhibition: Egypt",
-        "description": "There are many blue hues in ancient Egypt, made in lots of creative ways. Can you find the shiny blues we call faience?",
+        "description": "There were a range of blue hues in ancient Egypt, made in lots of creative ways. Can you find the shiny blues we call faience?",
         "items": [
             {
                 "id": "Egypt-Collar"
@@ -111,7 +111,7 @@
     },
     "middle-east": {
         "displayName": "Middle East",
-        "description": "Archaeologists found a plethora of blue in the Middle East. See examples from early history mostly carved from lapis lazuli. Later cultures used bright blue glaze to decorate pottery and tile.",
+        "description": "Archaeologists found a plethora of blue in the Middle East. See examples from early history that are carved from lapis lazuli. Later cultures used bright blue glaze to decorate pottery and tile.",
         "items": [
             {
                 "id": "ME-Ram"
@@ -146,7 +146,7 @@
     },
     "north-america": {
         "displayName": "North America",
-        "description": "Spot the beautiful variety of blues decorating the textiles from North America!",
+        "description": "Spot the beautiful variety of blues decorating the clothing and objects from North America!",
         "items": [
             {
                 "id": "NA-Cradleboard"
@@ -166,7 +166,7 @@
     },
     "mexico-central-america": {
         "displayName": "Mexico & Central America",
-        "description": "Most blue color faded from objects found in Mexico & Central America, but one object in this gallery remains bright blue!",
+        "description": "Most blue color has faded from objects found in Mexico & Central America, but one turquoise object  in this gallery remains bright blue!",
         "items": [
             {
                 "id": "MCA-Ear"
@@ -177,7 +177,7 @@
     },
     "africa": {
         "displayName": "Africa",
-        "description": "Blues appear in many forms across the continent. Check out the ways art and fashion include the blue materials of Africa!",
+        "description": "Blue materials appear in many forms across the African continent. Check out the ways they’re incorporated into art and fashion!",
         "items": [
             {
                 "id": "Africa-Robe"
@@ -197,7 +197,7 @@
     },
     "assyria": {
         "displayName": "Assyria",
-        "description": "The Assyrian Empire used blue to communicate wealth, decadence, and power. Blue paints and pigments decorate the halls of palaces and adorned the elite.",
+        "description": "The Assyrian Empire used blue to communicate wealth, decadence, and power. Blue paints and pigments decorated the halls of palaces and adorned the elite.",
         "items": [
             {
                 "id": "Assyria-Bead"

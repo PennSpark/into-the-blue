@@ -293,6 +293,8 @@ if (missingPositions.length > 0) {
     });
 
   return (
+    <>
+    <p className="w-full max-w-md flex flex-col gap-[16px] pb-[16px] text-center">Double-tap on an exhibit area to begin!</p>
     <div className="relative w-full" style={{ height: 'calc(100vh - 280px)' }}>
       <div style={{ transform: 'scale(0.81)', transformOrigin: 'top left' }}>
         <div className="relative" style={{ height: 800, width: '100%', minWidth: '100%' }} onClick={handleBackgroundClick}>
@@ -304,6 +306,7 @@ if (missingPositions.length > 0) {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

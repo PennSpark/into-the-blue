@@ -22,7 +22,7 @@ interface Region {
 
 export default function Home() {
   // State for active tab
-  const [activeTab, setActiveTab] = useState<"map" | "list">("map");
+  const [activeTab, setActiveTab] = useState<"list" | "map">("list");
   const [, setMetrics] = useState<{ totalObjectsFound: number }>({ totalObjectsFound: 0 });
   // Update this line with the proper type
   const [regions, setRegions] = useState<Region[]>([]);
