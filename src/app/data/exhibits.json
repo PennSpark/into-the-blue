@@ -1,209 +1,209 @@
 {
-    "into-the-blue": {
-        "displayName": "Into the Blue",
-        "description": "Your journey from Into the Blue around the entire museum starts right here!",
-        "items": [
-            {
-                "id": "ITB-Cloth"
-            }
-        ],
-        "totalObjects": 1,
-        "path": "/exhibit/into-the-blue"
-    },
-    "etruscan": {
-        "displayName": "Etruscan",
-        "description": "Archaeologists haven’t found many examples of blue items made in the Etruscan world, but there are some objects in this gallery that turned blue over time.",
-        "items": [
-            {
-                "id": "Etruscan-Mirror"
-            }
-        ],
-        "totalObjects": 1,
-        "path": "/exhibit/etruscan"
-    },
-    "greece": {
-        "displayName": "Greece",
-        "description": "See if you can find the tiny blue vessels in a gallery of mostly red and black pottery!",
-        "items": [
-            {
-                "id": "Greece-Oinochoe"
-            },
-            {
-                "id": "Greece-Alabastron"
-            }
-        ],
-        "totalObjects": 2,
-        "path": "/exhibit/greece"
-    },
-    "rome": {
-        "displayName": "Rome",
-        "description": "Ancient Roman glass vessels held oils and perfumes. Some of these were originally blue, while others have developed a blue patina over time.",
-        "items": [
-            {
-                "id": "Rome-Urn"
-            },
-            {
-                "id": "Rome-Flask"
-            },
-            {
-                "id": "Rome-Bracelet"
-            },
-            {
-                "id": "Rome-Necklace"
-            },
-            {
-                "id": "Rome-Perfume"
-            }
-        ],
-        "totalObjects": 5,
-        "path": "/exhibit/rome"
-    },
-    "eastern-mediterranean": {
-        "displayName": "Eastern Mediterranean",
-        "description": "This gallery houses blue pigments and objects that sailed long distances for trade at ports around the Mediterranean Sea.",
-        "items": [
-            {
-                "id": "EM-Pigment"
-            },
-            {
-                "id": "EM-OilFlask"
-            },
-            {
-                "id": "EM-Lapis"
-            },
-            {
-                "id": "EM-Amulet"
-            }
-        ],
-        "totalObjects": 4,
-        "path": "/exhibit/eastern-mediterranean"
-    },
-    "asia": {
-        "displayName": "Asia",
-        "description": "Blues in this gallery are hiding in plain sight!",
-        "items": [
-            {
-                "id": "Asia-LionRight"
-            },
-            {
-                "id": "Asia-LionLeft"
-            }
-        ],
-        "totalObjects": 2,
-        "path": "/exhibit/asia"
-    },
-    "egypt": {
-        "displayName": "Special Exhibition: Egypt",
-        "description": "There were a range of blue hues in ancient Egypt, made in lots of creative ways. Can you find the shiny blues we call faience?",
-        "items": [
-            {
-                "id": "Egypt-Collar"
-            },
-            {
-                "id": "Egypt-Beads"
-            },
-            {
-                "id": "Egypt-Cup"
-            }
-        ],
-        "totalObjects": 3,
-        "path": "/exhibit/egypt"
-    },
-    "middle-east": {
-        "displayName": "Middle East",
-        "description": "Archaeologists found a plethora of blue in the Middle East. See examples from early history that are carved from lapis lazuli. Later cultures used bright blue glaze to decorate pottery and tile.",
-        "items": [
-            {
-                "id": "ME-Ram"
-            },
-            {
-                "id": "ME-3Beads"
-            },
-            {
-                "id": "ME-Diadems"
-            },
-            {
-                "id": "ME-Bottle"
-            },
-            {
-                "id": "ME-Decor"
-            },
-            {
-                "id": "ME-Dish"
-            },
-            {
-                "id": "ME-Bowl"
-            },
-            {
-                "id": "ME-Tile"
-            },
-            {
-                "id": "ME-String"
-            }
-        ],
-        "totalObjects": 9,
-        "path": "/exhibit/middle-east"
-    },
-    "north-america": {
-        "displayName": "North America",
-        "description": "Spot the beautiful variety of blues decorating the clothing and objects from North America!",
-        "items": [
-            {
-                "id": "NA-Cradleboard"
-            },
-            {
-                "id": "NA-Shirt"
-            },
-            {
-                "id": "NA-WomansDress"
-            },
-            {
-                "id": "NA-JingleDress"
-            }
-        ],
-        "totalObjects": 4,
-        "path": "/exhibit/north-america"
-    },
-    "mexico-central-america": {
-        "displayName": "Mexico & Central America",
-        "description": "Most blue color has faded from objects found in Mexico & Central America, but one turquoise object  in this gallery remains bright blue!",
-        "items": [
-            {
-                "id": "MCA-Ear"
-            }
-        ],
-        "totalObjects": 1,
-        "path": "/exhibit/mexico-central-america"
-    },
-    "africa": {
-        "displayName": "Africa",
-        "description": "Blue materials appear in many forms across the African continent. Check out the ways they’re incorporated into art and fashion!",
-        "items": [
-            {
-                "id": "Africa-Robe"
-            },
-            {
-                "id": "Africa-Dress"
-            },
-            {
-                "id": "Africa-Beads"
-            },
-            {
-                "id": "Africa-Illu"
-            }
-        ],
-        "totalObjects": 4,
-        "path": "/exhibit/africa"
-    },
-    "assyria": {
-        "displayName": "Assyria",
-        "description": "The Assyrian Empire used blue to communicate wealth, decadence, and power. Blue paints and pigments decorated the halls of palaces and adorned the elite.",
-        "items": [
-            {
-                "id": "Assyria-Bead"
-            }
-        ],
-        "totalObjects": 1,
-        "path": "/exhibit/assyria"
-    }
+	"into-the-blue": {
+		"displayName": "Into the Blue",
+		"description": "Your journey from Into the Blue around the entire museum starts right here!",
+		"items": [
+			{
+				"id": "ITB-Cloth"
+			}
+		],
+		"totalObjects": 1,
+		"path": "/exhibit/into-the-blue"
+	},
+	"etruscan": {
+		"displayName": "Etruscan",
+		"description": "Archaeologists haven’t found many examples of blue items made in the Etruscan world, but there are some objects in this gallery that turned blue over time.",
+		"items": [
+			{
+				"id": "Etruscan-Mirror"
+			}
+		],
+		"totalObjects": 1,
+		"path": "/exhibit/etruscan"
+	},
+	"greece": {
+		"displayName": "Greece",
+		"description": "See if you can find the tiny blue vessels in a gallery of mostly red and black pottery!",
+		"items": [
+			{
+				"id": "Greece-Oinochoe"
+			},
+			{
+				"id": "Greece-Alabastron"
+			}
+		],
+		"totalObjects": 2,
+		"path": "/exhibit/greece"
+	},
+	"rome": {
+		"displayName": "Rome",
+		"description": "Ancient Roman glass vessels held oils and perfumes. Some of these were originally blue, while others have developed a blue patina over time.",
+		"items": [
+			{
+				"id": "Rome-Urn"
+			},
+			{
+				"id": "Rome-Flask"
+			},
+			{
+				"id": "Rome-Bracelet"
+			},
+			{
+				"id": "Rome-Necklace"
+			},
+			{
+				"id": "Rome-Perfume"
+			}
+		],
+		"totalObjects": 5,
+		"path": "/exhibit/rome"
+	},
+	"eastern-mediterranean": {
+		"displayName": "Eastern Mediterranean",
+		"description": "This gallery houses blue pigments and objects that sailed long distances for trade at ports around the Mediterranean Sea.",
+		"items": [
+			{
+				"id": "EM-Pigment"
+			},
+			{
+				"id": "EM-OilFlask"
+			},
+			{
+				"id": "EM-Lapis"
+			},
+			{
+				"id": "EM-Amulet"
+			}
+		],
+		"totalObjects": 4,
+		"path": "/exhibit/eastern-mediterranean"
+	},
+	"asia": {
+		"displayName": "Asia",
+		"description": "Blues in this gallery are hiding in plain sight!",
+		"items": [
+			{
+				"id": "Asia-LionRight"
+			},
+			{
+				"id": "Asia-LionLeft"
+			}
+		],
+		"totalObjects": 2,
+		"path": "/exhibit/asia"
+	},
+	"egypt": {
+		"displayName": "Egypt",
+		"description": "There were a range of blue hues in ancient Egypt, made in lots of creative ways. Can you find the shiny blues we call faience?",
+		"items": [
+			{
+				"id": "Egypt-Collar"
+			},
+			{
+				"id": "Egypt-Beads"
+			},
+			{
+				"id": "Egypt-Cup"
+			}
+		],
+		"totalObjects": 3,
+		"path": "/exhibit/egypt"
+	},
+	"middle-east": {
+		"displayName": "Middle East",
+		"description": "Archaeologists found a plethora of blue in the Middle East. See examples from early history that are carved from lapis lazuli. Later cultures used bright blue glaze to decorate pottery and tile.",
+		"items": [
+			{
+				"id": "ME-Ram"
+			},
+			{
+				"id": "ME-3Beads"
+			},
+			{
+				"id": "ME-Diadems"
+			},
+			{
+				"id": "ME-Bottle"
+			},
+			{
+				"id": "ME-Decor"
+			},
+			{
+				"id": "ME-Dish"
+			},
+			{
+				"id": "ME-Bowl"
+			},
+			{
+				"id": "ME-Tile"
+			},
+			{
+				"id": "ME-String"
+			}
+		],
+		"totalObjects": 9,
+		"path": "/exhibit/middle-east"
+	},
+	"north-america": {
+		"displayName": "North America",
+		"description": "Spot the beautiful variety of blues decorating the clothing and objects from North America!",
+		"items": [
+			{
+				"id": "NA-Cradleboard"
+			},
+			{
+				"id": "NA-Shirt"
+			},
+			{
+				"id": "NA-WomansDress"
+			},
+			{
+				"id": "NA-JingleDress"
+			}
+		],
+		"totalObjects": 4,
+		"path": "/exhibit/north-america"
+	},
+	"mexico-central-america": {
+		"displayName": "Mexico & Central America",
+		"description": "Most blue color has faded from objects found in Mexico & Central America, but one turquoise object  in this gallery remains bright blue!",
+		"items": [
+			{
+				"id": "MCA-Ear"
+			}
+		],
+		"totalObjects": 1,
+		"path": "/exhibit/mexico-central-america"
+	},
+	"africa": {
+		"displayName": "Africa",
+		"description": "Blue materials appear in many forms across the African continent. Check out the ways they’re incorporated into art and fashion!",
+		"items": [
+			{
+				"id": "Africa-Robe"
+			},
+			{
+				"id": "Africa-Dress"
+			},
+			{
+				"id": "Africa-Beads"
+			},
+			{
+				"id": "Africa-Illu"
+			}
+		],
+		"totalObjects": 4,
+		"path": "/exhibit/africa"
+	},
+	"assyria": {
+		"displayName": "Assyria",
+		"description": "The Assyrian Empire used blue to communicate wealth, decadence, and power. Blue paints and pigments decorated the halls of palaces and adorned the elite.",
+		"items": [
+			{
+				"id": "Assyria-Bead"
+			}
+		],
+		"totalObjects": 1,
+		"path": "/exhibit/assyria"
+	}
 }
