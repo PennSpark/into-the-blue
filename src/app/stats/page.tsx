@@ -116,7 +116,7 @@ export default function StatsPage() {
 {/* First content */}
             <div className={`absolute inset-0 transition-opacity duration-1000 ${showContent ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
                 <div className="h-full flex flex-col items-center justify-start gap-[30px] z-10">
-                    <div className="h-[84%] w- flex flex-col items-center justify-start gap-[36px] m-[20px] p-[32px] px-[20px] bg-warm-white rounded-xl">
+                    <div className="h-auto w- flex flex-col items-center justify-start gap-[36px] m-[20px] p-[32px] px-[20px] bg-warm-white rounded-xl">
                         <div className='flex flex-col items-center gap-[21px]'>
                             <div className='flex flex-col items-center gap-[10px]'>
                                 <p className="text-[18px] font-semibold text-blue-black">Visit Statistics</p>
