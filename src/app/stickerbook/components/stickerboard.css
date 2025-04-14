@@ -9,7 +9,7 @@
   flex-wrap: wrap;
   padding: 3svh;
   gap: 1svh;
-  background: linear-gradient(180deg, rgba(244, 248, 255, 0.40) 0%, rgba(203, 222, 255, 0.40) 100%);
+  background: linear-gradient(180deg, rgb(251, 252, 255), rgba(203, 222, 255));
 }
 
 .grid-bg {
