@@ -188,7 +188,7 @@ export default function ExhibitClient({ exhibit, id }) {
 						alt="Paper"
 					/>
 					{/* Top bar */}
-					<div className="sticky top-0 z-10 shadow-md bg-warm-white left-0 right-0 flex items-center justify-between py-2 px-2 mb-4">
+					<div className="sticky-header top-0 z-40 shadow-md bg-warm-white left-0 right-0 flex items-center justify-between py-2 px-2 mb-4">
 						{/* Home button */}
 						<Link
 							className="p-[15px] min-w-[45px] bg-warm-gray rounded-[8px] transition-all ease-in duration-300"
@@ -326,6 +326,19 @@ export default function ExhibitClient({ exhibit, id }) {
 					</div>
 				</main>
 			)}
+
+			{/* Inline CSS for Sticky Header */}
+			<style jsx>{`
+				.sticky-header {
+					position: -webkit-sticky; /* For Safari */
+					position: sticky;
+					top: 0;
+					z-index: 1000; /* Ensure the header is above other content */
+					background-color: #ffffff; /* Optional, to prevent content from showing behind */
+					box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional, to add shadow */
+				}
+			`}</style>
+
 		</main>
 	);
 }
