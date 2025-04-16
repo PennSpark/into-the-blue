@@ -11,25 +11,19 @@ import { Dialog } from '@headlessui/react'; // Optional: You can use any modal d
 import Link from 'next/link';
 
 import ImageCutout from "@/utils/ProcessSticker";
+import ZoomControls from "./ZoomControls";
 
 export interface CameraProps {
   artifact: Artifact;
   onImageCaptured: () => void;
 }
 
-// Add video constraints for using rear camera
 const videoConstraints = {
     facingMode: "environment"
 };
 
 export default function Camera({ artifact, onImageCaptured }: CameraProps) {
-
-
   const [imagePath, setImagePath] = useState(`/sites/blue/images/artifacts/${artifact.id}.png`);
-
-  console.log(imagePath)
-
-
   const webcamRef = useRef<Webcam>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
@@ -42,6 +36,11 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
   const [shouldProcess, setShouldProcess] = useState(false);
 
+  const [zoom, setZoom] = useState(1.0);
+
+  useEffect(() => {
+    console.log("Zoom camera changed:", zoom);
+  }, [zoom]);
 
   // Function to toggle hint state
   const toggleHint = () => {
@@ -102,7 +101,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
     updateCanvasSize();
     window.addEventListener("resize", updateCanvasSize);
     return () => window.removeEventListener("resize", updateCanvasSize);
-  }, [updateCanvasSize]);
+  }, [updateCanvasSize, zoom]);
 
   useEffect(() => {
     const processWebcamFeed = () => {
@@ -125,7 +124,16 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
           const dy = 0;
 
           ctx.clearRect(0, 0, canvas.width, canvas.height);
-          ctx.drawImage(video, dx, dy, newWidth, newHeight);
+          const zoomedWidth = videoWidth / zoom;
+          const zoomedHeight = videoHeight / zoom;
+          const sx = (videoWidth - zoomedWidth) / 2;
+          const sy = (videoHeight - zoomedHeight) / 2;
+    
+          ctx.drawImage(
+            video,
+            sx, sy, zoomedWidth, zoomedHeight, // source (cropped)
+            dx, dy, newWidth, newHeight        // destination (fit canvas)
+          );
         }
 
         requestAnimationFrame(processWebcamFeed);
@@ -182,11 +190,21 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
           //reset transformations before drawing image onto clipped canvas so image isn't distorted
           clipCtx.translate(viewBox.width / 2, viewBox.height / 2);
-          clipCtx.scale(1 / scaleX, 360 / (scaleY * 300));
+          clipCtx.scale(1 / scaleX, 1 / scaleY);
           clipCtx.translate(-clipCanvas.width / 2, -clipCanvas.height / 2);
+          
 
-          //draw the image
-          clipCtx.drawImage(canvas, 0, 0, clipCanvas.width, clipCanvas.height);
+          //draw the image and account for zoom
+          const zoomedWidth = canvas.width / zoom;
+          const zoomedHeight = canvas.height / zoom;
+          const sx = (video.videoWidth - zoomedWidth) / 2;
+          const sy = (video.videoHeight - (zoomedWidth * 360 / 300)) / 2;
+
+          clipCtx.drawImage(
+            video,
+            sx, sy, zoomedWidth, zoomedWidth * 360 / 300, // source
+            0, 0, clipCanvas.width, clipCanvas.height // destination
+          );
 
           clipCtx.restore();
           setImage(clipCanvas.toDataURL("image/png"));
@@ -264,10 +282,16 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
         </Dialog>
     )}
 
-
-
       {/* Webcam container with relative positioning */}
       <div className="relative w-[40svh] h-[60svh]">
+
+        <ZoomControls
+          zoom={zoom}
+          setZoom={setZoom}
+          minZoom={1.0}
+          maxZoom={5.0}
+        ></ZoomControls>
+
         <Webcam 
           ref={webcamRef}
           videoConstraints={videoConstraints}  // <-- Added prop
