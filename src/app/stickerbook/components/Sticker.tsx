@@ -34,6 +34,7 @@ const Sticker: React.FC<StickerProps> = ({
   const [dragging, setDragging] = useState(false);
   const [resizing, setResizing] = useState(false);
   const [rotating, setRotating] = useState(false);
+
   const [stickerHeightPercent, setStickerHeightPercent] = useState(width * aspectRatio);
 
   useEffect(() => {
@@ -64,9 +65,13 @@ const Sticker: React.FC<StickerProps> = ({
     if (
       target.classList.contains('resize-handle') ||
       target.classList.contains('rotate-handle')
-    ) return;
+    ) {
+      return; // prevent drag when clicking handle
+    }
 
     if (!ref.current || !ref.current.parentElement) return;
+
+    const parentRect = ref.current.parentElement.getBoundingClientRect();
     startMouseRef.current = { x: e.clientX, y: e.clientY };
     initialPosRef.current = { x, y };
     setDragging(true);
@@ -149,6 +154,7 @@ const Sticker: React.FC<StickerProps> = ({
         transform: `rotate(${rotation}deg)`,
         transformOrigin: 'center',
         border: isSelected ? '2px solid #4A90E2' : 'none',
+        boxSizing: 'border-box',
         backgroundImage: isLabel
           ? `url(/sites/blue/stickers/${src})`
           : `url(${src})`,
@@ -157,35 +163,61 @@ const Sticker: React.FC<StickerProps> = ({
         backgroundPosition: 'center',
         cursor: dragging ? 'grabbing' : 'grab',
         userSelect: 'none',
-        boxSizing: 'border-box',
       }}
     >
       {isSelected && (
         <>
-          {/* Resize Handle */}
+          {/* Corner Dots */}
           <div
-            className="resize-handle"
-            onMouseDown={(e) => {
-              e.stopPropagation();
-              if (!ref.current) return;
-              initialWidthRef.current = width;
-              startMouseXRef.current = e.clientX;
-              startMouseYRef.current = e.clientY;
-              setResizing(true);
-            }}
             style={{
               position: 'absolute',
-              width: '18px',
-              height: '18px',
-              right: '-9px',
-              bottom: '-9px',
-              backgroundColor: 'white',
+              top: '-6px',
+              left: '-6px',
+              width: '12px',
+              height: '12px',
               borderRadius: '50%',
-              border: '2px solid #4A90E2',
+              backgroundColor: '#4A90E2',
               zIndex: 10,
-              cursor: 'nwse-resize',
             }}
           />
+          <div
+            style={{
+              position: 'absolute',
+              top: '-6px',
+              right: '-6px',
+              width: '12px',
+              height: '12px',
+              borderRadius: '50%',
+              backgroundColor: '#4A90E2',
+              zIndex: 10,
+            }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              bottom: '-6px',
+              left: '-6px',
+              width: '12px',
+              height: '12px',
+              borderRadius: '50%',
+              backgroundColor: '#4A90E2',
+              zIndex: 10,
+            }}
+          />
+
+          {/* Connector line for rotate handle */}
+<div
+  style={{
+    position: 'absolute',
+    top: '-24px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    width: '2px',
+    height: '16px',
+    backgroundColor: '#4A90E2',
+    zIndex: 5,
+  }}
+/>
 
           {/* Rotate Handle */}
           <div
@@ -205,7 +237,7 @@ const Sticker: React.FC<StickerProps> = ({
             }}
             style={{
               position: 'absolute',
-              top: '-25px',
+              top: '-40px',
               left: '50%',
               transform: 'translateX(-50%)',
               width: '14px',
@@ -217,6 +249,64 @@ const Sticker: React.FC<StickerProps> = ({
               zIndex: 10,
             }}
           />
+
+          {/* Resize Handle */}
+          <div
+            className="resize-handle"
+            onMouseDown={(e) => {
+              e.stopPropagation();
+              if (!ref.current) return;
+              initialWidthRef.current = width;
+              startMouseXRef.current = e.clientX;
+              startMouseYRef.current = e.clientY;
+              setResizing(true);
+            }}
+            style={{
+              position: 'absolute',
+              width: '18px',
+              height: '18px',
+              right: '-9px',
+              bottom: '-9px',
+              backgroundColor: 'white',
+              borderRadius: '50%',
+              zIndex: 10,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'nwse-resize',
+            }}
+          >
+            <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+  {/* Top-left facing triangle */}
+  <div
+    style={{
+      position: 'absolute',
+      top: '4px',
+      left: '4px',
+      width: 0,
+      height: 0,
+      borderTop: '6px solid #4A90E2',
+      borderRight: '6px solid transparent',
+      transform: 'rotate(-45deg)',
+    }}
+  />
+
+  {/* Bottom-right facing triangle */}
+  <div
+    style={{
+      position: 'absolute',
+      bottom: '4px',
+      right: '4px',
+      width: 0,
+      height: 0,
+      borderBottom: '6px solid #4A90E2',
+      borderLeft: '6px solid transparent',
+      transform: 'rotate(-45deg)',
+    }}
+  />
+</div>
+
+          </div>
         </>
       )}
     </div>
