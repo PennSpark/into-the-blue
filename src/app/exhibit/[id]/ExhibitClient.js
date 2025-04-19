@@ -6,6 +6,8 @@ import anime from "animejs";
 import Image from "next/image";
 import { get, set } from "idb-keyval";
 import { loadCollectedArtifacts } from "../../context/IndexedDB"; // adjust path as necessary
+import { motion } from "framer-motion";
+import { FaArrowLeft } from "react-icons/fa";
 
 export default function ExhibitClient({ exhibit, id }) {
 	// Local state for controlling the intro sequence
@@ -182,148 +184,156 @@ export default function ExhibitClient({ exhibit, id }) {
 				</div>
 			) : (
 				<main className="min-h-screen w-full relative bg-warm-white">
-					<img
-						src="/sites/blue/images/paper.png"
-						className="w-full h-full absolute z-0"
-						alt="Paper"
-					/>
-					{/* Top bar */}
-					<div className="sticky-header top-0 z-40 shadow-md bg-warm-white left-0 right-0 flex items-center justify-between py-2 px-2 mb-4">
-						{/* Home button */}
-						<Link
-							className="p-[15px] min-w-[45px] bg-warm-gray rounded-[8px] transition-all ease-in duration-300"
-							href="/"
-						>
-							<img
-								src="/sites/blue/icons/home.svg"
-								alt="Home"
-								className="w-[15px] h-[15px] cursor-pointer"
-							/>
-						</Link>
-
-						{/* Exhibit Title & Found Count */}
-						<div className="artifacts-header text-center">
-							<p className="text-heading1 font-heading1 font-FibraOneBold tracking-heading leading-none my-4 text-blue-black p-0">
-								{exhibit.displayName.toUpperCase()}
-							</p>
-							<p className="text-body font-body1 text-gray-2">
-								{foundCount}/{exhibit.totalObjects} Objects Found
-							</p>
-						</div>
-
-						{/* Right side placeholder to balance layout */}
-						<div className="w-[45px] h-[45px]" />
-					</div>
-
-					{/* Artifact Tiles */}
-					<div className="w-[90%] mx-auto flex flex-row gap-4 justify-center pb-[60px]">
-						<div className="w-full mx-auto flex flex-col gap-4 items-center">
-							{artifacts
-								.filter((artifact, index) => index % 2 === 0)
-								.map((artifact) => (
-									<Link
-										key={artifact.id}
-										className={`relative flex flex-col items-center w-full p-4 rounded-md cursor-pointer ${
-											artifact.userFound ? "bg-blue-2" : "bg-blue-3"
-										}`}
-										href={`/exhibit/${id}/${artifact.id}`}
-									>
-										<Image
-											src={artifact.imageURL}
-											alt={artifact.name}
-											className={
-												artifact.userFound
-													? "max-h-[220px] max-w-[120px] object-contain opacity-0 transition-opacity duration-300"
-													: "filter grayscale max-h-[220px] max-w-[120px] object-contain opacity-0 transition-opacity duration-300"
-											}
-											width={120}
-											height={220}
-											placeholder="blur"
-											blurDataURL="/sites/blue/images/placeholder.png"
-											onLoad={(e) =>
-												e.currentTarget.classList.remove("opacity-0")
-											}
-										/>
-
-										<p className="mt-2 text-body font-body1 text-gray-1 text-center">
-											{artifact.name}
-										</p>
-
-										{/* "Found" sticker overlay if artifact is found */}
-										{artifact.userFound && (
-											<img
-												src="/sites/blue/icons/found.svg"
-												alt="Found"
-												className="absolute m-auto top-0 bottom-0 left-0 right-0 w-21"
-											/>
-										)}
-									</Link>
-								))}
-						</div>
-						<div className="w-full mx-auto flex flex-col gap-4 items-center">
-							{artifacts
-								.filter((artifact, index) => index % 2 === 1)
-								.map((artifact) => (
-									<Link
-										key={artifact.id}
-										className={`relative flex flex-col items-center w-full p-4 rounded-md cursor-pointer ${
-											artifact.userFound ? "bg-blue-2" : "bg-blue-3"
-										}`}
-										href={`/exhibit/${id}/${artifact.id}`}
-									>
-										<Image
-											src={artifact.imageURL}
-											alt={artifact.name}
-											className={
-												artifact.userFound
-													? "max-h-[220px] max-w-[120px] object-contain opacity-0 transition-opacity duration-300"
-													: "filter grayscale max-h-[220px] max-w-[120px] object-contain opacity-0 transition-opacity duration-300"
-											}
-											width={120}
-											height={220}
-											placeholder="blur"
-											blurDataURL="/sites/blue/images/placeholder.png"
-											onLoad={(e) =>
-												e.currentTarget.classList.remove("opacity-0")
-											}
-										/>
-
-										<p className="mt-2 text-body font-body1 text-gray-1 text-center">
-											{artifact.name}
-										</p>
-
-										{/* "Found" sticker overlay if artifact is found */}
-										{artifact.userFound && (
-											<img
-												src="/sites/blue/icons/found.svg"
-												alt="Found"
-												className="absolute m-auto top-0 bottom-0 left-0 right-0 w-21"
-											/>
-										)}
-									</Link>
-								))}
-						</div>
-					</div>
-
-					{/* Bottom "Stickerbook" button */}
-					<div
-						className="fixed bottom-0 w-full px-5 py-3 flex justify-between z-40"
-						style={{
-							background:
-								"linear-gradient(to bottom, rgba(254,252,247,0) 0%, rgba(255,254,253,0.85) 40.5%, #FFFEFD 100%)",
-						}}
+					<motion.div
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						transition={{ duration: 0.6, ease: "easeOut" }}
 					>
-						<Link href="/stickerbook">
-							<div className="flex items-center bg-green text-warm-white w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
-								<img
-									src="/sites/blue/icons/stickerbook.svg"
-									alt="Sticker Book"
-									className="w-[26px] h-[25px]"
-								/>
-								<p className="font-medium text-base">Sticker Book</p>
+						<img
+							src="/sites/blue/images/paper.png"
+							className="w-full h-full absolute z-0"
+							alt="Paper"
+						/>
+						{/* Top bar */}
+						<div className="sticky-header fixed top-0 left-0 right-0 w-full shadow-md bg-warm-white flex flex-col justify-center items-center py-2 px-2 mb-4">
+							{/* Home button */}
+							<Link href={`/`} className="absolute left-4 top-4">
+								<button className="rounded-[20px] h-[34px] w-[96px] px-[14px] py-[10px] flex flex-row items-center bg-warm-gray">
+									<FaArrowLeft
+										style={{
+											width: "18px",
+											height: "16px",
+											marginRight: "8px",
+										}}
+									/>
+									Home
+								</button>
+							</Link>
+
+							{/* top placeholder to balance layout */}
+							<div className="w-[45px] h-[45px]" />
+
+							{/* Exhibit Title & Found Count */}
+							<div className="artifacts-header text-center">
+								<p className="text-heading1 font-heading1 font-FibraOneBold tracking-heading leading-none mt-4 text-blue-black p-0">
+									{exhibit.displayName}
+								</p>
+								<p className="text-body font-body1 my-2 text-gray-2">
+									{foundCount}/{exhibit.totalObjects} Objects Found
+								</p>
 							</div>
-						</Link>
-					</div>
+						</div>
+
+						{/* Artifact Tiles */}
+						<div className="w-[90%] mx-auto flex flex-row gap-4 justify-center pb-[60px]">
+							<div className="w-full mx-auto flex flex-col gap-4 items-center">
+								{artifacts
+									.filter((artifact, index) => index % 2 === 0)
+									.map((artifact) => (
+										<Link
+											key={artifact.id}
+											className={`relative flex flex-col items-center w-full p-4 rounded-md cursor-pointer ${
+												artifact.userFound ? "bg-blue-2" : "bg-blue-3"
+											}`}
+											href={`/exhibit/${id}/${artifact.id}`}
+										>
+											<Image
+												src={artifact.imageURL}
+												alt={artifact.name}
+												className={
+													artifact.userFound
+														? "max-h-[220px] max-w-[120px] object-contain opacity-0 transition-opacity duration-300"
+														: "filter grayscale max-h-[220px] max-w-[120px] object-contain opacity-0 transition-opacity duration-300"
+												}
+												width={120}
+												height={220}
+												placeholder="blur"
+												blurDataURL="/sites/blue/images/placeholder.png"
+												onLoad={(e) =>
+													e.currentTarget.classList.remove("opacity-0")
+												}
+											/>
+
+											<p className="mt-2 text-body font-body1 text-gray-1 text-center">
+												{artifact.name}
+											</p>
+
+											{/* "Found" sticker overlay if artifact is found */}
+											{artifact.userFound && (
+												<img
+													src="/sites/blue/icons/found.svg"
+													alt="Found"
+													className="absolute m-auto top-0 bottom-0 left-0 right-0 w-21"
+												/>
+											)}
+										</Link>
+									))}
+							</div>
+							<div className="w-full mx-auto flex flex-col gap-4 items-center">
+								{artifacts
+									.filter((artifact, index) => index % 2 === 1)
+									.map((artifact) => (
+										<Link
+											key={artifact.id}
+											className={`relative flex flex-col items-center w-full p-4 rounded-md cursor-pointer ${
+												artifact.userFound ? "bg-blue-2" : "bg-blue-3"
+											}`}
+											href={`/exhibit/${id}/${artifact.id}`}
+										>
+											<Image
+												src={artifact.imageURL}
+												alt={artifact.name}
+												className={
+													artifact.userFound
+														? "max-h-[220px] max-w-[120px] object-contain opacity-0 transition-opacity duration-300"
+														: "filter grayscale max-h-[220px] max-w-[120px] object-contain opacity-0 transition-opacity duration-300"
+												}
+												width={120}
+												height={220}
+												placeholder="blur"
+												blurDataURL="/sites/blue/images/placeholder.png"
+												onLoad={(e) =>
+													e.currentTarget.classList.remove("opacity-0")
+												}
+											/>
+
+											<p className="mt-2 text-body font-body1 text-gray-1 text-center">
+												{artifact.name}
+											</p>
+
+											{/* "Found" sticker overlay if artifact is found */}
+											{artifact.userFound && (
+												<img
+													src="/sites/blue/icons/found.svg"
+													alt="Found"
+													className="absolute m-auto top-0 bottom-0 left-0 right-0 w-21"
+												/>
+											)}
+										</Link>
+									))}
+							</div>
+						</div>
+
+						{/* Bottom "Stickerbook" button */}
+						<div
+							className="fixed bottom-0 w-full px-5 py-3 flex justify-between z-40"
+							style={{
+								background:
+									"linear-gradient(to bottom, rgba(254,252,247,0) 0%, rgba(255,254,253,0.85) 40.5%, #FFFEFD 100%)",
+							}}
+						>
+							<Link href="/stickerbook">
+								<div className="flex items-center bg-green text-warm-white w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
+									<img
+										src="/sites/blue/icons/stickerbook.svg"
+										alt="Sticker Book"
+										className="w-[26px] h-[25px]"
+									/>
+									<p className="font-medium text-base">Sticker Book</p>
+								</div>
+							</Link>
+						</div>
+					</motion.div>
 				</main>
 			)}
 
@@ -337,8 +347,8 @@ export default function ExhibitClient({ exhibit, id }) {
 					background-color: #ffffff; /* Optional, to prevent content from showing behind */
 					box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional, to add shadow */
 				}
+				}
 			`}</style>
-
 		</main>
 	);
 }
