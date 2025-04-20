@@ -49,11 +49,20 @@ export default function ExhibitClient({ exhibit, id }) {
 			try {
 				// loadCollectedArtifacts returns an array of artifact IDs that have been collected.
 				const collected = await loadCollectedArtifacts();
+				const newlyFoundId = sessionStorage.getItem("newlyFoundArtifact");
+
 				const updatedArtifacts = exhibit.items.map((item) => {
-					return { ...item, userFound: collected.includes(item.id) };
+					const isNewlyFound =
+						collected.includes(item.id) && item.id === newlyFoundId;
+					return {
+						...item,
+						userFound: collected.includes(item.id),
+						justFound: isNewlyFound,
+					};
 				});
 				setArtifacts(updatedArtifacts);
 				setFoundCount(updatedArtifacts.filter((a) => a.userFound).length);
+				sessionStorage.removeItem("newlyFoundArtifact");
 			} catch (error) {
 				console.error("Error checking collected artifacts:", error);
 			}
@@ -260,9 +269,29 @@ export default function ExhibitClient({ exhibit, id }) {
 
 											{/* "Found" sticker overlay if artifact is found */}
 											{artifact.userFound && (
-												<img
+												<motion.img
 													src="/sites/blue/icons/found.svg"
 													alt="Found"
+													initial={
+														artifact.justFound
+															? { scale: 0, rotate: -45, opacity: 0 }
+															: false
+													}
+													animate={
+														artifact.justFound
+															? { scale: 1, rotate: 0, opacity: 1 }
+															: false
+													}
+													transition={
+														artifact.justFound
+															? {
+																	duration: 2,
+																	ease: "easeOut",
+																	type: "spring",
+																	bounce: 0.4,
+															  }
+															: {}
+													}
 													className="absolute m-auto top-0 bottom-0 left-0 right-0 w-21"
 												/>
 											)}
@@ -303,9 +332,29 @@ export default function ExhibitClient({ exhibit, id }) {
 
 											{/* "Found" sticker overlay if artifact is found */}
 											{artifact.userFound && (
-												<img
+												<motion.img
 													src="/sites/blue/icons/found.svg"
 													alt="Found"
+													initial={
+														artifact.justFound
+															? { scale: 0, rotate: -45, opacity: 0 }
+															: false
+													}
+													animate={
+														artifact.justFound
+															? { scale: 1, rotate: 0, opacity: 1 }
+															: false
+													}
+													transition={
+														artifact.justFound
+															? {
+																	duration: 2,
+																	ease: "easeOut",
+																	type: "spring",
+																	bounce: 0.4,
+															  }
+															: {}
+													}
 													className="absolute m-auto top-0 bottom-0 left-0 right-0 w-21"
 												/>
 											)}
