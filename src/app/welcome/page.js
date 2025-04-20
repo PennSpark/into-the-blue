@@ -71,7 +71,8 @@ export default function WelcomePage() {
 			duration: 600,
 		});
 
-		tl.add({ targets: ".text", opacity: [0, 1], duration: 410 }, 0)
+		tl.add({ targets: ".intro-seq", translateY: [0, -45], duration: 100 }, 0)
+			.add({ targets: ".text", opacity: [0, 1], duration: 410 }, 0)
 			.add({ targets: ".journey", opacity: [0, 1], duration: 500 }, 180)
 
 			.add({ targets: ".obj1", opacity: [0, 1], duration: 450 }, 450)
@@ -169,11 +170,11 @@ export default function WelcomePage() {
 
 			{/* Second content */}
 			<div
-				className={`intro-seq min-h-screen w-full overflow-y-auto transition-opacity duration-1000 ${
+				className={`min-h-screen w-full overflow-y-auto transition-opacity duration-1000 ${
 					showSecondContent ? "opacity-100" : "opacity-0 pointer-events-none"
 				}`}
 			>
-				<div className="relative min-h-screen">
+				<div className="intro-seq relative min-h-screen">
 					<div className="text absolute left-[33px] top-[290px]">
 						<Image
 							src="/sites/blue/welcome-assets/text.svg"
@@ -293,51 +294,51 @@ export default function WelcomePage() {
 						/>
 					</div>
 					<div className="absolute top-[680px] w-full h-[200px]" />
-					{hasMetrics ? (
-						<div className="buttons fixed bottom-0 w-full px-5 py-3 flex z-40">
-							<div className="flex gap-3 w-full justify-between">
-								<Link href="/" onClick={handleStartOver}>
-									<div className="flex items-center border-2 border-blue-1 text-blue-1 font-semibold bg-white w-fit h-[44px] gap-[8px] px-[20px] rounded-full">
-										<p className="font-medium text-base">Start Over</p>
-									</div>
-								</Link>
-								<Link href="/">
-									<div className="flex items-center bg-blue-1 text-warm-white font-semibold w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
-										<p className="font-medium text-base">Continue Hunt</p>
-										<img
-											src="/sites/blue/icons/Footprints.svg"
-											alt="Continue"
-											className="w-[22px] h-[22px]"
-										/>
-									</div>
-								</Link>
-							</div>
-						</div>
-					) : (
-						<div className="buttons fixed bottom-0 w-full px-5 py-3 flex justify-end z-40">
-							<Link
-								href="/"
-								onClick={async () => {
-									await saveMetrics({
-										totalObjectsFound: 0,
-										totalExhibitsVisited: 0,
-										startTime: Date.now(),
-										stickerbookViewTime: 0,
-									});
-								}}
-							>
-								<div className="flex items-center bg-blue-1 text-warm-white w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
-									<p className="font-medium text-base">Let&apos;s Begin!</p>
+				</div>
+				{hasMetrics ? (
+					<div className="buttons fixed bottom-0 w-full px-5 py-3 flex z-40">
+						<div className="flex gap-3 w-full justify-between">
+							<Link href="/" onClick={handleStartOver}>
+								<div className="flex items-center border-2 border-blue-1 text-blue-1 font-semibold bg-white w-fit h-[44px] gap-[8px] px-[20px] rounded-full">
+									<p className="font-medium text-base">Start Over</p>
+								</div>
+							</Link>
+							<Link href="/">
+								<div className="flex items-center bg-blue-1 text-warm-white font-semibold w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
+									<p className="font-medium text-base">Continue Hunt</p>
 									<img
 										src="/sites/blue/icons/Footprints.svg"
-										alt="Sticker Book"
+										alt="Continue"
 										className="w-[22px] h-[22px]"
 									/>
 								</div>
 							</Link>
 						</div>
-					)}
-				</div>
+					</div>
+				) : (
+					<div className="buttons fixed bottom-0 w-full px-5 py-3 flex justify-end z-40">
+						<Link
+							href="/"
+							onClick={async () => {
+								await saveMetrics({
+									totalObjectsFound: 0,
+									totalExhibitsVisited: 0,
+									startTime: Date.now(),
+									stickerbookViewTime: 0,
+								});
+							}}
+						>
+							<div className="flex items-center bg-blue-1 text-warm-white w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
+								<p className="font-medium text-base">Let&apos;s Begin!</p>
+								<img
+									src="/sites/blue/icons/Footprints.svg"
+									alt="Sticker Book"
+									className="w-[22px] h-[22px]"
+								/>
+							</div>
+						</Link>
+					</div>
+				)}
 			</div>
 		</main>
 	);
