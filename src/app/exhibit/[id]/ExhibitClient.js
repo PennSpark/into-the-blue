@@ -43,56 +43,72 @@ export default function ExhibitClient({ exhibit, id }) {
 		checkIntro();
 	}, [id]);
 
-	// After exhibit prop is available, load collected artifact IDs from IndexedDB.
+	// Replace both useEffect hooks with this single one
 	useEffect(() => {
-		async function checkCollected() {
+		async function checkCollected(checkForNewlyFound = true) {
 			try {
-				// loadCollectedArtifacts returns an array of artifact IDs that have been collected.
+				// Load collected artifacts
 				const collected = await loadCollectedArtifacts();
-				const newlyFoundId = sessionStorage.getItem("newlyFoundArtifact");
+
+				// Only check for newly found items on initial load, not on focus events
+				let newlyFoundId = null;
+				if (checkForNewlyFound) {
+					newlyFoundId = sessionStorage.getItem("newlyFoundArtifact");
+					console.log("Session Storage newlyFoundId:", newlyFoundId);
+				}
 
 				const updatedArtifacts = exhibit.items.map((item) => {
 					const isNewlyFound =
-						collected.includes(item.id) && item.id === newlyFoundId;
+						checkForNewlyFound &&
+						collected.includes(item.id) &&
+						item.id === newlyFoundId;
+
+					if (isNewlyFound) {
+						console.log("Found newly discovered item:", item);
+					}
+
 					return {
 						...item,
 						userFound: collected.includes(item.id),
 						justFound: isNewlyFound,
 					};
 				});
-				setArtifacts(updatedArtifacts);
-				setFoundCount(updatedArtifacts.filter((a) => a.userFound).length);
-				sessionStorage.removeItem("newlyFoundArtifact");
-			} catch (error) {
-				console.error("Error checking collected artifacts:", error);
-			}
-		}
-		if (exhibit && exhibit.items) {
-			checkCollected();
-		}
-	}, [exhibit]);
 
-	useEffect(() => {
-		async function checkCollected() {
-			try {
-				const collected = await loadCollectedArtifacts();
-				const updatedArtifacts = exhibit.items.map((item) => ({
-					...item,
-					userFound: collected.includes(item.id),
-				}));
+				// Log items marked as justFound
+				if (checkForNewlyFound) {
+					const justFoundItems = updatedArtifacts.filter((a) => a.justFound);
+					console.log("Items marked as justFound:", justFoundItems);
+				}
+
 				setArtifacts(updatedArtifacts);
 				setFoundCount(updatedArtifacts.filter((a) => a.userFound).length);
+
+				// Only clear sessionStorage on initial load after we've used it
+				if (checkForNewlyFound && newlyFoundId) {
+					// Delay removal slightly to ensure animation has started
+					setTimeout(() => {
+						sessionStorage.removeItem("newlyFoundArtifact");
+						console.log("Cleared newlyFoundArtifact from sessionStorage");
+					}, 500);
+				}
 			} catch (error) {
 				console.error("Error checking collected artifacts:", error);
 			}
 		}
-		// Re-run checkCollected when the window gains focus.
-		function handleFocus() {
-			checkCollected();
+
+		// Initial check - with newly found animation handling
+		if (exhibit && exhibit.items) {
+			checkCollected(true);
 		}
+
+		// Set up focus event handler - without animation handling
+		function handleFocus() {
+			checkCollected(false);
+		}
+
 		window.addEventListener("focus", handleFocus);
 
-		// Clean up on unmount.
+		// Clean up
 		return () => {
 			window.removeEventListener("focus", handleFocus);
 		};
