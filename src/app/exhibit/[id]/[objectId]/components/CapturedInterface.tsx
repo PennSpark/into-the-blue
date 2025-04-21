@@ -45,8 +45,12 @@ export default function CapturedInterface({
 							href={`/exhibit/${artifact.exhibitID}`}
 							className="absolute left-4 top-4"
 						>
-							<button className="rounded-[45.547px] h-[34px] w-[42px] px-[12px] py-[6px] border border-[#D5DAE7] bg-[#FFFEFD] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.15)]">
-								<FaArrowLeft style={{ width: "18px", height: "16px" }} />
+							<button className="rounded-[46px] px-3 py-2 border border-[#D5DAE7] bg-[#FFFEFD] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.15)]">
+								<img
+									src="/sites/blue/icons/left-arrow-black.svg"
+									alt="Back"
+									className="w-[16px] h-[14px]"
+								/>
 							</button>
 						</Link>
 						<p className="text-[24px] w-[220px] font-semibold text-black leading-tight whitespace-pre-wrap text-center ">
