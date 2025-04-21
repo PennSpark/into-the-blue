@@ -227,25 +227,33 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
       <div className='absolute top-5 flex flex-row w-[40svh] h-[10svh] justify-between items-center'>
       <Link href={`/exhibit/${artifact.exhibitID}`}>
-	  <img
-            src="/sites/blue/icons/left-arrow-blue.svg"
-            alt="Back"
-            className="cursor-pointer"
-          />
+	      <img
+          src="/sites/blue/icons/left-arrow-blue.svg"
+          alt="Back"
+          className="cursor-pointer"
+        />
       </Link>
 
       {/* hint button */}
       <button
         onClick={toggleHint}
-        className={`rounded-full p-3 z-10 flex items-center gap-2 border-none ${dialogOpen ? 'bg-white text-blue-500' : 'bg-transparent text-blue-500'}`}
+        className={`rounded-full px-[12px] h-10 font-bold z-10 flex items-center gap-2 border ${dialogOpen ? 'bg-white text-blue-500 border-[2px] border-blue-1' : 'bg-transparent text-blue-500 border-[2px] border-blue-2'}`}
         aria-label="Hint"
       >
         {dialogOpen ? (
-          <FaLightbulb className="text-[#89aFEF]" />
+          <img
+          src="/sites/blue/icons/lightbulb-open.svg"
+          alt="Bulb"
+          className="cursor-pointer pb-[5px]"
+         />
         ) : (
-          <FaRegLightbulb className="text-[#89aFEF]" />
+          <img
+            src="/sites/blue/icons/lightbulb-closed.svg"
+            alt="Bulb"
+            className="cursor-pointer"
+           />
         )}
-        <span className={dialogOpen ? 'text-[#89aFEF]' : 'text-[#89aFEF]'}>Hint</span>
+        <span className={dialogOpen ? 'text-blue-1' : 'text-[#89aFEF]'}>Hint</span>
       </button>
       </div>
 
