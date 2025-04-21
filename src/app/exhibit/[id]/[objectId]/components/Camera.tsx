@@ -269,7 +269,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
       {/* Hintbox */}
     {dialogOpen && (
-        <Dialog open={dialogOpen} onClose={closeDialog} className="fixed inset-0 z-20 flex justify-center items-center">
+        <Dialog open={dialogOpen} onClose={closeDialog} className="fixed inset-0 z-20 flex justify-center items-center ">
         <div className="bg-white rounded-lg p-6 w-80 max-w-xs flex flex-col justify-center items-center">
             <h2 className="text-[#3e65c8] text-lg mb-4 text-center">{artifact.hint || "This artifact doesn't have a hint."}</h2>
             <button

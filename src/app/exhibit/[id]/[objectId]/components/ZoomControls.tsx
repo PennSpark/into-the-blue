@@ -17,10 +17,12 @@ export default function ZoomControls({ zoom, setZoom, minZoom, maxZoom }: ZoomCo
     if (!container) return;
 
     const handleTouchStart = (e: TouchEvent) => {
+      console.log("Touch start", e.touches);
       if (e.touches.length === 2) {
         const dx = e.touches[0].clientX - e.touches[1].clientX;
         const dy = e.touches[0].clientY - e.touches[1].clientY;
         initialDistanceRef.current = Math.sqrt(dx * dx + dy * dy);
+        e.preventDefault();
       }
     };
 
@@ -37,11 +39,12 @@ export default function ZoomControls({ zoom, setZoom, minZoom, maxZoom }: ZoomCo
         setZoom(parseFloat(newZoom.toFixed(2)));
 
         initialDistanceRef.current = newDistance;
+        e.preventDefault();
       }
     };
 
-    container.addEventListener("touchstart", handleTouchStart, { passive: true });
-    container.addEventListener("touchmove", handleTouchMove, { passive: true });
+    container.addEventListener("touchstart", handleTouchStart, { passive: false });
+    container.addEventListener("touchmove", handleTouchMove, { passive: false });
 
     return () => {
       container.removeEventListener("touchstart", handleTouchStart);
@@ -50,7 +53,7 @@ export default function ZoomControls({ zoom, setZoom, minZoom, maxZoom }: ZoomCo
   }, [zoom, minZoom, maxZoom, setZoom]);
 
   return (
-    <div ref={containerRef} className="w-full absolute z-[20] px-[2svh] py-[2svh]">
+    <div ref={containerRef} className="w-full h-full absolute z-[20] px-[2svh] py-[2svh] touch-none select-none">
       <input
         type="range"
         min={minZoom}
@@ -59,6 +62,11 @@ export default function ZoomControls({ zoom, setZoom, minZoom, maxZoom }: ZoomCo
         value={zoom}
         onChange={(e) => setZoom(parseFloat(e.target.value))}
         className="w-full"
+        style={{
+          touchAction: "none",    
+          WebkitTouchCallout: "none", 
+          WebkitUserSelect: "none",
+        }}
       />
       <p className="text-center text-white text-sm mt-2">Zoom: {zoom.toFixed(2)}×</p>
     </div>
