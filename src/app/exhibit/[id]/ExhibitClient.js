@@ -220,7 +220,7 @@ export default function ExhibitClient({ exhibit, id }) {
 							alt="Paper"
 						/>
 						{/* Top bar */}
-						<div className="sticky-header fixed top-0 left-0 right-0 w-full bg-white flex flex-col justify-center items-center py-2 px-2 mb-4">
+						<div className="sticky-header fixed top-0 left-0 right-0 w-full bg-white flex flex-col justify-center items-center pt-2 px-2">
 							<img
 								src="/sites/blue/images/paper.png"
 								className="w-full h-full absolute z-0 object-cover"
@@ -244,14 +244,14 @@ export default function ExhibitClient({ exhibit, id }) {
 							<div className="w-[45px] h-[45px]" />
 
 							{/* Exhibit Title & Found Count */}
-							<div className="artifacts-header text-center">
-								<p className="text-heading1 font-heading1 font-FibraOneBold tracking-heading leading-none mt-4 text-blue-black p-0">
+							<div className="artifacts-header text-center leading-none">
+								<p className="text-[26px] font-FibraOneBold tracking-heading mt-[14px] text-blue-black p-0">
 									{exhibit.displayName}
 								</p>
-								<p className="text-body font-body1 my-2 text-gray-2">
+								<p className="text-body font-body1 mt-[14px] text-gray-2">
 									{foundCount}/{exhibit.totalObjects} Objects Found
 								</p>
-								<p className="text-body font-body1 mt-5 mb-4 text-gray-2">
+								<p className="text-body font-body1 my-[22px] text-gray-2">
 									Look for
 									<span className="text-blue-4"> blue objects </span>
 									in the gallery!

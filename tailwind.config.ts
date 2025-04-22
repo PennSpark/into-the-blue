@@ -54,7 +54,7 @@ export default {
 				FibraOneSemi: ["fibra-one-semibold", "Roboto"],
 			},
 			letterSpacing: {
-				heading: "-0.28px",
+				heading: "-0.26px",
 			},
 		},
 	},
