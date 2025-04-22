@@ -154,6 +154,7 @@ export const saveImage = async (
   });
 };
 
+
 //retrieve all images
 export const loadAllImages = async (): Promise<{ id: string, url: string }[]> => {
   const db = await openDB();
@@ -511,6 +512,10 @@ export const deleteStickerById = async (id: number): Promise<void> => {
   const tx = db.transaction(STICKERS_STORE, "readwrite");
   const store = tx.objectStore(STICKERS_STORE);
   store.delete(id);
+
+  await store.delete(id); // <-- this is critical: await the request
+  await tx.oncomplete; 
+
   return new Promise((resolve, reject) => {
     tx.oncomplete = () => resolve();
     tx.onerror = () => reject("Failed to delete sticker");

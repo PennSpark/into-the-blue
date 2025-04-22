@@ -166,6 +166,12 @@ const StickerBoard: React.FC = () => {
     updateSticker(id, { x: newX, y: newY });
   };
 
+  const handleDelete = async (id: number) => {
+    await deleteStickerById(id);
+    setStickers(prev => prev.filter(s => s.id !== id));
+  };
+  
+
   const resizeSticker = (id: number, newWidth: number) => {
     setStickers((prev) =>
       prev.map((sticker) =>
@@ -189,6 +195,7 @@ const StickerBoard: React.FC = () => {
     deleteStickerById(id);
   };
 
+  
   const captureStickerboard = async () => {
     const board = boardRef.current;
     if (board) {
@@ -245,22 +252,21 @@ const StickerBoard: React.FC = () => {
     >
       {stickers.map((sticker) => (
         <Sticker
-        isLabel={sticker.isLabel}
-        key={sticker.id}
-        id={sticker.id}
-        x={sticker.x}
-        y={sticker.y}
-        src={sticker.src}
-        width={sticker.width || 10}
-        aspectRatio={sticker.aspectRatio || 1}
-        rotation={sticker.rotation || 0}
-        moveSticker={moveSticker}
-        resizeSticker={resizeSticker}
-        rotateSticker={rotateSticker}
-        deleteSticker={deleteSticker}
-        active={sticker.id === activeStickerId}
-        setActiveSticker={setActiveStickerId}
-        />
+  key={sticker.id}
+  id={sticker.id}
+  src={sticker.src}
+  x={sticker.x}
+  y={sticker.y}
+  width={sticker.width || 10}
+  aspectRatio={sticker.aspectRatio || 1}
+  rotation={sticker.rotation || 0}
+  isLabel={sticker.isLabel}
+  isSelected={sticker.id === activeStickerId}
+  onSelect={setActiveStickerId}
+  onChange={(id, changes) => updateSticker(id, changes)}
+  onDelete={(id) => handleDelete(id)}
+/>
+
       ))}
     </div>
 
