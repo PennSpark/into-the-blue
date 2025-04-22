@@ -6,18 +6,17 @@
 	--background: #ffffff;
 	--foreground: #171717;
 
-	
 	--Warm-Gray: #efece4;
-  --Blue-1: #3E65C8;
-  --Blue-2: #89AFEF;
-  --Blue-3: #D5DAE7;
-  --Blue-4: #355DC3;
-  --Blue-5: #D7E3FF;
-  --Warm-White: #FFFEFD;
-  --Gray-1: #414549;
-  --Gray-2: #686E78;
-  --Green: #333D37;
-  --Gray-3: #C8CDD4;
+	--Blue-1: #3e65c8;
+	--Blue-2: #89afef;
+	--Blue-3: #d5dae7;
+	--Blue-4: #355dc3;
+	--Blue-5: #d7e3ff;
+	--Warm-White: #fffefd;
+	--Gray-1: #414549;
+	--Gray-2: #686e78;
+	--Green: #333d37;
+	--Gray-3: #c8cdd4;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -182,7 +182,7 @@ export default function ExhibitClient({ exhibit, id }) {
 							className="intro-heading font-FibraOneSemi tracking-heading opacity-0"
 						>
 							<h1 className="px-[5px] text-[32px] sm:text-[32px] md:text-[45px] lg:text-[50px] text-green text-center">
-								{exhibit.displayName}
+								{exhibit.displayName.toUpperCase()}
 							</h1>
 							<h2 className="font-bold text-[#333d374D] text-2xl text-center">
 								{id == "egypt" ? "Special Exhibition" : "Gallery"}
@@ -208,7 +208,7 @@ export default function ExhibitClient({ exhibit, id }) {
 					</div>
 				</div>
 			) : (
-				<main className="min-h-screen w-full relative bg-warm-white">
+				<main className="min-h-screen w-full relative bg-white">
 					<motion.div
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
@@ -216,31 +216,45 @@ export default function ExhibitClient({ exhibit, id }) {
 					>
 						<img
 							src="/sites/blue/images/paper.png"
-							className="w-full h-full absolute z-0"
+							className="w-full h-full absolute z-0 object-cover"
 							alt="Paper"
 						/>
 						{/* Top bar */}
-						<div className="sticky-header top-0 z-40 shadow-md bg-warm-white flex items-center justify-between px-[5%] mb-4 relative">
-							{/* Home button - positioned absolute */}
-							<Link
-								className="px-[14px] py-[10px] bg-warm-gray text-green rounded-[20px] flex items-center gap-[8px] transition-all ease-in duration-300 absolute left-[5%]"
-								href="/"
-							>
-								<img
-									src="/sites/blue/icons/left-arrow-green.svg"
-									alt="Home"
-									className="w-[16px] h-[14px] cursor-pointer"
-								/>
-								<p className="text-[16px] font-medium">Home</p>
+						<div className="sticky-header fixed top-0 left-0 right-0 w-full bg-white flex flex-col justify-center items-center py-2 px-2 mb-4">
+							<img
+								src="/sites/blue/images/paper.png"
+								className="w-full h-full absolute z-0 object-cover"
+								alt="Paper"
+							/>
+							{/* Home button */}
+							<Link href={`/`} className="absolute left-4 top-4">
+								<button className="rounded-[20px] h-[34px] w-[96px] px-[14px] py-[10px] flex flex-row items-center bg-warm-gray">
+									<FaArrowLeft
+										style={{
+											width: "18px",
+											height: "16px",
+											marginRight: "8px",
+										}}
+									/>
+									Home
+								</button>
 							</Link>
 
-							{/* Exhibit Title & Found Count - centered in container */}
-							<div className="artifacts-header text-center my-4 w-full">
-								<p className="text-heading1 font-heading1 font-FibraOneBold tracking-heading leading-none text-blue-black p-0">
+							{/* Top placeholder to balance layout */}
+							<div className="w-[45px] h-[45px]" />
+
+							{/* Exhibit Title & Found Count */}
+							<div className="artifacts-header text-center">
+								<p className="text-heading1 font-heading1 font-FibraOneBold tracking-heading leading-none mt-4 text-blue-black p-0">
 									{exhibit.displayName}
 								</p>
-								<p className="text-body font-body1 text-gray-2">
+								<p className="text-body font-body1 my-2 text-gray-2">
 									{foundCount}/{exhibit.totalObjects} Objects Found
+								</p>
+								<p className="text-body font-body1 mt-5 mb-4 text-gray-2">
+									Look for
+									<span className="text-blue-4"> blue objects </span>
+									in the gallery!
 								</p>
 							</div>
 						</div>
@@ -377,7 +391,7 @@ export default function ExhibitClient({ exhibit, id }) {
 
 						{/* Bottom "Stickerbook" button */}
 						<div
-							className="fixed bottom-0 w-full px-5 py-3 flex justify-between z-40"
+							className="fixed bottom-0 w-full px-5 py-3 flex justify-end z-40"
 							style={{
 								background:
 									"linear-gradient(to bottom, rgba(254,252,247,0) 0%, rgba(255,254,253,0.85) 40.5%, #FFFEFD 100%)",
@@ -393,7 +407,7 @@ export default function ExhibitClient({ exhibit, id }) {
 									<p className="font-medium text-base">Sticker Book</p>
 								</div>
 							</Link>
-						</div>	
+						</div>
 					</motion.div>
 				</main>
 			)}
@@ -405,9 +419,6 @@ export default function ExhibitClient({ exhibit, id }) {
 					position: sticky;
 					top: 0;
 					z-index: 1000; /* Ensure the header is above other content */
-					background-color: #ffffff; /* Optional, to prevent content from showing behind */
-					box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional, to add shadow */
-				}
 				}
 			`}</style>
 		</main>
