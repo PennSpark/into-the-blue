@@ -97,13 +97,75 @@ const Sticker: React.FC<StickerProps> = ({
     }
 
     if (resizing) {
+      // Track both horizontal and vertical movements
       const dx = e.clientX - startMouseXRef.current;
       const dy = e.clientY - startMouseYRef.current;
-      const angleRad = (-rotation * Math.PI) / 180;
-      const localDx = dx * Math.cos(angleRad) - dy * Math.sin(angleRad);
-      const dxPercent = (localDx / parentRect.width) * 100;
-      const newWidth = initialWidthRef.current + dxPercent;
-      onChange(id, { x, y, width: newWidth, rotation });
+      
+      // Calculate the distance of the drag (using Pythagorean theorem)
+      const dragDistance = Math.sqrt(dx * dx + dy * dy);
+      
+      if (!ref.current) return;
+      const rect = ref.current.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      
+      // Calculate the normalized rotation angle (0-360)
+      const normalizedRotation = ((rotation % 360) + 360) % 360;
+      
+      // Calculate the position of the resize handle based on rotation
+      // The handle is always in the bottom-right corner of the non-rotated sticker
+      // We need to rotate this point around the center based on the sticker's rotation
+      const rotationInRadians = (normalizedRotation * Math.PI) / 180;
+      
+      // Vector to bottom-right corner (handle) in non-rotated state
+      const cornerVectorX = rect.width / 2;
+      const cornerVectorY = rect.height / 2;
+      
+      // Rotate this vector by the sticker's rotation angle
+      const handleVectorX = 
+          cornerVectorX * Math.cos(rotationInRadians) - 
+          cornerVectorY * Math.sin(rotationInRadians);
+      const handleVectorY = 
+          cornerVectorX * Math.sin(rotationInRadians) + 
+          cornerVectorY * Math.cos(rotationInRadians);
+      
+      // Vector of the drag movement
+      const dragVectorX = dx;
+      const dragVectorY = dy;
+      
+      // Dot product to determine if vectors are aligned (outward drag) or opposed (inward drag)
+      const dotProduct = handleVectorX * dragVectorX + handleVectorY * dragVectorY;
+      
+      // Convert to parent percentage, with appropriate sign
+      const parentRect = ref.current.parentElement.getBoundingClientRect();
+      const dragPercent = ((dotProduct > 0 ? dragDistance : -dragDistance) / parentRect.width) * 100;
+      
+      // Calculate new width based on the change
+      const newWidth = Math.max(5, initialWidthRef.current + dragPercent);
+      const widthDiff = newWidth - initialWidthRef.current;
+      
+      if (rotation === 0) {
+        // For non-rotated stickers, no position adjustment needed
+        onChange(id, { x: initialPosRef.current.x, y: initialPosRef.current.y, width: newWidth, rotation });
+      } else {
+        // For rotated stickers, calculate the position shift
+        const angleRad = (rotation * Math.PI) / 180;
+        
+        // Calculate the shift needed for the center (half the size change)
+        const halfWidthDiff = widthDiff / 2;
+        const halfHeightDiff = (widthDiff * aspectRatio) / 2;
+        
+        // Calculate the rotated shift vectors
+        // Note: multiply by -1 to move in the opposite direction of growth
+        const rotatedXShift = halfWidthDiff * Math.cos(angleRad) - halfHeightDiff * Math.sin(angleRad);
+        const rotatedYShift = halfWidthDiff * Math.sin(angleRad) + halfHeightDiff * Math.cos(angleRad);
+        
+        // Calculate new position to maintain the top-left corner fixed in rotated space
+        const newX = initialPosRef.current.x + rotatedXShift;
+        const newY = initialPosRef.current.y + rotatedYShift;
+        
+        onChange(id, { x: newX, y: newY, width: newWidth, rotation });
+      }
     }
 
     if (rotating) {
@@ -160,13 +222,75 @@ const Sticker: React.FC<StickerProps> = ({
     }
   
     if (resizing) {
+      // Track both horizontal and vertical movements
       const dx = touch.clientX - startMouseXRef.current;
       const dy = touch.clientY - startMouseYRef.current;
-      const angleRad = (-rotation * Math.PI) / 180;
-      const localDx = dx * Math.cos(angleRad) - dy * Math.sin(angleRad);
-      const dxPercent = (localDx / parentRect.width) * 100;
-      const newWidth = initialWidthRef.current + dxPercent;
-      onChange(id, { x, y, width: newWidth, rotation });
+      
+      // Calculate the distance of the drag (using Pythagorean theorem)
+      const dragDistance = Math.sqrt(dx * dx + dy * dy);
+      
+      if (!ref.current) return;
+      const rect = ref.current.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      
+      // Calculate the normalized rotation angle (0-360)
+      const normalizedRotation = ((rotation % 360) + 360) % 360;
+      
+      // Calculate the position of the resize handle based on rotation
+      // The handle is always in the bottom-right corner of the non-rotated sticker
+      // We need to rotate this point around the center based on the sticker's rotation
+      const rotationInRadians = (normalizedRotation * Math.PI) / 180;
+      
+      // Vector to bottom-right corner (handle) in non-rotated state
+      const cornerVectorX = rect.width / 2;
+      const cornerVectorY = rect.height / 2;
+      
+      // Rotate this vector by the sticker's rotation angle
+      const handleVectorX = 
+          cornerVectorX * Math.cos(rotationInRadians) - 
+          cornerVectorY * Math.sin(rotationInRadians);
+      const handleVectorY = 
+          cornerVectorX * Math.sin(rotationInRadians) + 
+          cornerVectorY * Math.cos(rotationInRadians);
+      
+      // Vector of the drag movement
+      const dragVectorX = dx;
+      const dragVectorY = dy;
+      
+      // Dot product to determine if vectors are aligned (outward drag) or opposed (inward drag)
+      const dotProduct = handleVectorX * dragVectorX + handleVectorY * dragVectorY;
+      
+      // Convert to parent percentage, with appropriate sign
+      const parentRect = ref.current.parentElement.getBoundingClientRect();
+      const dragPercent = ((dotProduct > 0 ? dragDistance : -dragDistance) / parentRect.width) * 100;
+      
+      // Calculate new width based on the change
+      const newWidth = Math.max(5, initialWidthRef.current + dragPercent);
+      const widthDiff = newWidth - initialWidthRef.current;
+      
+      if (rotation === 0) {
+        // For non-rotated stickers, no position adjustment needed
+        onChange(id, { x: initialPosRef.current.x, y: initialPosRef.current.y, width: newWidth, rotation });
+      } else {
+        // For rotated stickers, calculate the position shift
+        const angleRad = (rotation * Math.PI) / 180;
+        
+        // Calculate the shift needed for the center (half the size change)
+        const halfWidthDiff = widthDiff / 2;
+        const halfHeightDiff = (widthDiff * aspectRatio) / 2;
+        
+        // Calculate the rotated shift vectors
+        // Note: multiply by -1 to move in the opposite direction of growth
+        const rotatedXShift = halfWidthDiff * Math.cos(angleRad) - halfHeightDiff * Math.sin(angleRad);
+        const rotatedYShift = halfWidthDiff * Math.sin(angleRad) + halfHeightDiff * Math.cos(angleRad);
+        
+        // Calculate new position to maintain the top-left corner fixed in rotated space
+        const newX = initialPosRef.current.x + rotatedXShift;
+        const newY = initialPosRef.current.y + rotatedYShift;
+        
+        onChange(id, { x: newX, y: newY, width: newWidth, rotation });
+      }
     }
   
     if (rotating) {
@@ -277,7 +401,7 @@ window.removeEventListener('touchend', stopActions);
               boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'
             }}
           >
-            <FiTrash color="white" size={12} />
+            <img src="/sites/blue/icons/delete.svg" className="w-8 h-8" />
           </div>
   
           {/* Bottom-left Corner Dot */}
@@ -362,6 +486,7 @@ window.removeEventListener('touchend', stopActions);
               initialWidthRef.current = width;
               startMouseXRef.current = e.clientX;
               startMouseYRef.current = e.clientY;
+              initialPosRef.current = { x, y }; // Add this to capture initial position
               setResizing(true);
             }}
             onTouchStart={(e) => {
@@ -371,6 +496,7 @@ window.removeEventListener('touchend', stopActions);
               initialWidthRef.current = width;
               startMouseXRef.current = touch.clientX;
               startMouseYRef.current = touch.clientY;
+              initialPosRef.current = { x, y }; // Add this to capture initial position
               setResizing(true);
             }}
             style={{
@@ -388,32 +514,8 @@ window.removeEventListener('touchend', stopActions);
               cursor: 'nwse-resize',
             }}
           >
-            <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '4px',
-                  left: '4px',
-                  width: 0,
-                  height: 0,
-                  borderTop: '6px solid #4A90E2',
-                  borderRight: '6px solid transparent',
-                  transform: 'rotate(-45deg)',
-                }}
-              />
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: '4px',
-                  right: '4px',
-                  width: 0,
-                  height: 0,
-                  borderBottom: '6px solid #4A90E2',
-                  borderLeft: '6px solid transparent',
-                  transform: 'rotate(-45deg)',
-                }}
-              />
-            </div>
+            <img src="/sites/blue/icons/resize.svg" className="w-8 h-8" />
+            
           </div>
         </>
       )}
