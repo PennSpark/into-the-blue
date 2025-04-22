@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { FiTrash } from "react-icons/fi";
 
 interface StickerProps {
   id: number;
@@ -15,6 +16,7 @@ interface StickerProps {
     id: number,
     props: { x: number; y: number; width: number; rotation: number }
   ) => void;
+  onDelete: (id: number) => void;
 }
 
 const Sticker: React.FC<StickerProps> = ({
@@ -29,6 +31,7 @@ const Sticker: React.FC<StickerProps> = ({
   isSelected,
   onSelect,
   onChange,
+  onDelete
 }) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const [dragging, setDragging] = useState(false);
@@ -45,6 +48,8 @@ const Sticker: React.FC<StickerProps> = ({
     const heightPercent = (heightPx / parent.height) * 100;
     setStickerHeightPercent(heightPercent);
   }, [width, aspectRatio]);
+
+  
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -120,12 +125,74 @@ const Sticker: React.FC<StickerProps> = ({
     setRotating(false);
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    e.preventDefault(); // ← Add this
+    const target = e.target as HTMLElement;
+    if (
+      target.classList.contains('resize-handle') ||
+      target.classList.contains('rotate-handle')
+    ) {
+      return;
+    }
+  
+    if (!ref.current || !ref.current.parentElement) return;
+    const touch = e.touches[0];
+    startMouseRef.current = { x: touch.clientX, y: touch.clientY };
+    initialPosRef.current = { x, y };
+    setDragging(true);
+  };
+  
+  
+  const handleTouchMove = (e: TouchEvent) => {
+    e.preventDefault();
+    if (!ref.current || !ref.current.parentElement) return;
+    const parentRect = ref.current.parentElement.getBoundingClientRect();
+    const touch = e.touches[0];
+  
+    if (dragging) {
+      const dx = touch.clientX - startMouseRef.current.x;
+      const dy = touch.clientY - startMouseRef.current.y;
+      const dxPercent = (dx / parentRect.width) * 100;
+      const dyPercent = (dy / parentRect.height) * 100;
+      const newX = initialPosRef.current.x + dxPercent;
+      const newY = initialPosRef.current.y + dyPercent;
+      onChange(id, { x: newX, y: newY, width, rotation });
+    }
+  
+    if (resizing) {
+      const dx = touch.clientX - startMouseXRef.current;
+      const dy = touch.clientY - startMouseYRef.current;
+      const angleRad = (-rotation * Math.PI) / 180;
+      const localDx = dx * Math.cos(angleRad) - dy * Math.sin(angleRad);
+      const dxPercent = (localDx / parentRect.width) * 100;
+      const newWidth = initialWidthRef.current + dxPercent;
+      onChange(id, { x, y, width: newWidth, rotation });
+    }
+  
+    if (rotating) {
+      const rect = ref.current.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const dx = touch.clientX - centerX;
+      const dy = touch.clientY - centerY;
+      const currentAngle = (Math.atan2(dy, dx) * 180) / Math.PI;
+      const delta = currentAngle - startAngleRef.current;
+      const newRotation = initialRotationRef.current + delta;
+      onChange(id, { x, y, width, rotation: newRotation });
+    }
+  };
+  
+
   useEffect(() => {
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', stopActions);
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+window.addEventListener('touchend', stopActions);
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', stopActions);
+      window.removeEventListener('touchmove', handleTouchMove);
+window.removeEventListener('touchend', stopActions);
     };
   });
 
@@ -141,6 +208,7 @@ const Sticker: React.FC<StickerProps> = ({
     <div
       ref={ref}
       onMouseDown={handleMouseDown}
+      onTouchStart={handleTouchStart}
       onClick={(e) => {
         e.stopPropagation();
         onSelect(id);
@@ -163,35 +231,56 @@ const Sticker: React.FC<StickerProps> = ({
         backgroundPosition: 'center',
         cursor: dragging ? 'grabbing' : 'grab',
         userSelect: 'none',
+        touchAction: 'none'
       }}
     >
       {isSelected && (
         <>
-          {/* Corner Dots */}
+          {/* Top-left Corner Dot */}
+<div
+  style={{
+    position: 'absolute',
+    top: '-6px',
+    left: '-6px',
+    width: '12px',
+    height: '12px',
+    borderRadius: '50%',
+    backgroundColor: '#4A90E2',
+    zIndex: 10,
+  }}
+/>
+
+  
+          {/* Top-right Delete Handle */}
           <div
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete(id);
+            }}
+            onTouchStart={(e) => {
+              e.stopPropagation();
+              onDelete(id);
+            }}
             style={{
               position: 'absolute',
-              top: '-6px',
-              left: '-6px',
-              width: '12px',
-              height: '12px',
+              top: '-9px',
+              right: '-9px',
+              width: '20px',
+              height: '20px',
               borderRadius: '50%',
-              backgroundColor: '#4A90E2',
-              zIndex: 10,
+              backgroundColor: '#E16161',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 15,
+              cursor: 'pointer',
+              boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'
             }}
-          />
-          <div
-            style={{
-              position: 'absolute',
-              top: '-6px',
-              right: '-6px',
-              width: '12px',
-              height: '12px',
-              borderRadius: '50%',
-              backgroundColor: '#4A90E2',
-              zIndex: 10,
-            }}
-          />
+          >
+            <FiTrash color="white" size={12} />
+          </div>
+  
+          {/* Bottom-left Corner Dot */}
           <div
             style={{
               position: 'absolute',
@@ -204,21 +293,21 @@ const Sticker: React.FC<StickerProps> = ({
               zIndex: 10,
             }}
           />
-
+  
           {/* Connector line for rotate handle */}
-<div
-  style={{
-    position: 'absolute',
-    top: '-24px',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    width: '2px',
-    height: '16px',
-    backgroundColor: '#4A90E2',
-    zIndex: 5,
-  }}
-/>
-
+          <div
+            style={{
+              position: 'absolute',
+              top: '-24px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: '2px',
+              height: '16px',
+              backgroundColor: '#4A90E2',
+              zIndex: 5,
+            }}
+          />
+  
           {/* Rotate Handle */}
           <div
             className="rotate-handle"
@@ -230,6 +319,20 @@ const Sticker: React.FC<StickerProps> = ({
               const centerY = rect.top + rect.height / 2;
               const dx = e.clientX - centerX;
               const dy = e.clientY - centerY;
+              const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
+              startAngleRef.current = angle;
+              initialRotationRef.current = rotation;
+              setRotating(true);
+            }}
+            onTouchStart={(e) => {
+              e.stopPropagation();
+              if (!ref.current) return;
+              const touch = e.touches[0];
+              const rect = ref.current.getBoundingClientRect();
+              const centerX = rect.left + rect.width / 2;
+              const centerY = rect.top + rect.height / 2;
+              const dx = touch.clientX - centerX;
+              const dy = touch.clientY - centerY;
               const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
               startAngleRef.current = angle;
               initialRotationRef.current = rotation;
@@ -249,7 +352,7 @@ const Sticker: React.FC<StickerProps> = ({
               zIndex: 10,
             }}
           />
-
+  
           {/* Resize Handle */}
           <div
             className="resize-handle"
@@ -259,6 +362,15 @@ const Sticker: React.FC<StickerProps> = ({
               initialWidthRef.current = width;
               startMouseXRef.current = e.clientX;
               startMouseYRef.current = e.clientY;
+              setResizing(true);
+            }}
+            onTouchStart={(e) => {
+              e.stopPropagation();
+              if (!ref.current) return;
+              const touch = e.touches[0];
+              initialWidthRef.current = width;
+              startMouseXRef.current = touch.clientX;
+              startMouseYRef.current = touch.clientY;
               setResizing(true);
             }}
             style={{
@@ -277,40 +389,38 @@ const Sticker: React.FC<StickerProps> = ({
             }}
           >
             <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-  {/* Top-left facing triangle */}
-  <div
-    style={{
-      position: 'absolute',
-      top: '4px',
-      left: '4px',
-      width: 0,
-      height: 0,
-      borderTop: '6px solid #4A90E2',
-      borderRight: '6px solid transparent',
-      transform: 'rotate(-45deg)',
-    }}
-  />
-
-  {/* Bottom-right facing triangle */}
-  <div
-    style={{
-      position: 'absolute',
-      bottom: '4px',
-      right: '4px',
-      width: 0,
-      height: 0,
-      borderBottom: '6px solid #4A90E2',
-      borderLeft: '6px solid transparent',
-      transform: 'rotate(-45deg)',
-    }}
-  />
-</div>
-
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '4px',
+                  left: '4px',
+                  width: 0,
+                  height: 0,
+                  borderTop: '6px solid #4A90E2',
+                  borderRight: '6px solid transparent',
+                  transform: 'rotate(-45deg)',
+                }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: '4px',
+                  right: '4px',
+                  width: 0,
+                  height: 0,
+                  borderBottom: '6px solid #4A90E2',
+                  borderLeft: '6px solid transparent',
+                  transform: 'rotate(-45deg)',
+                }}
+              />
+            </div>
           </div>
         </>
       )}
     </div>
   );
-};
+  
+    
+};  
 
 export default Sticker;

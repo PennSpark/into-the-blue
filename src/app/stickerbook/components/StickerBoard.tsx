@@ -166,6 +166,12 @@ const StickerBoard: React.FC = () => {
     updateSticker(id, { x: newX, y: newY });
   };
 
+  const handleDelete = async (id: number) => {
+    await deleteStickerById(id);
+    setStickers(prev => prev.filter(s => s.id !== id));
+  };
+  
+
   const resizeSticker = (id: number, newWidth: number) => {
     setStickers((prev) =>
       prev.map((sticker) =>
@@ -189,6 +195,7 @@ const StickerBoard: React.FC = () => {
     deleteStickerById(id);
   };
 
+  
   const captureStickerboard = async () => {
     const board = boardRef.current;
     if (board) {
@@ -257,6 +264,7 @@ const StickerBoard: React.FC = () => {
   isSelected={sticker.id === activeStickerId}
   onSelect={setActiveStickerId}
   onChange={(id, changes) => updateSticker(id, changes)}
+  onDelete={(id) => handleDelete(id)}
 />
 
       ))}
