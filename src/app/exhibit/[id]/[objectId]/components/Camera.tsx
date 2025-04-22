@@ -11,6 +11,7 @@ import { Dialog } from "@headlessui/react"; // Optional: You can use any modal d
 import Link from "next/link";
 
 import ImageCutout from "@/utils/ProcessSticker";
+import { set } from "idb-keyval";
 
 export interface CameraProps {
 	artifact: Artifact;
@@ -440,7 +441,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 					svgUrl={artifact.svgURL}
 					onReady={async (processedImage) => {
 						await saveImage(processedImage, artifact.id, artifact.exhibitID);
-						sessionStorage.setItem("newlyFoundArtifact", artifact.id);
+						await set("justFoundArtifactId", artifact.id);
 						console.log("processed image saved");
 						onImageCaptured();
 					}}

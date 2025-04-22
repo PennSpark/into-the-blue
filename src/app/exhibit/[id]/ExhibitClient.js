@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import anime from "animejs";
 import Image from "next/image";
-import { get, set } from "idb-keyval";
+import { get, set, del } from "idb-keyval";
 import { loadCollectedArtifacts } from "../../context/IndexedDB"; // adjust path as necessary
 import { motion } from "framer-motion";
 import { FaArrowLeft } from "react-icons/fa";
@@ -49,20 +49,18 @@ export default function ExhibitClient({ exhibit, id }) {
 			try {
 				// loadCollectedArtifacts returns an array of artifact IDs that have been collected.
 				const collected = await loadCollectedArtifacts();
-				const newlyFoundId = sessionStorage.getItem("newlyFoundArtifact");
+				const justFoundId = await get("justFoundArtifactId");
 
 				const updatedArtifacts = exhibit.items.map((item) => {
-					const isNewlyFound =
-						collected.includes(item.id) && item.id === newlyFoundId;
 					return {
 						...item,
 						userFound: collected.includes(item.id),
-						justFound: isNewlyFound,
+						justFound: collected.includes(item.id) && item.id === justFoundId,
 					};
 				});
 				setArtifacts(updatedArtifacts);
 				setFoundCount(updatedArtifacts.filter((a) => a.userFound).length);
-				sessionStorage.removeItem("newlyFoundArtifact");
+				await del("justFoundArtifactId");
 			} catch (error) {
 				console.error("Error checking collected artifacts:", error);
 			}
@@ -286,6 +284,7 @@ export default function ExhibitClient({ exhibit, id }) {
 														artifact.justFound
 															? {
 																	duration: 2,
+																	delay: 0.5,
 																	ease: "easeOut",
 																	type: "spring",
 																	bounce: 0.4,
@@ -349,6 +348,7 @@ export default function ExhibitClient({ exhibit, id }) {
 														artifact.justFound
 															? {
 																	duration: 2,
+																	delay: 0.5,
 																	ease: "easeOut",
 																	type: "spring",
 																	bounce: 0.4,
