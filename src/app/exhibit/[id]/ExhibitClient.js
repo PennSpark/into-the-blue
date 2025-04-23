@@ -223,7 +223,7 @@ export default function ExhibitClient({ exhibit, id }) {
 						<div className="sticky-header fixed top-0 left-0 right-0 w-full bg-white flex flex-col justify-center items-center pt-2 px-2">
 							<img
 								src="/sites/blue/images/paper.png"
-								className="w-full h-full absolute z-0 object-cover"
+								className="w-full h-full absolute z-0 top-0 object-cover"
 								alt="Paper"
 							/>
 							{/* Home button */}
@@ -312,6 +312,7 @@ export default function ExhibitClient({ exhibit, id }) {
 														artifact.justFound
 															? {
 																	duration: 2,
+																	delay: 0.8,
 																	ease: "easeOut",
 																	type: "spring",
 																	bounce: 0.4,
@@ -375,6 +376,7 @@ export default function ExhibitClient({ exhibit, id }) {
 														artifact.justFound
 															? {
 																	duration: 2,
+																	delay: 0.8,
 																	ease: "easeOut",
 																	type: "spring",
 																	bounce: 0.4,
