@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   title: "Into the Blue",
   description: "Built by Penn Spark",
   icons: {
-    icon: "images/favicon.png"
+    icon: "/sites/blue/images/favicon.png"
   }
 };
 
