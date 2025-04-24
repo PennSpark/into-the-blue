@@ -40,17 +40,16 @@ const RegionList: React.FC<RegionListProps> = ({ regions }) => {
 		lineHeight: "1",
 	};
 
-	return (
-		<div className="w-full max-w-md flex flex-col gap-[16px] pb-[16px]">
-			<p className="text-center">Tap on a gallery name to begin!</p>
-			{regions.map((region, index) => {
-				const completionPercentage =
-					region.totalObjects > 0
-						? (region.objectsFound / region.totalObjects) * 100
-						: 0;
-				const allFound =
-					region.objectsFound === region.totalObjects &&
-					region.totalObjects > 0;
+  return (
+    <div className="w-full max-w-md flex flex-col gap-[16px] pb-[16px]">
+      <p className="text-center font-semibold text-gray1">Select the gallery you’re visiting!</p>
+      {regions.map((region, index) => {
+        const completionPercentage =
+          region.totalObjects > 0
+            ? (region.objectsFound / region.totalObjects) * 100
+            : 0;
+        const allFound =
+          region.objectsFound === region.totalObjects && region.totalObjects > 0;
 
 				return (
 					<div

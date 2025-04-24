@@ -178,7 +178,7 @@ export default function StatsPage() {
         metrics.totalObjectsFound >= 12 ? 'INVESTIGATOR' :
         'CURIOUS';
 
-    const personalityDescription = metrics.totalObjectsFound === 36 ? 'You found all 36 objects and completed the scavenger hunt!' :
+    const personalityDescription = metrics.totalObjectsFound === 37 ? 'You found all 37 objects and completed the scavenger hunt!' :
         metrics.totalObjectsFound >= 24 ? `You found ${metrics.totalObjectsFound} objects and are a true collector!` :
         metrics.totalObjectsFound >= 12 ? `You found ${metrics.totalObjectsFound} objects and are quite the investigator!` :
         `You found ${metrics.totalObjectsFound} objects and are a curious explorer!`;

@@ -255,11 +255,11 @@ export default function ExhibitClient({ exhibit, id }) {
 							<div className="relative z-60 px-8 pt-[150px] pb-[56px] flex flex-col w-full h-full mx-auto">
 								<div className="fixed top-0 left-0 right-0 w-full pr-[23px] pt-[23px] flex justify-end z-40">
 									<button
-										className="bg-blue-1 text-black text-body font-body1 px-6 py-2 rounded-[50px] flex items-center gap-2"
+										className="bg-blue-2 text-black text-body font-medium font-body1 px-6 py-2 rounded-[50px] flex items-center gap-[2px]"
 										onClick={handleSkipClick}
 									>
 										Skip Tutorial
-										<FaArrowRight style={{ width: "20px", height: "18px" }} />
+										<img src="/sites/blue/icons/right-arrow-black.svg" alt="Arrow" className="w-[26px] h-[25px]"/>
 									</button>
 								</div>
 
