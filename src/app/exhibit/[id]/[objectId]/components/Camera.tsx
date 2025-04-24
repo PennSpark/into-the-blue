@@ -11,6 +11,7 @@ import { Dialog } from "@headlessui/react"; // Optional: You can use any modal d
 import Link from "next/link";
 
 import ImageCutout from "@/utils/ProcessSticker";
+import ZoomControls from "./ZoomControls";
 import { motion } from "framer-motion";
 
 export interface CameraProps {
@@ -18,29 +19,29 @@ export interface CameraProps {
 	onImageCaptured: () => void;
 }
 
-// Add video constraints for using rear camera
 const videoConstraints = {
 	facingMode: "environment",
 };
 
 export default function Camera({ artifact, onImageCaptured }: CameraProps) {
-	const [imagePath, setImagePath] = useState(
-		`/sites/blue/images/artifacts/${artifact.id}.png`
-	);
-
-	console.log(imagePath);
-
-	const webcamRef = useRef<Webcam>(null);
-	const canvasRef = useRef<HTMLCanvasElement>(null);
-	const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
-	//need to store svg paths as path2d for clipping and string for svg (i don't like it but we can fix later)
-	const [clipPathData, setClipPathData] = useState<Path2D[] | null>(null);
-	const [svgPaths, setSvgPaths] = useState<string[] | null>(null);
+  const [imagePath, setImagePath] = useState(`/sites/blue/images/artifacts/${artifact.id}.png`);
+  const webcamRef = useRef<Webcam>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
+  //need to store svg paths as path2d for clipping and string for svg (i don't like it but we can fix later)
+  const [clipPathData, setClipPathData] = useState<Path2D[] | null>(null);
+  const [svgPaths, setSvgPaths] = useState<string[] | null>(null);
 
 	const [, setHintActive] = useState(false); // State to toggle the hint active state
 	const [dialogOpen, setDialogOpen] = useState(false); // State to manage dialog visibility
 
-	const [shouldProcess, setShouldProcess] = useState(false);
+  const [shouldProcess, setShouldProcess] = useState(false);
+
+  const [zoom, setZoom] = useState(1.0);
+
+  useEffect(() => {
+    console.log("Zoom camera changed:", zoom);
+  }, [zoom]);
 
 	// Function to toggle hint state
 	const toggleHint = () => {
@@ -116,7 +117,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 		updateCanvasSize();
 		window.addEventListener("resize", updateCanvasSize);
 		return () => window.removeEventListener("resize", updateCanvasSize);
-	}, [updateCanvasSize]);
+	}, [updateCanvasSize, zoom]);
 
 	useEffect(() => {
 		async function getTutorialStatus() {
@@ -160,9 +161,19 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 					const dx = (canvasSize.width - newWidth) / 2;
 					const dy = 0;
 
-					ctx.clearRect(0, 0, canvas.width, canvas.height);
-					ctx.drawImage(video, dx, dy, newWidth, newHeight);
-				}
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          const zoomedWidth = video.videoWidth / zoom;
+          const zoomedHeight = video.videoHeight / zoom;
+          
+          const sx = (video.videoWidth - zoomedWidth) / 2;
+          const sy = (video.videoHeight - zoomedHeight) / 2;
+    
+          ctx.drawImage(
+            video,
+            sx, sy, zoomedWidth, zoomedHeight, // source (cropped)
+            dx, dy, newWidth, newHeight        // destination (fit canvas)
+          );
+        }
 
 				requestAnimationFrame(processWebcamFeed);
 			}
@@ -217,24 +228,39 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 						console.error("no clippath");
 					}
 
-					//reset transformations before drawing image onto clipped canvas so image isn't distorted
-					clipCtx.translate(viewBox.width / 2, viewBox.height / 2);
-					clipCtx.scale(1 / scaleX, 360 / (scaleY * 300));
-					clipCtx.translate(-clipCanvas.width / 2, -clipCanvas.height / 2);
+          //reset transformations before drawing image onto clipped canvas so image isn't distorted
+          clipCtx.translate(viewBox.width / 2, viewBox.height / 2);
+          clipCtx.scale(1 / scaleX, 1 / scaleY);
+          clipCtx.translate(-clipCanvas.width / 2, -clipCanvas.height / 2);
+          
 
-					//draw the image
-					clipCtx.drawImage(canvas, 0, 0, clipCanvas.width, clipCanvas.height);
+          //draw the image and account for zoom
+          const aspectRatio = 300 / 360;
+          const zoomedHeight = video.videoHeight / (zoom * 1.25);
+          const zoomedWidth = zoomedHeight * aspectRatio;
+          
+          const sx = (video.videoWidth - zoomedWidth) / 2;
+          const sy = (video.videoHeight - zoomedHeight) / 2;
+          
+          clipCtx.drawImage(
+            video,
+            sx, sy, zoomedWidth, zoomedHeight, // source
+            0, 0, clipCanvas.width, clipCanvas.height // destination
+          );
+          
+          clipCtx.restore();
+          setImage(clipCanvas.toDataURL("image/png"));
+          setText("");
+          setImagePath(`/sites/blue/images/artifacts/${artifact.id}.png`);
 
-					clipCtx.restore();
-					setImage(clipCanvas.toDataURL("image/png"));
-					setText("");
-					setImagePath(`/sites/blue/images/artifacts/${artifact.id}.png`);
-				} else {
-					console.error("canvas not initialized properly");
-				}
-			}
-		}
-	};
+        } else {
+          console.error("canvas not initialized properly");
+        }
+      }
+    }
+
+    
+  };
 
 	const saveClippedImage = () => {
 		if (image && image.length > 50) {
@@ -244,11 +270,12 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 		}
 	};
 
-	const rejectClippedImage = async () => {
-		setImage(null);
-		setText("Line up the image to the outline");
-		setImagePath(`/sites/blue/images/artifacts/${artifact.id}.png`);
-	};
+  const rejectClippedImage = async () => {
+    setImage(null);
+    setText("Pinch to zoom and align with outline");
+    setImagePath(`/sites/blue/images/artifacts/${artifact.id}.png`);
+  };
+
 
 	return (
 		<div
@@ -377,19 +404,27 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 				</Dialog>
 			)}
 
-			{/* Webcam container with relative positioning */}
-			<div className="relative w-[40svh] h-[60svh]">
-				<Webcam
-					ref={webcamRef}
-					videoConstraints={videoConstraints} // <-- Added prop
-					className="absolute opacity-0 pointer-events-none"
-				/>
+      {/* Webcam container with relative positioning */}
+      <div className="relative w-[40svh] h-[60svh]">
+        {/* Zoom controls */}
+        <ZoomControls
+          zoom={zoom}
+          setZoom={setZoom}
+          minZoom={1.0}
+          maxZoom={5.0}
+        />
 
-				<canvas
-					ref={canvasRef}
-					style={{ width: "40svh", height: "60svh" }}
-					className="absolute rounded-lg shadow-lg"
-				/>
+        <Webcam 
+          ref={webcamRef}
+          videoConstraints={videoConstraints}  // <-- Added prop
+          className="absolute w-[40svh] h-[60svh] opacity-0 pointer-events-none" 
+        />
+        
+        <canvas
+          ref={canvasRef}
+          style={{ width: "40svh", height: "60svh" }}
+          className="absolute rounded-lg shadow-lg"
+        />
 
 				<div className="absolute inset-0 flex justify-center items-center pointer-events-none">
 					<svg
@@ -421,13 +456,16 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 					</svg>
 				</div>
 
-				{/* instructions */}
-				{!image && (
-					<div className="absolute bottom-[4px] left-1/2 transform -translate-x-1/2 w-[95%] z-[10] text-center text-warm-white text-[14px] overflow-hidden px-3 py-2 rounded-[60px] bg-[#393939]/70 backdrop-blur-[7px]">
-						<p>{text}</p>
-					</div>
-				)}
-			</div>
+        {/* instructions */}
+        {!image && (
+          <>
+        <p className="absolute bottom-[35px] left-1/2 transform -translate-x-1/2  z-[10] text-center text-[14px] overflow-hidden px-2 py-[2px] rounded-[60px] bg-white/80">{zoom.toFixed(1)}x</p>
+        <div className="absolute flex bottom-[4px] left-1/2 transform -translate-x-1/2 w-max z-[10] text-center text-warm-white text-[14px] overflow-hidden px-3 py-[2px] rounded-[60px] bg-[#393939]/70 backdrop-blur-[7px]">
+          <p className="font-bold">{text}</p>
+        </div>
+        </>
+        )}
+      </div>
 
 			{/* visible before taking picture: white circular button to take picture */}
 			{!image && (
