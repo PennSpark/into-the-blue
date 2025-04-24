@@ -51,7 +51,7 @@ export default function StatsPage() {
                 }
                 const shuffled = artifactIds.sort(() => 0.5 - Math.random());
                 const selected = shuffled.slice(0, 4);
-                const images = selected.map(id => `/sites/blue/images/artifacts/${id}.png`);
+                const images = selected.map(id => `/sites/blue/images/artifacts/${id}.webp`);
                 setCollectedImages(images);
             } catch (err) {
                 console.error(err);

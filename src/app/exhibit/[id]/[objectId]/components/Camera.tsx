@@ -23,7 +23,7 @@ const videoConstraints = {
 };
 
 export default function Camera({ artifact, onImageCaptured }: CameraProps) {
-  const [, setImagePath] = useState(`/sites/blue/images/artifacts/${artifact.id}.png`);
+  const [, setImagePath] = useState(`/sites/blue/images/artifacts/${artifact.id}.webp`);
   const webcamRef = useRef<Webcam>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
@@ -250,7 +250,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
           clipCtx.restore();
           setImage(clipCanvas.toDataURL("image/png"));
           setText("");
-          setImagePath(`/sites/blue/images/artifacts/${artifact.id}.png`);
+          setImagePath(`/sites/blue/images/artifacts/${artifact.id}.webp`);
 
         } else {
           console.error("canvas not initialized properly");
@@ -272,7 +272,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
   const rejectClippedImage = async () => {
     setImage(null);
     setText("Pinch to zoom and align with outline");
-    setImagePath(`/sites/blue/images/artifacts/${artifact.id}.png`);
+    setImagePath(`/sites/blue/images/artifacts/${artifact.id}.webp`);
   };
 
 
@@ -484,7 +484,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
 					<div className="absolute inset-0 flex justify-center items-center z-[10] pointer-events-none">
 						<Image
-							src={"/sites/blue/camera-overlay/" + artifact.id + ".png"}
+							src={"/sites/blue/camera-overlay/" + artifact.id + ".webp"}
 							alt="Captured"
 							className="w-[40svh] h-auto"
 							width={500}

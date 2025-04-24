@@ -119,7 +119,7 @@ const RegionList: React.FC<RegionListProps> = ({ regions }) => {
 								<img
 									src={`/sites/blue/icons/regions/${region.name
 										.toLowerCase()
-										.replace(/\s+/g, "-")}.png`}
+										.replace(/\s+/g, "-")}.webp`}
 									alt={`${region.displayName} icon`}
 									className="h-full object-cover object-left"
 									style={{ maxWidth: "none" }}

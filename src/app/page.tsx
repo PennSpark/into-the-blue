@@ -125,7 +125,7 @@ export default function Home() {
 		<div
 			className="min-h-screen font-[family-name:var(--font-geist-sans)] bg-warm-white"
 			style={{
-				backgroundImage: "url('/sites/blue/images/paper.png')",
+				backgroundImage: "url('/sites/blue/images/paper.webp')",
 				backgroundRepeat: "repeat",
 			}}
 		>
@@ -220,7 +220,7 @@ export default function Home() {
 													<img
 														src={`/sites/blue/icons/regions/${region.name
 															.toLowerCase()
-															.replace(/\s+/g, "-")}.png`}
+															.replace(/\s+/g, "-")}.webp`}
 														alt={`${region.displayName} icon`}
 														className="h-full object-cover object-left"
 														style={{ maxWidth: "none" }}

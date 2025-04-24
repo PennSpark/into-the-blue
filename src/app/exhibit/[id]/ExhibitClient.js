@@ -294,14 +294,14 @@ export default function ExhibitClient({ exhibit, id }) {
 						className={`${showTutOverlay ? "pointer-events-none" : ""}`}
 					>
 						<img
-							src="/sites/blue/images/paper.png"
+							src="/sites/blue/images/paper.webp"
 							className="w-full h-full absolute z-0 object-cover"
 							alt="Paper"
 						/>
 						{/* Top bar */}
 						<div className="sticky-header fixed top-0 left-0 right-0 w-full bg-white flex flex-col justify-center items-center pt-2 px-2">
 							<img
-								src="/sites/blue/images/paper.png"
+								src="/sites/blue/images/paper.webp"
 								className="w-full h-full absolute z-0 top-0 object-cover"
 								alt="Paper"
 							/>
@@ -366,7 +366,7 @@ export default function ExhibitClient({ exhibit, id }) {
 												width={120}
 												height={220}
 												placeholder="blur"
-												blurDataURL="/sites/blue/images/placeholder.png"
+												blurDataURL="/sites/blue/images/placeholder.webp"
 												onLoad={(e) => {
 													e.currentTarget.classList.remove("opacity-0");
 													if (firstArtifactRef.current) {
@@ -434,7 +434,7 @@ export default function ExhibitClient({ exhibit, id }) {
 												width={120}
 												height={220}
 												placeholder="blur"
-												blurDataURL="/sites/blue/images/placeholder.png"
+												blurDataURL="/sites/blue/images/placeholder.webp"
 												onLoad={(e) =>
 													e.currentTarget.classList.remove("opacity-0")
 												}

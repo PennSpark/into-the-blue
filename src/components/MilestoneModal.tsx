@@ -337,7 +337,7 @@ const MilestoneModal: React.FC<MilestoneModalProps> = ({
           }}
         >
             <div className="h-full flex flex-col items-center justify-center gap-16 z-10" style={{ height: "-webkit-fill-available"}}>
-                <img src="/sites/blue/character/ending.png" alt="Character" className="w-[208px] " />
+                <img src="/sites/blue/character/ending.webp" alt="Character" className="w-[208px] " />
                 <div className="flex flex-col items-center justify-center gap-4 z-10">
                     <p className="w-full text-center text-blue-black font-medium text-2xl leading-[1.75] px-[20px]">Congrats! <br></br> You found all 37 artifacts!</p>
                 </div>
