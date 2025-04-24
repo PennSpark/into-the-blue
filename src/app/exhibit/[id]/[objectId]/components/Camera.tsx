@@ -288,12 +288,6 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
       {/* Webcam container with relative positioning */}
       <div className="relative w-[40svh] h-[60svh]">
 
-        <ZoomControls
-          zoom={zoom}
-          setZoom={setZoom}
-          minZoom={1.0}
-          maxZoom={5.0}
-        ></ZoomControls>
 
         <Webcam 
           ref={webcamRef}
@@ -331,9 +325,12 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
         {/* instructions */}
         {!image && (
-        <div className="absolute bottom-[4px] left-1/2 transform -translate-x-1/2 w-[95%] z-[10] text-center text-warm-white text-[14px] overflow-hidden px-3 py-2 rounded-[60px] bg-[#393939]/70 backdrop-blur-[7px]">
-          <p>{text}</p>
+          <>
+        <p className="absolute bottom-[35px] left-1/2 transform -translate-x-1/2  z-[10] text-center text-[14px] overflow-hidden px-2 py-[2px] rounded-[60px] bg-white/80">{zoom.toFixed(1)}x</p>
+        <div className="absolute flex bottom-[4px] left-1/2 transform -translate-x-1/2 w-max z-[10] text-center text-warm-white text-[14px] overflow-hidden px-3 py-[2px] rounded-[60px] bg-[#393939]/70 backdrop-blur-[7px]">
+          <p className="font-bold">{text}</p>
         </div>
+        </>
         )}
       </div>
 
