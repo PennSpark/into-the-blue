@@ -287,7 +287,13 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
       {/* Webcam container with relative positioning */}
       <div className="relative w-[40svh] h-[60svh]">
-
+        {/* Zoom controls */}
+        <ZoomControls
+          zoom={zoom}
+          setZoom={setZoom}
+          minZoom={1.0}
+          maxZoom={5.0}
+        />
 
         <Webcam 
           ref={webcamRef}
