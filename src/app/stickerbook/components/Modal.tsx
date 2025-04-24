@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import { loadAllImages } from "../../context/IndexedDB";
 
@@ -11,7 +11,7 @@ interface ModalProps {
 }
 
 export default function Modal({ setMenuSelection, addSticker, setGridBg, menuSelection }: ModalProps) {
-  const sections = ["sticker", "label", "grid"];
+  const sections = useMemo(() => ["sticker", "label", "grid"], []);
   const [savedStickers, setSavedStickers] = useState<{ id: string; url: string; }[]>([]);
   const [, setCurrentIndex] = useState(sections.indexOf(menuSelection ?? "sticker"));
   // const touchStartX = useRef<number | null>(null);

@@ -27,13 +27,16 @@ const MilestoneModal: React.FC<MilestoneModalProps> = ({
   const [secondModalOpacity, setSecondModalOpacity] = useState(1);
   const [thirdModalOpacity, setThirdModalOpacity] = useState(1);
 
+  // Add a new state to track the opacity during fade-in
+  const [fadeInProgress, setFadeInProgress] = useState(false);
+
   // Milestone thresholds
   const FIRST_MILESTONE = 3;
   const SECOND_MILESTONE = 18;
   const THIRD_MILESTONE = 37;
   const FINAL_MILESTONE = totalObjects;
 
-  // Handle the fullscreen image display and fade effect - only for third milestone
+  // Modify the displayFullScreenImage function to include fade-in for the third modal
   const displayFullScreenImage = () => {
     setShowFullScreenImage(true);
     setImageOpacity(1);
@@ -45,16 +48,30 @@ const MilestoneModal: React.FC<MilestoneModalProps> = ({
     setTimeout(() => {
       setShowFullScreenImage(false);
       
-      // Show the third milestone modal after the image disappears
+      // Start with opacity 0 for fade-in
+      setThirdModalOpacity(0);
       setShowThirdModal(true);
       
-      // Auto-dismiss after 3 seconds for the third milestone
-      const timer = setTimeout(() => {
+      // Fade in the third modal
+      setTimeout(() => {
+        setThirdModalOpacity(1);
+      }, 50); // Short delay to ensure state updates properly
+      
+      // Auto-dismiss after 5 seconds for the third milestone
+      const fadeOutTimer = setTimeout(() => {
+        setThirdModalOpacity(0);
+      }, 4500); // Start fade out 0.5s before hiding
+      
+      const hideTimer = setTimeout(() => {
         setShowThirdModal(false);
+        setThirdModalOpacity(1); // Reset for next time
         localStorage.setItem('thirdMilestoneDismissed', 'true');
       }, 5000);
       
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(fadeOutTimer);
+        clearTimeout(hideTimer);
+      };
     }, 5000);
   };
 
@@ -128,22 +145,28 @@ const MilestoneModal: React.FC<MilestoneModalProps> = ({
       // Only for the third milestone (37/37 objects), show fullscreen image first
       displayFullScreenImage();
     } else if (objectsFound >= THIRD_MILESTONE && !thirdMilestoneDismissed && objectsFound < FINAL_MILESTONE) {
-      // If they've reached 37 but not all objects, just show the modal
+      // If they've reached 37 but not all objects, just show the modal with fade-in
+      setThirdModalOpacity(0); // Start with opacity 0
       setShowThirdModal(true);
       
-      // Auto-dismiss after 3 seconds
-      const fadeTimer = setTimeout(() => {
+      // Fade in
+      setTimeout(() => {
+        setThirdModalOpacity(1);
+      }, 50);
+      
+      // Auto-dismiss after 5 seconds
+      const fadeOutTimer = setTimeout(() => {
         setThirdModalOpacity(0);
-      }, 2500); // Start fade 0.5s before hiding
+      }, 4500); // Start fade 0.5s before hiding
       
       const hideTimer = setTimeout(() => {
         setShowThirdModal(false);
         setThirdModalOpacity(1); // Reset for next time
         localStorage.setItem('thirdMilestoneDismissed', 'true');
-      }, 3000);
+      }, 5000);
       
       return () => {
-        clearTimeout(fadeTimer);
+        clearTimeout(fadeOutTimer);
         clearTimeout(hideTimer);
       };
     }
@@ -235,7 +258,7 @@ const MilestoneModal: React.FC<MilestoneModalProps> = ({
           <div className="bg-[#333D37] text-warm-white p-4 rounded-lg max-w-[14rem] shadow-lg">
             <div className="flex flex-col space-y-2.5 text-center">
               <p className="text-base font-semibold leading-tight mx-2">
-                Remember, you can click here to finish your hunt anytime!
+                Remember, you can tap here to finish your hunt anytime!
               </p>
               {/* No OK button for the second milestone */}
             </div>

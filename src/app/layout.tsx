@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
+import { TutorialProvider } from "@/app/context/TutorialContext";
 
 const dmSans = DM_Sans({
-  display: "swap",
-  variable: "--font-dm-sans",
-  subsets: ["latin"],
+	display: "swap",
+	variable: "--font-dm-sans",
+	subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -17,13 +18,18 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode;
+	children: React.ReactNode;
 }) {
-  return (
-    <html lang="en">
-      <body className={`${dmSans.variable} antialiased`}>{children}</body>
-    </html>
-  );
+	return (
+		<html lang="en">
+			<body className={`${dmSans.variable} antialiased`}>
+				<TutorialProvider>
+					{/* <TutorialOverlay /> */}
+					{children}
+				</TutorialProvider>
+			</body>
+		</html>
+	);
 }

@@ -1,9 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import anime from "animejs";
+import { motion } from "framer-motion";
+
 import {
 	saveMetrics,
 	getMetrics,
@@ -12,13 +15,17 @@ import {
 	clearVisitedExhibits,
 	clearGridSettings,
 	clearStickers,
+	getTutorialCompleted,
 } from "../context/IndexedDB";
 
 export default function WelcomePage() {
 	const [showFirstContent, setShowFirstContent] = useState(false);
 	const [showSecondContent, setShowSecondContent] = useState(false);
+	const [showIntroSlides, setShowIntroSlides] = useState(false);
+	const [introIndex, setIntroIndex] = useState(0);
 	const [hasMetrics, setHasMetrics] = useState(false);
 
+	const router = useRouter();
 	// Set CSS variable for viewport height
 	useEffect(() => {
 		const setVh = () => {
@@ -38,6 +45,7 @@ export default function WelcomePage() {
 				setHasMetrics(true);
 			}
 		}
+
 		checkMetrics();
 	}, []);
 
@@ -122,11 +130,48 @@ export default function WelcomePage() {
 		});
 	};
 
+	const handleStartClick = async () => {
+		const completed = await getTutorialCompleted();
+		if (!completed) {
+			setShowSecondContent(false);
+			setTimeout(() => {
+				setShowIntroSlides(true);
+			}, 1000);
+		} else {
+			if (!hasMetrics) {
+				await saveMetrics({
+					totalObjectsFound: 0,
+					totalExhibitsVisited: 0,
+					startTime: Date.now(),
+					stickerbookViewTime: 0,
+				});
+			}
+			router.push("/");
+		}
+	};
+
+	const handleIntroComplete = async () => {
+		if (!hasMetrics) {
+			await saveMetrics({
+				totalObjectsFound: 0,
+				totalExhibitsVisited: 0,
+				startTime: Date.now(),
+				stickerbookViewTime: 0,
+			});
+		}
+		router.push("/");
+	};
+
 	return (
 		<main
 			className="bg-warm-white w-full relative overflow-hidden"
 			style={{ height: "calc(var(--vh, 1vh) * 100)" }}
 		>
+			<img
+				src="/sites/blue/images/paper.png"
+				className="w-full h-full absolute z-0 object-cover"
+				alt="Paper"
+			/>
 			{/* First content */}
 			<div
 				className={`absolute inset-0 transition-opacity duration-1000 ${
@@ -134,12 +179,10 @@ export default function WelcomePage() {
 				}`}
 			>
 				<div className="h-full flex flex-col items-center justify-center gap-[30px] z-10">
-					<p className="text-blue-black leading-none">Presented by</p>
+					<p className="text-blue-black leading-none font-FibraOneSemi font-FibraOneSemi">
+						Presented by
+					</p>
 					<div className="flex items-center justify-center gap-[16px]">
-						{/* <Image className="w-[31px] h-[31px]"
-                            src="/sites/blue/welcome-assets/spark.png" alt="Spark" width={100} height={100} 
-                        />
-                        <p className="text-blue-black font-FibraOneSemi text-base">PENN SPARK</p> */}
 						<Image
 							className="w-[30vw] h-auto"
 							src="/sites/blue/icons/PennSparkLogo.png"
@@ -161,11 +204,6 @@ export default function WelcomePage() {
 							width={500}
 							height={500}
 						/>
-
-						{/* <Image className="w-[31px] h-[31px] padding-l-[1px]"
-                            src="/sites/blue/welcome-assets/penn-museum.png" alt="Spark" width={100} height={100} 
-                        />
-                        <p className="text-blue-black font-FibraOneSemi text-base">PENN MUSEUM</p> */}
 					</div>
 				</div>
 			</div>
@@ -298,14 +336,14 @@ export default function WelcomePage() {
 					<div className="absolute top-[680px] w-full h-[200px]" />
 				</div>
 				{hasMetrics ? (
-					<div className="buttons fixed bottom-0 w-full px-5 py-3 flex z-40">
+					<div className="buttons fixed bottom-0 w-full px-5 py-3 flex z-40 font-FibraOneSemi">
 						<div className="flex gap-3 w-full justify-between">
 							<Link href="/" onClick={handleStartOver}>
 								<div className="flex items-center border-2 border-blue-1 text-blue-1 font-semibold bg-white w-fit h-[44px] gap-[8px] px-[20px] rounded-full">
 									<p className="font-medium text-base">Start Over</p>
 								</div>
 							</Link>
-							<Link href="/">
+							<button onClick={handleStartClick}>
 								<div className="flex items-center bg-blue-1 text-warm-white font-semibold w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
 									<p className="font-medium text-base">Continue Hunt</p>
 									<img
@@ -314,22 +352,12 @@ export default function WelcomePage() {
 										className="w-[22px] h-[22px]"
 									/>
 								</div>
-							</Link>
+							</button>
 						</div>
 					</div>
 				) : (
-					<div className="buttons fixed bottom-0 w-full px-5 py-3 flex justify-end z-40">
-						<Link
-							href="/"
-							onClick={async () => {
-								await saveMetrics({
-									totalObjectsFound: 0,
-									totalExhibitsVisited: 0,
-									startTime: Date.now(),
-									stickerbookViewTime: 0,
-								});
-							}}
-						>
+					<div className="buttons fixed bottom-0 w-full px-5 py-3 flex justify-end z-40 font-FibraOneSemi tracking-heading">
+						<button onClick={handleStartClick}>
 							<div className="flex items-center bg-blue-1 text-warm-white w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
 								<p className="font-medium text-base">Let&apos;s Begin!</p>
 								<img
@@ -338,7 +366,123 @@ export default function WelcomePage() {
 									className="w-[22px] h-[22px]"
 								/>
 							</div>
-						</Link>
+						</button>
+					</div>
+				)}
+			</div>
+
+			{/* Intro slides */}
+			<div
+				key={introIndex}
+				className={`absolute w-full h-full inset-0 p-6 z-50 text-center transition-opacity duration-500 ${
+					showIntroSlides ? "opacity-100" : "opacity-0 pointer-events-none"
+				} text-black text-[24px] tracking-heading font-semibold`}
+			>
+				{introIndex === 0 && (
+					<div className="flex flex-col justify-center items-center gap-4 h-full w-full">
+						<p>
+							Welcome to <i>Into the Blue</i> scavenger hunt!
+						</p>
+						<Image
+							className="w-[50vw] h-auto"
+							src="/sites/blue/tutorial-assets/char1.png"
+							alt="Char1"
+							width={500}
+							height={500}
+							onLoad={(e) => {
+								e.currentTarget.classList.remove("opacity-0");
+							}}
+						/>
+					</div>
+				)}
+				{introIndex === 1 && (
+					<motion.div
+						className="flex flex-col justify-center items-center gap-4 h-full w-full"
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						transition={{ duration: 1, ease: "easeOut" }}
+					>
+						<p className="pb-[18px]">
+							<i>Into the Blue</i> is an exhibit all about the color blue.
+						</p>
+						<p>Find this exhibit on the upper level of the Museum.</p>
+						<Image
+							className="w-[60vw] h-auto"
+							src="/sites/blue/tutorial-assets/char2.png"
+							alt="Char1"
+							width={500}
+							height={500}
+							onLoad={(e) => {
+								e.currentTarget.classList.remove("opacity-0");
+							}}
+						/>
+					</motion.div>
+				)}
+				{introIndex === 2 && (
+					<motion.div
+						className="flex flex-col justify-center items-center gap-4 h-full w-full"
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						transition={{ duration: 1, ease: "easeOut" }}
+					>
+						<p>
+							Your goal is to find
+							<span className="text-blue-4 font-black"> blue objects </span>
+							across the Museum.
+						</p>
+						<Image
+							className="w-[40vw] h-auto"
+							src="/sites/blue/tutorial-assets/char3.png"
+							alt="Char1"
+							width={500}
+							height={500}
+							onLoad={(e) => {
+								e.currentTarget.classList.remove("opacity-0");
+							}}
+						/>
+					</motion.div>
+				)}
+				{introIndex === 3 && (
+					<motion.div
+						className="flex flex-col justify-center items-center gap-4 h-full w-full"
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						transition={{ duration: 1, ease: "easeOut" }}
+					>
+						<p>
+							Then, you can create a stickerbook to share your finds with
+							friends & family!
+						</p>
+						<Image
+							className="w-[50vw] h-auto"
+							src="/sites/blue/tutorial-assets/char4.png"
+							alt="Char1"
+							width={500}
+							height={500}
+							onLoad={(e) => {
+								e.currentTarget.classList.remove("opacity-0");
+							}}
+						/>
+					</motion.div>
+				)}
+
+				{introIndex < 3 ? (
+					<div className="fixed bottom-0 left-0 right-0 w-full px-5 py-3 flex justify-end z-40">
+						<button
+							className="bg-blue-1 text-white text-body font-body1 px-6 py-2 rounded-[50px]"
+							onClick={() => setIntroIndex((i) => i + 1)}
+						>
+							Next
+						</button>
+					</div>
+				) : (
+					<div className="fixed bottom-0 left-0 right-0 w-full px-5 py-3 flex justify-end z-40">
+						<button
+							className="bg-blue-1 text-white text-body font-body1 px-6 py-2 rounded-[50px]"
+							onClick={handleIntroComplete}
+						>
+							Let’s Get Started!
+						</button>
 					</div>
 				)}
 			</div>

@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { FiTrash } from "react-icons/fi";
 
 interface StickerProps {
   id: number;
@@ -63,7 +62,7 @@ const Sticker: React.FC<StickerProps> = ({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isSelected]);
+  }, [isSelected, onSelect]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
@@ -76,7 +75,6 @@ const Sticker: React.FC<StickerProps> = ({
 
     if (!ref.current || !ref.current.parentElement) return;
 
-    const parentRect = ref.current.parentElement.getBoundingClientRect();
     startMouseRef.current = { x: e.clientX, y: e.clientY };
     initialPosRef.current = { x, y };
     setDragging(true);
@@ -106,8 +104,7 @@ const Sticker: React.FC<StickerProps> = ({
       
       if (!ref.current) return;
       const rect = ref.current.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
+
       
       // Calculate the normalized rotation angle (0-360)
       const normalizedRotation = ((rotation % 360) + 360) % 360;
@@ -231,8 +228,6 @@ const Sticker: React.FC<StickerProps> = ({
       
       if (!ref.current) return;
       const rect = ref.current.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
       
       // Calculate the normalized rotation angle (0-360)
       const normalizedRotation = ((rotation % 360) + 360) % 360;
@@ -401,7 +396,7 @@ window.removeEventListener('touchend', stopActions);
               boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'
             }}
           >
-            <img src="/sites/blue/icons/delete.svg" className="w-8 h-8" />
+            <img src="/sites/blue/icons/delete.svg" alt="" className="w-8 h-8" />
           </div>
   
           {/* Bottom-left Corner Dot */}
@@ -514,7 +509,7 @@ window.removeEventListener('touchend', stopActions);
               cursor: 'nwse-resize',
             }}
           >
-            <img src="/sites/blue/icons/resize.svg" className="w-8 h-8" />
+            <img src="/sites/blue/icons/resize.svg" alt="" className="w-8 h-8" />
             
           </div>
         </>

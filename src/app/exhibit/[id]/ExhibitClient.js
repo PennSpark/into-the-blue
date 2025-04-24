@@ -5,9 +5,13 @@ import Link from "next/link";
 import anime from "animejs";
 import Image from "next/image";
 import { get, set } from "idb-keyval";
-import { loadCollectedArtifacts } from "../../context/IndexedDB"; // adjust path as necessary
+import {
+	loadCollectedArtifacts,
+	getTutorialCompleted,
+	setTutorialCompleted,
+} from "../../context/IndexedDB"; // adjust path as necessary
 import { motion } from "framer-motion";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 export default function ExhibitClient({ exhibit, id }) {
 	// Local state for controlling the intro sequence
@@ -16,6 +20,11 @@ export default function ExhibitClient({ exhibit, id }) {
 	// New state to hold the updated artifact list and found count
 	const [artifacts, setArtifacts] = useState(exhibit.items);
 	const [foundCount, setFoundCount] = useState(0);
+
+	const [showTutOverlay, setShowTutOverlay] = useState(false);
+	const [targetRect, setTargetRect] = useState(null);
+	const firstArtifactRef = useRef(null);
+	const [firstArtifactLoaded, setFirstArtifactLoaded] = useState(false);
 
 	const introRef = useRef(null);
 	const headingRef = useRef(null);
@@ -27,19 +36,38 @@ export default function ExhibitClient({ exhibit, id }) {
 			duration: 800,
 			easing: "easeInOutQuad",
 			complete: async () => {
-				await set(`seenIntro-${id}`, true);
+				if (!showTutOverlay) {
+					await set(`seenIntro-${id}`, true);
+				}
 				setShowArtifacts(true);
 			},
 		});
+	};
+
+	const handleSkipClick = async () => {
+		await setTutorialCompleted();
+		setShowTutOverlay(false);
 	};
 
 	// When component mounts, check if the intro has been seen.
 	useEffect(() => {
 		const checkIntro = async () => {
 			const seen = await get(`seenIntro-${id}`);
+			const t = await getTutorialCompleted();
+
 			setShowArtifacts(seen === true);
+
+			if (t) {
+				setShowTutOverlay(false);
+			} else {
+				setShowTutOverlay(true);
+				setShowArtifacts(true);
+				console.log("setting showartifacts to false");
+			}
+
 			setIsLoading(false);
 		};
+
 		checkIntro();
 	}, [id]);
 
@@ -147,6 +175,14 @@ export default function ExhibitClient({ exhibit, id }) {
 			.add({ targets: ".intro-enter", opacity: [0, 1] });
 	}, [isLoading, showArtifacts, id]);
 
+	useEffect(() => {
+		if (showTutOverlay) {
+			document.body.style.overflow = "hidden";
+		} else {
+			document.body.style.overflow = "auto";
+		}
+	}, [showTutOverlay]);
+
 	// Render the intro screen or the artifact list
 	if (isLoading) return null;
 	return (
@@ -209,10 +245,53 @@ export default function ExhibitClient({ exhibit, id }) {
 				</div>
 			) : (
 				<main className="min-h-screen w-full relative bg-white">
+					{showTutOverlay && firstArtifactLoaded && (
+						<motion.div
+							className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-75 z-[2000]"
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							transition={{ duration: 0.6, ease: "easeOut", delay: 0.5 }}
+						>
+							<div className="relative z-60 px-8 pt-[150px] pb-[56px] flex flex-col w-full h-full mx-auto">
+								<div className="fixed top-0 left-0 right-0 w-full pr-[23px] pt-[23px] flex justify-end z-40">
+									<button
+										className="bg-blue-2 text-black text-body font-medium font-body1 px-6 py-2 rounded-[50px] flex items-center gap-[2px]"
+										onClick={handleSkipClick}
+									>
+										Skip Tutorial
+										<img src="/sites/blue/icons/right-arrow-black.svg" alt="Arrow" className="w-[26px] h-[25px]"/>
+									</button>
+								</div>
+
+								{targetRect && firstArtifactLoaded && (
+									<div
+										className="absolute flex flex-col"
+										style={{
+											top: targetRect?.bottom,
+											left: targetRect?.left,
+											width: targetRect?.width,
+										}}
+									>
+										<div
+											className="mx-auto mb-[-1px] transform -translate-x-1/2 w-0 h-0 border-x-8 border-x-transparent border-b-8 border-b-blue-5 mt-4"
+											style={{
+												top: targetRect?.bottom,
+												left: targetRect?.left,
+											}}
+										/>
+										<div className="text-body font-body1 text-center bg-blue-5 rounded-[8px] border-0 py-1">
+											Choose an object
+										</div>
+									</div>
+								)}
+							</div>
+						</motion.div>
+					)}
 					<motion.div
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
 						transition={{ duration: 0.6, ease: "easeOut" }}
+						className={`${showTutOverlay ? "pointer-events-none" : ""}`}
 					>
 						<img
 							src="/sites/blue/images/paper.png"
@@ -223,7 +302,7 @@ export default function ExhibitClient({ exhibit, id }) {
 						<div className="sticky-header fixed top-0 left-0 right-0 w-full bg-white flex flex-col justify-center items-center pt-2 px-2">
 							<img
 								src="/sites/blue/images/paper.png"
-								className="w-full h-full absolute z-0 object-cover"
+								className="w-full h-full absolute z-0 top-0 object-cover"
 								alt="Paper"
 							/>
 							{/* Home button */}
@@ -264,29 +343,39 @@ export default function ExhibitClient({ exhibit, id }) {
 							<div className="w-full mx-auto flex flex-col gap-4 items-center">
 								{artifacts
 									.filter((artifact, index) => index % 2 === 0)
-									.map((artifact) => (
+									.map((artifact, index) => (
 										<Link
 											key={artifact.id}
+											id={index === 0 ? "first-artifact" : undefined}
+											ref={index === 0 ? firstArtifactRef : undefined}
 											className={`relative flex flex-col items-center w-full p-4 rounded-md cursor-pointer ${
 												artifact.userFound ? "bg-blue-2" : "bg-blue-3"
+											} ${
+												showTutOverlay && index == 0
+													? "z-[3000] pointer-events-auto"
+													: ""
 											}`}
 											href={`/exhibit/${id}/${artifact.id}`}
 										>
 											<Image
 												src={artifact.imageURL}
 												alt={artifact.name}
-												className={
-													artifact.userFound
-														? "max-h-[220px] max-w-[120px] object-contain opacity-0 transition-opacity duration-300"
-														: "filter grayscale max-h-[220px] max-w-[120px] object-contain opacity-0 transition-opacity duration-300"
-												}
+												className={`${
+													artifact.userFound ? "" : "filter grayscale"
+												} max-h-[220px] max-w-[120px] object-contain opacity-0 transition-opacity duration-300`}
 												width={120}
 												height={220}
 												placeholder="blur"
 												blurDataURL="/sites/blue/images/placeholder.png"
-												onLoad={(e) =>
-													e.currentTarget.classList.remove("opacity-0")
-												}
+												onLoad={(e) => {
+													e.currentTarget.classList.remove("opacity-0");
+													if (firstArtifactRef.current) {
+														setFirstArtifactLoaded(true);
+														const rect =
+															firstArtifactRef.current.getBoundingClientRect();
+														setTargetRect(rect);
+													}
+												}}
 											/>
 
 											<p className="mt-2 text-body font-body1 text-gray-1 text-center">
@@ -312,6 +401,7 @@ export default function ExhibitClient({ exhibit, id }) {
 														artifact.justFound
 															? {
 																	duration: 2,
+																	delay: 0.8,
 																	ease: "easeOut",
 																	type: "spring",
 																	bounce: 0.4,
@@ -338,11 +428,9 @@ export default function ExhibitClient({ exhibit, id }) {
 											<Image
 												src={artifact.imageURL}
 												alt={artifact.name}
-												className={
-													artifact.userFound
-														? "max-h-[220px] max-w-[120px] object-contain opacity-0 transition-opacity duration-300"
-														: "filter grayscale max-h-[220px] max-w-[120px] object-contain opacity-0 transition-opacity duration-300"
-												}
+												className={`${
+													artifact.userFound ? "" : "filter grayscale"
+												} max-h-[220px] max-w-[120px] object-contain opacity-0 transition-opacity duration-300`}
 												width={120}
 												height={220}
 												placeholder="blur"
@@ -375,6 +463,7 @@ export default function ExhibitClient({ exhibit, id }) {
 														artifact.justFound
 															? {
 																	duration: 2,
+																	delay: 0.8,
 																	ease: "easeOut",
 																	type: "spring",
 																	bounce: 0.4,

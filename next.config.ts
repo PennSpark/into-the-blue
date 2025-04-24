@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   /* config options here */
   output: 'export',
   basePath: '/sites/blue',
+  assetPrefix: '/sites/blue',
   trailingSlash: true,
   images: {unoptimized: true},
   typescript: {
