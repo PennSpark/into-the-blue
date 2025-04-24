@@ -7,7 +7,7 @@ import Link from "next/link";
 import MuseumMap from "@/components/MuseumMap";
 import ProgressStars from '@/components/ProgressStars';
 import ProgressBar from '@/components/ProgressBar';
-import FinishHuntButton from '@/components/FinishHuntButton';
+import MilestoneModal from '@/components/MilestoneModal'; // Import the MilestoneModal component
 import { getMetrics, loadCollectedArtifacts } from "./context/IndexedDB";
 import { Exhibit } from "@/app/types"; // Import the Exhibit type
 
@@ -92,6 +92,13 @@ export default function Home() {
       <main className="flex flex-col items-center gap-6 pt-6 px-8 pb-20">
         <ProgressStars objectsFound={totalObjectsFound} totalObjects={totalObjects} />
         
+        {/* Add the MilestoneModal component here */}
+        <MilestoneModal 
+          objectsFound={totalObjectsFound} 
+          totalObjects={totalObjects} 
+          activeTab={activeTab} 
+        />
+        
         <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
         
         {activeTab === 'list' ? (
@@ -102,8 +109,8 @@ export default function Home() {
           </div>
         )}
 
-        {/* Floating buttons */}
-        <div className="fixed bottom-0 w-full px-5 py-3 flex justify-between z-40"
+       {/* Floating buttons */}
+       <div className="fixed bottom-0 w-full px-5 py-3 flex justify-end z-40"
           style={{
             background:
               "linear-gradient(to bottom, rgba(254,252,247,0) 0%, rgba(255,254,253,0.85) 40.5%, #FFFEFD 100%)",
@@ -115,8 +122,6 @@ export default function Home() {
               <p className="font-medium text-base">Sticker Book</p>
             </div>
           </Link>
-          
-          <FinishHuntButton objectsFound={totalObjectsFound} />
         </div>
       </main>
     </div>

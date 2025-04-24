@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 
 function getLineEndpoint(section: MapSection): { x: number; y: number } {
@@ -44,6 +44,31 @@ interface MapSection extends Region {
   dotX: number;
   dotY: number;
 }
+
+// Level Label component
+const LevelLabel: React.FC<{
+  topWord: string;
+  bottomWord: string;
+  top: number;
+}> = ({ topWord, bottomWord, top }) => {
+  return (
+    <div 
+      className="absolute font-dm-sans"
+      style={{
+        left: 30,
+        top,
+        fontSize: '17px',
+        letterSpacing: '-0.02em',
+        lineHeight: '1.2',
+        textAlign: 'left',
+        fontWeight: 900,
+        color: 'rgba(51, 61, 55, 0.5)'
+      }}
+    >
+      {topWord}<br />{bottomWord}
+    </div>
+  );
+};
 
 const DecorativeShape: React.FC<{
   x: number;
@@ -174,13 +199,13 @@ if (missingPositions.length > 0) {
     };
   });
 
-  // Updated toggle function using Next.js router
+  // Modified toggle function with fixed auto-navigation
   const toggleSection = (sectionName: string, path: string) => {
-    if (activeSection === sectionName) {
-      router.push(path); // Navigate using Next.js
-    } else {
-      setActiveSection(sectionName);
-    }
+    setActiveSection(sectionName);
+    
+    setTimeout(() => {
+      router.push(path);
+    }, 345); 
   };
 
   const getPopupPosition = (section: MapSection) => {
@@ -190,8 +215,11 @@ if (missingPositions.length > 0) {
       : { x: centerX, y: section.y + section.height + 20 };
   };
 
+  // Background clicks no longer cancel navigation
   const handleBackgroundClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) setActiveSection(null);
+    if (e.target === e.currentTarget) {
+      setActiveSection(null);
+    }
   };
 
   const renderShadows = () =>
@@ -294,10 +322,15 @@ if (missingPositions.length > 0) {
 
   return (
     <>
-    <p className="w-full max-w-md flex flex-col gap-[16px] pb-[16px] text-center">Double-tap on a gallery area to begin!</p>
+    <p className="w-full max-w-md flex flex-col gap-[16px] pb-[16px] text-center font-semibold text-gray1">Select the gallery you're visiting!</p>
     <div className="relative w-full" style={{ height: 'calc(100vh - 280px)' }}>
       <div style={{ transform: 'scale(0.81)', transformOrigin: 'top left' }}>
         <div className="relative" style={{ height: 800, width: '100%', minWidth: '100%' }} onClick={handleBackgroundClick}>
+          {/* Level Labels */}
+          <LevelLabel topWord="UPPER" bottomWord="LEVEL" top={100} />
+          <LevelLabel topWord="MAIN" bottomWord="LEVEL" top={340} />
+          <LevelLabel topWord="LOWER" bottomWord="LEVEL" top={520} />
+          
           {renderShadows()}
           <DecorativeShape x={172} y={323} width={100} height={22} backgroundColor="#BCCAF0" borderRadius="10%" rotate={22} skew={{ x: -45, y: 0 }} />
           <DecorativeShape x={210} y={118} width={125} height={18} backgroundColor="#BCCAF0" borderRadius="10%" rotate={22} skew={{ x: -45, y: 0 }} />
