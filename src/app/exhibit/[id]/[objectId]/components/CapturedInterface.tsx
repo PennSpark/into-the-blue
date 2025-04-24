@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
+import { setTutorialCompleted } from "@/app/context/IndexedDB";
+import { useRouter } from "next/navigation";
 
 export default function CapturedInterface({
 	image,
@@ -13,6 +15,12 @@ export default function CapturedInterface({
 	artifact: Artifact;
 	returning: boolean;
 }) {
+	const router = useRouter();
+	const handleContinueClick = async () => {
+		await setTutorialCompleted();
+		router.push(`/exhibit/${artifact.exhibitID}`);
+	};
+
 	return (
 		<div className="w-full flex flex-col gap-5 items-center relative">
 			{/* Dots Layer */}
@@ -146,13 +154,13 @@ export default function CapturedInterface({
 						transition={{ duration: 0.3, delay: 0.4 }}
 						className="mt-4 flex justify-center fixed right-0 left-0 bottom-12"
 					>
-						<Link
-							href={`/exhibit/${artifact.exhibitID}`}
+						<button
+							onClick={handleContinueClick}
 							className="bg-[#333D37] text-white text-[16px] px-6 py-2 rounded-full shadow-md hover:bg-[#444D47] transition flex items-center"
 						>
 							<span className="mr-2">Continue</span>
 							<FaArrowRight style={{ width: "20px", height: "18px" }} />
-						</Link>
+						</button>
 					</motion.div>
 				)}
 			</div>

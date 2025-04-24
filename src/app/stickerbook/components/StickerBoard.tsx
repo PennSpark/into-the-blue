@@ -9,9 +9,6 @@ import { saveSticker, loadImageByName, loadAllStickers, loadGridBg, saveGridBg, 
 
 import Sticker from "./Sticker";
 
-// import StickerModal from "./StickerModal";
-// import LabelModal from "./LabelModal";
-// import GridModal from "./GridModal";
 import Modal from "./Modal";
 
 import './stickerboard.css'
@@ -64,6 +61,7 @@ const StickerBoard: React.FC = () => {
   const [activeStickerId, setActiveStickerId] = useState<number | null>(null);
   const [menuSelection, setMenuSelection] = useState<string | null>(null);
   const [gridBg, setGridBg] = useState<string>("var(--Warm-White)");
+  const [showFinishHint, setShowFinishHint] = useState(true);
 
   const router = useRouter();
 
@@ -195,21 +193,96 @@ const StickerBoard: React.FC = () => {
     deleteStickerById(id);
   };
 
+  const uniqueCount = Array.from(
+    new Set(
+      stickers
+        .filter(sticker => !sticker.isLabel)
+        .map(sticker => sticker.imageName)
+    )
+  ).length;
+
+  const handleAnyClick = () => {
+    if (showFinishHint) setShowFinishHint(false);
+  };
 
   return (
-    <div className='relative h-[100svh] w-[100svw] grid-bg-gray flex flex-col justify-center items-center bg-gray-500 overflow-hidden gap-[0.5svh]'>
-      <div className='w-[42.75svh] h-[9svh] py-[2.3svh] flex flex-row justify-between items-center'>
-        <button onClick={() => router.back()}
-          className='bg-warm-white border-2 border-blue-3 flex justify-center items-center rounded-full w-fit h-fit px-3 py-2'>
-          <Image src='/sites/blue/icons/arrow-stroke.svg' className='w-4 h-fit' width={100} height={100} alt='back' />
+    <div
+      className='relative h-[100svh] w-[100svw] grid-bg-gray flex flex-col justify-center items-center bg-gray-500 overflow-hidden gap-[0.5svh]'
+      onClick={handleAnyClick}
+    >
+      
+      {/* Header row with back + finish button */}
+      <div className='w-[42.75svh] h-[9svh] py-[2.3svh] flex flex-row justify-between items-center relative'>
+        <button
+          onClick={() => router.back()}
+          className='bg-warm-white border-2 border-blue-3 flex justify-center items-center rounded-full w-fit h-fit px-3 py-2'
+        >
+          <Image
+            src='/sites/blue/icons/arrow-stroke.svg'
+            className='w-4 h-fit'
+            width={100}
+            height={100}
+            alt='back'
+          />
         </button>
-        
-        {/* Count unique stickers based on src */}
-        <FinishHuntButton objectsFound={
-          Array.from(new Set(stickers.map(sticker => sticker.imageName))).length
-        } />
-        
+
+        <FinishHuntButton objectsFound={uniqueCount} />
+
+        {uniqueCount < 3 && (
+          <div
+            onClick={e => e.stopPropagation()}
+            className={`
+              absolute
+              bottom-0
+              right-[4svh]
+              translate-x-[20%]
+              translate-y-[80%]
+              flex
+              flex-col
+              items-start
+              z-50
+
+              transition-opacity
+              duration-300
+              ease-in-out
+
+              ${showFinishHint
+                ? "opacity-100 pointer-events-auto"
+                : "opacity-0 pointer-events-none"
+              }
+            `}
+          >
+            {/* triangle “carrot” */}
+            <div
+              className="
+                w-0 h-0
+                border-l-[1svh] border-l-transparent
+                border-r-[1svh] border-r-transparent
+                border-b-[1svh] border-b-green
+                mb-[-1px]
+                ml-[27svh]
+              "
+            />
+
+            {/* modal box */}
+            <div
+              className="
+                bg-green
+                text-white
+                text-[14px]
+                font-body1
+                rounded-[8px]
+                py-1
+                px-2
+                shadow-lg
+              "
+            >
+              Place at least three unique artifact stickers to finish your hunt!
+            </div>
+          </div>
+        )}
       </div>
+
       <div
         ref={boardRef}
         id="sticker-board"
