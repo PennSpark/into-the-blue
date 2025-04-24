@@ -16,6 +16,8 @@ import {
 	clearGridSettings,
 	clearStickers,
 	getTutorialCompleted,
+	clearIntroAnimations,
+	clearTutorialCompletion,
 } from "../context/IndexedDB";
 
 export default function WelcomePage() {
@@ -58,12 +60,12 @@ export default function WelcomePage() {
 		// Fade out first content after 3 seconds
 		const fadeOutTimer = setTimeout(() => {
 			setShowFirstContent(false);
-		}, 3000);
+		}, 2000);
 
 		// Fade in second content after first fades out
 		const fadeInTimer = setTimeout(() => {
 			setShowSecondContent(true);
-		}, 4000);
+		}, 2700);
 
 		return () => {
 			clearTimeout(fadeOutTimer);
@@ -122,6 +124,8 @@ export default function WelcomePage() {
 		await clearVisitedExhibits();
 		await clearGridSettings();
 		await clearStickers();
+		await clearIntroAnimations();
+		await clearTutorialCompletion(); 
 		await saveMetrics({
 			totalObjectsFound: 0,
 			totalExhibitsVisited: 0,

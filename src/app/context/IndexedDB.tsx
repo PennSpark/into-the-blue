@@ -1,3 +1,6 @@
+import { keys, del } from 'idb-keyval';
+
+
 const DB_NAME = "ImageDatabase";
 const STORE_NAME = "images";
 const METRICS_STORE = "metrics";
@@ -196,6 +199,42 @@ export const loadAllImages = async (): Promise<
 		request.onerror = () => reject("Failed to load images");
 	});
 };
+
+// In src/app/context/IndexedDB.js
+export async function clearIntroAnimations() {
+    try {
+        // Get all keys in the database
+        const allKeys = await keys();
+        
+        // Filter for keys that start with "seenIntro-"
+        const introKeys = allKeys.filter(key => 
+            typeof key === 'string' && key.startsWith('seenIntro-')
+        );
+        
+        // Delete each key
+        await Promise.all(introKeys.map(key => del(key)));
+        
+        console.log(`Cleared ${introKeys.length} intro animation flags`);
+    } catch (error) {
+        console.error('Error clearing intro animations:', error);
+    }
+}
+
+export async function clearTutorialCompletion() {
+	try {
+	  const db = await openDB();
+	  const tx = db.transaction("tutorial", "readwrite");
+	  const store = tx.objectStore("tutorial");
+	  store.delete("main");
+	  
+	  return new Promise<void>((resolve, reject) => {
+		tx.oncomplete = () => resolve();
+		tx.onerror = () => reject("Failed to clear tutorial completion");
+	  });
+	} catch (error) {
+	  console.error('Error clearing tutorial completion:', error);
+	}
+  }
 
 //delete images (for convenience)
 export const clearImages = async () => {

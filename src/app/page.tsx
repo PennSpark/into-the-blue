@@ -16,7 +16,6 @@ import {
 } from "./context/IndexedDB";
 import { Exhibit } from "@/app/types"; // Import the Exhibit type
 import { useRouter } from "next/navigation";
-import { FaArrowRight } from "react-icons/fa";
 import { motion } from "framer-motion";
 
 // Add this interface at the top of your file, or import it if defined elsewhere

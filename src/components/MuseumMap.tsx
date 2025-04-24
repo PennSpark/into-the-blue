@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 function getLineEndpoint(section: MapSection): { x: number; y: number } {
@@ -322,7 +322,7 @@ if (missingPositions.length > 0) {
 
   return (
     <>
-    <p className="w-full max-w-md flex flex-col gap-[16px] pb-[16px] text-center font-semibold text-gray1">Select the gallery you're visiting!</p>
+    <p className="w-full max-w-md flex flex-col gap-[16px] pb-[16px] text-center font-semibold text-gray1">Select the gallery you&apos;re visiting!</p>
     <div className="relative w-full" style={{ height: 'calc(100vh - 280px)' }}>
       <div style={{ transform: 'scale(0.81)', transformOrigin: 'top left' }}>
         <div className="relative" style={{ height: 800, width: '100%', minWidth: '100%' }} onClick={handleBackgroundClick}>

@@ -12,8 +12,6 @@ interface MilestoneModalProps {
 const MilestoneModal: React.FC<MilestoneModalProps> = ({ 
   objectsFound, 
   totalObjects,
-  activeTab,
-  fullScreenImagePath = '/sites/blue/images/FullCompletion.png'
 }) => {
   const [showFirstModal, setShowFirstModal] = useState(false);
   const [showSecondModal, setShowSecondModal] = useState(false);
@@ -26,9 +24,6 @@ const MilestoneModal: React.FC<MilestoneModalProps> = ({
   const [firstModalOpacity, setFirstModalOpacity] = useState(1);
   const [secondModalOpacity, setSecondModalOpacity] = useState(1);
   const [thirdModalOpacity, setThirdModalOpacity] = useState(1);
-
-  // Add a new state to track the opacity during fade-in
-  const [fadeInProgress, setFadeInProgress] = useState(false);
 
   // Milestone thresholds
   const FIRST_MILESTONE = 3;
@@ -170,7 +165,7 @@ const MilestoneModal: React.FC<MilestoneModalProps> = ({
         clearTimeout(hideTimer);
       };
     }
-  }, []);
+  }, [FINAL_MILESTONE, objectsFound]);
 
   // For the first modal (OK button)
   const handleDismissFirst = () => {
@@ -302,7 +297,7 @@ const MilestoneModal: React.FC<MilestoneModalProps> = ({
           <div className="bg-[#333D37] text-warm-white p-4 rounded-lg max-w-[14rem] shadow-lg">
             <div className="flex flex-col space-y-2.5 text-center">
               <p className="text-base font-semibold leading-tight mx-2">
-                Congratulations! You've found every artifact. Click here to finalize your stickerbook and complete the hunt.
+                Congratulations! You&apos;ve found every artifact. Click here to finalize your stickerbook and complete the hunt.
               </p>
               {/* No OK button for the third milestone */}
             </div>

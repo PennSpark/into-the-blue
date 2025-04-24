@@ -144,11 +144,10 @@ export default function StatsPage() {
                 await navigator.share(shareData);
                 console.log('Successful share');
             } else {
-                alert('Sharing not supported (yet!)');
+                alert('Sharing is not supported on this device.');
             }
         } catch (error) {
             console.error('Error capturing or sharing:', error);
-            alert('Something went wrong trying to share.');
         }
     };
 

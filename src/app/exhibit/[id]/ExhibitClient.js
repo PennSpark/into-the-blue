@@ -11,7 +11,7 @@ import {
 	setTutorialCompleted,
 } from "../../context/IndexedDB"; // adjust path as necessary
 import { motion } from "framer-motion";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa";
 
 export default function ExhibitClient({ exhibit, id }) {
 	// Local state for controlling the intro sequence
@@ -191,7 +191,7 @@ export default function ExhibitClient({ exhibit, id }) {
 				// Intro Sequence View
 				<div
 					ref={introRef}
-					className="w-screen h-screen relative bg-white [background:linear-gradient(180deg,#FFF5DD_0%,#3E65C8_100%)]"
+					className="w-screen h-screen relative bg-white [background:linear-gradient(180deg,#FCF4E0_0%,#89AFEF_100%)]"
 				>
 					{/* Centered Content */}
 					<div className="h-full flex flex-col items-center justify-center">
