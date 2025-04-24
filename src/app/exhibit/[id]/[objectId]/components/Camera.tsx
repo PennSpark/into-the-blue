@@ -234,7 +234,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
   const rejectClippedImage = async () => {
     setImage(null);
-    setText("Line up the image to the outline");
+    setText("Pinch to zoom and align with outline");
     setImagePath(`/sites/blue/images/artifacts/${artifact.id}.png`);
   };
 

@@ -31,7 +31,7 @@ interface StickerData {
 {/* open db, TODO: initialize found objects array */}
 export const openDB = (): Promise<IDBDatabase> => {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, 4); // bump version if needed
+    const request = indexedDB.open(DB_NAME, 5); // bump version if needed
 
     request.onupgradeneeded = (event) => {
       const db = (event.target as IDBOpenDBRequest).result;
