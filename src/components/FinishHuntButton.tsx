@@ -27,9 +27,8 @@ const FinishHuntButton: React.FC<FinishHuntButtonProps> = ({ objectsFound = 0 })
         onClick={handleButtonClick}
         className={`cursor-${insufficientObjectsFound ? 'default' : 'pointer'} ${insufficientObjectsFound ? 'opacity-50' : ''}`}
       >
-        <div className="flex items-center text-green border-2 border-green w-fit h-[44px] gap-[6px] px-[20px] rounded-full">
+        <div className="flex items-center bg-green text-warm-white w-fit h-fit px-4 py-1 rounded-full">
           <p className="font-medium text-base">Finish Hunt</p>
-          <img src="/sites/blue/icons/arrow.svg" alt="Finish Hunt" className="w-[26px] h-[25px]" />
         </div>
       </div>
       
