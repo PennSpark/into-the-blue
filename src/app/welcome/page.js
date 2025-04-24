@@ -181,10 +181,6 @@ export default function WelcomePage() {
 						Presented by
 					</p>
 					<div className="flex items-center justify-center gap-[16px]">
-						{/* <Image className="w-[31px] h-[31px]"
-                            src="/sites/blue/welcome-assets/spark.png" alt="Spark" width={100} height={100} 
-                        />
-                        <p className="text-blue-black font-FibraOneSemi text-base">PENN SPARK</p> */}
 						<Image
 							className="w-[30vw] h-auto"
 							src="/sites/blue/icons/PennSparkLogo.png"
@@ -206,11 +202,6 @@ export default function WelcomePage() {
 							width={500}
 							height={500}
 						/>
-
-						{/* <Image className="w-[31px] h-[31px] padding-l-[1px]"
-                            src="/sites/blue/welcome-assets/penn-museum.png" alt="Spark" width={100} height={100} 
-                        />
-                        <p className="text-blue-black font-FibraOneSemi text-base">PENN MUSEUM</p> */}
 					</div>
 				</div>
 			</div>

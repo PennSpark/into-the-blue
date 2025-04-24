@@ -11,11 +11,11 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-	title: "Into the Blue",
-	description: "Built by Penn Spark",
-	icons: {
-		icon: "images/favicon.png",
-	},
+  title: "Into the Blue",
+  description: "Built by Penn Spark",
+  icons: {
+    icon: "/sites/blue/images/favicon.png"
+  }
 };
 
 export default function RootLayout({
