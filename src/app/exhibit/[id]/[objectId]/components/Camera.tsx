@@ -290,7 +290,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 				>
 					<div className="relative z-60 px-[25%] flex flex-col w-full h-full mx-auto items-cetner justify-center">
 						<p className="text-[24px] font-semibold text-center text-white mx-auto leading-none mb-[30px]">
-							Look for the blue object in the Rome gallery!
+							Look for this blue artifact in the {artifact.exhibit || "gallery"}!
 						</p>
 						<button
 							className="bg-blue-5 text-green text-body font-body1 px-4 py-2 w-fit rounded-[50px] mx-auto"
