@@ -2,7 +2,7 @@ import { Artifact } from "../../../../types";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
+import { FaArrowRight } from "react-icons/fa";
 import { setTutorialCompleted } from "@/app/context/IndexedDB";
 import { useRouter } from "next/navigation";
 

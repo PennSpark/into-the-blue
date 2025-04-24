@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
-import { FaLightbulb, FaRegLightbulb } from "react-icons/fa"; // Importing icons from react-icons
 import { getTutorialCompleted, saveImage } from "../../../../context/IndexedDB";
 import Webcam from "react-webcam";
 import Image from "next/image";
@@ -24,7 +23,7 @@ const videoConstraints = {
 };
 
 export default function Camera({ artifact, onImageCaptured }: CameraProps) {
-  const [imagePath, setImagePath] = useState(`/sites/blue/images/artifacts/${artifact.id}.png`);
+  const [, setImagePath] = useState(`/sites/blue/images/artifacts/${artifact.id}.png`);
   const webcamRef = useRef<Webcam>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
@@ -180,7 +179,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 		};
 
 		requestAnimationFrame(processWebcamFeed);
-	}, [canvasSize, clipPathData]);
+	}, [canvasSize, clipPathData, zoom]);
 
 	const captureImage = async () => {
 		if (webcamRef.current && canvasRef.current) {

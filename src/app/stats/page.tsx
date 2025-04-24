@@ -190,7 +190,7 @@ export default function StatsPage() {
         slidesToShow: 1,
         slidesToScroll: 1,
         swipeToSlide: true,
-        beforeChange: (_: any, next: number) => setActiveSlide(next),
+        beforeChange: (_: number, next: number) => setActiveSlide(next),
         arrows: false,
         centerMode: true,
         centerPadding: '50px',

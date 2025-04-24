@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import { TutorialProvider } from "@/app/context/TutorialContext";
-import TutorialOverlay from "../components/TutorialOverlay";
 
 const dmSans = DM_Sans({
 	display: "swap",

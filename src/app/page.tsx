@@ -1,13 +1,12 @@
 "use client";
 
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo } from "react";
 import TabNavigation from "@/components/TabNavigation";
 import RegionList from "@/components/RegionList";
 import Link from "next/link";
 import MuseumMap from "@/components/MuseumMap";
 import ProgressStars from "@/components/ProgressStars";
 import ProgressBar from "@/components/ProgressBar";
-import FinishHuntButton from "@/components/FinishHuntButton";
 import {
 	getMetrics,
 	loadCollectedArtifacts,

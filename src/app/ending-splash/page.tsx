@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { getMetrics, saveMetrics } from "../context/IndexedDB";
 import Link from 'next/link';
 
 export default function WelcomePage() {
@@ -15,17 +14,6 @@ export default function WelcomePage() {
             setShowContent(true);
         }, 100);
     }, []);
-
-    async function updateStickerbookViewTime() {
-        const current = await getMetrics();
-        const stickerbookViewTime = Date.now();
-        await saveMetrics({
-            totalObjectsFound: current?.totalObjectsFound || 0,
-            totalExhibitsVisited: current?.totalExhibitsVisited || 0,
-            startTime: current?.startTime || Date.now(),
-            stickerbookViewTime,
-        });
-    }
 
     return (
         <main

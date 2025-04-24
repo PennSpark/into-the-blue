@@ -18,11 +18,9 @@ export default function TutorialOverlay() {
 			setTargetRect(el.getBoundingClientRect());
 			console.log("element found");
 		}
-	}, [step, active]);
+	}, [step, active, stop]);
 
 	if (!active || !targetRect) return null;
-
-	const stepData = tutorialSteps[step];
 
 	return (
 		<div

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import FinishHuntButton from "@/components/FinishHuntButton";
@@ -69,7 +69,53 @@ const StickerBoard: React.FC = () => {
     setGridBg(color);
     saveGridBg(color);
   };
+
+  const updateSticker = useCallback((id: number, changes: Partial<StickerData>) => {
+    setStickers((prev) => {
+      const updated = prev.map((s) =>
+        s.id === id ? { ...s, ...changes } : s
+      );
   
+      const current = updated.find((s) => s.id === id);
+      if (current) {
+        saveSticker(extractStoredFields(current));
+      }
+  
+      return updated;
+    });
+  }, []);
+
+  const moveSticker = useCallback((id: number, newX: number, newY: number) => {
+    setStickers((prev) =>
+      prev.map((sticker) =>
+        sticker.id === id ? { ...sticker, x: newX, y: newY } : sticker
+      )
+    );
+    updateSticker(id, { x: newX, y: newY });
+  }, [updateSticker]);
+
+  const resizeSticker = useCallback((id: number, newWidth: number) => {
+    setStickers((prev) =>
+      prev.map((sticker) =>
+        sticker.id === id ? { ...sticker, width: newWidth } : sticker
+      )
+    );
+    updateSticker(id, { width: newWidth });
+  }, [updateSticker]);
+
+  const rotateSticker = useCallback((id: number, newRotation: number) => {
+    setStickers((prev) =>
+      prev.map((sticker) =>
+        sticker.id === id ? { ...sticker, rotation: newRotation } : sticker
+      )
+    );
+    updateSticker(id, { rotation: newRotation });
+  }, [updateSticker]);
+
+  const deleteSticker = useCallback((id: number) => {
+    setStickers((prev) => prev.filter((sticker) => sticker.id !== id));
+    deleteStickerById(id);
+  }, []);
 
   useEffect(() => {
     loadGridBg().then((savedColor) => {
@@ -78,8 +124,7 @@ const StickerBoard: React.FC = () => {
     loadAllStickers().then(async (saved) => {
       const hydrated = await Promise.all(
         saved.map(async (s) => {
-          // Add aspectRatio if it doesn't exist in the saved sticker
-          const aspectRatio = s.aspectRatio || 1; // Default to 1 if not present
+          const aspectRatio = s.aspectRatio || 1;
           
           return {
             ...s,
@@ -90,26 +135,24 @@ const StickerBoard: React.FC = () => {
             deleteSticker,
             active: false,
             setActiveSticker: setActiveStickerId,
-            aspectRatio, // Ensure aspectRatio is explicitly included
+            aspectRatio,
           };
         })
       );
       setStickers(hydrated);
     });
-  }, []);
+  }, [moveSticker, resizeSticker, rotateSticker, deleteSticker]);
 
   const addSticker = (imageName: string, isLabel: boolean) => {
     loadImageByName(imageName).then((blobUrl) => {
-      // Use window.Image instead of Image to reference the built-in constructor
       const tempImg = new window.Image();
       tempImg.onload = () => {
-        // Calculate the aspect ratio from the actual image
         const aspectRatio = tempImg.naturalHeight / tempImg.naturalWidth;
-        const standardWidth = 40; // Keep your standard width
+        const standardWidth = 40;
   
         const newSticker: StickerData = {
           id: Date.now(),
-          imageName, // save stable ID
+          imageName,
           src: isLabel ? imageName : (blobUrl || ''),
           x: 50 - standardWidth / 2,
           y: 50 - (aspectRatio * standardWidth) / 2,
@@ -129,68 +172,18 @@ const StickerBoard: React.FC = () => {
         saveSticker(extractStoredFields(stickerData));
       };
   
-      // Set the source to trigger the onload event
       tempImg.src = isLabel ? `/sites/blue/stickers/${imageName}` : (blobUrl || '');
     });
   };
-
-  const updateSticker = (id: number, changes: Partial<StickerData>) => {
-    setStickers((prev) => {
-      const updated = prev.map((s) =>
-        s.id === id ? { ...s, ...changes } : s
-      );
-  
-      const current = updated.find((s) => s.id === id);
-      if (current) {
-        saveSticker(extractStoredFields(current));
-      }
-  
-      return updated;
-    });
-  };
-  
 
   const setMenu = (menu: string) => {
     setMenuSelection(menu);
     setActiveStickerId(null);
   };
 
-  const moveSticker = (id: number, newX: number, newY: number) => {
-    setStickers((prev) =>
-      prev.map((sticker) =>
-        sticker.id === id ? { ...sticker, x: newX, y: newY } : sticker
-      )
-    );
-    updateSticker(id, { x: newX, y: newY });
-  };
-
   const handleDelete = async (id: number) => {
     await deleteStickerById(id);
     setStickers(prev => prev.filter(s => s.id !== id));
-  };
-  
-
-  const resizeSticker = (id: number, newWidth: number) => {
-    setStickers((prev) =>
-      prev.map((sticker) =>
-        sticker.id === id ? { ...sticker, width: newWidth } : sticker
-      )
-    );
-    updateSticker(id, { width: newWidth });
-  };
-
-  const rotateSticker = (id: number, newRotation: number) => {
-    setStickers((prev) =>
-      prev.map((sticker) =>
-        sticker.id === id ? { ...sticker, rotation: newRotation } : sticker
-      )
-    );
-    updateSticker(id, { rotation: newRotation });
-  };
-
-  const deleteSticker = (id: number) => {
-    setStickers((prev) => prev.filter((sticker) => sticker.id !== id));
-    deleteStickerById(id);
   };
 
   const uniqueCount = Array.from(
