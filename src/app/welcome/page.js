@@ -172,7 +172,7 @@ export default function WelcomePage() {
 			style={{ height: "calc(var(--vh, 1vh) * 100)" }}
 		>
 			<img
-				src="/sites/blue/images/paper.png"
+				src="/sites/blue/images/paper.webp"
 				className="w-full h-full absolute z-0 object-cover"
 				alt="Paper"
 			/>
@@ -189,7 +189,7 @@ export default function WelcomePage() {
 					<div className="flex items-center justify-center gap-[16px]">
 						<Image
 							className="w-[30vw] h-auto"
-							src="/sites/blue/icons/PennSparkLogo.png"
+							src="/sites/blue/icons/PennSparkLogo.webp"
 							alt="Spark"
 							width={500}
 							height={500}
@@ -203,7 +203,7 @@ export default function WelcomePage() {
 						/>
 						<Image
 							className="w-[40vw] h-auto"
-							src="/sites/blue/icons/PennMuseumLogo.png"
+							src="/sites/blue/icons/PennMuseumLogo.webp"
 							alt="Spark"
 							width={500}
 							height={500}
@@ -230,7 +230,7 @@ export default function WelcomePage() {
 					</div>
 					<div className="journey absolute left-0 right-0 top-[60px]">
 						<Image
-							src="/sites/blue/welcome-assets/journey.png"
+							src="/sites/blue/welcome-assets/journey.webp"
 							alt="Journey"
 							width={100}
 							height={100}
@@ -239,7 +239,7 @@ export default function WelcomePage() {
 					</div>
 					<div className="obj1 absolute left-[37px] top-[71px]">
 						<Image
-							src="/sites/blue/welcome-assets/object-1.png"
+							src="/sites/blue/welcome-assets/object-1.webp"
 							alt="obj1"
 							width={100}
 							height={100}
@@ -248,7 +248,7 @@ export default function WelcomePage() {
 					</div>
 					<div className="obj2 absolute left-[259.86px] top-[233.42px]">
 						<Image
-							src="/sites/blue/welcome-assets/object-2.png"
+							src="/sites/blue/welcome-assets/object-2.webp"
 							alt="obj2"
 							width={100}
 							height={100}
@@ -258,7 +258,7 @@ export default function WelcomePage() {
 					</div>
 					<div className="obj3 absolute left-[28.09px] top-[433px]">
 						<Image
-							src="/sites/blue/welcome-assets/object-3.png"
+							src="/sites/blue/welcome-assets/object-3.webp"
 							alt="obj3"
 							width={100}
 							height={100}
@@ -267,7 +267,7 @@ export default function WelcomePage() {
 					</div>
 					<div className="obj4 absolute left-[220px] top-[563px]">
 						<Image
-							src="/sites/blue/welcome-assets/object-4.png"
+							src="/sites/blue/welcome-assets/object-4.webp"
 							alt="obj4"
 							width={100}
 							height={100}
@@ -276,7 +276,7 @@ export default function WelcomePage() {
 					</div>
 					<div className="star1 absolute left-[4px] top-[52px]">
 						<Image
-							src="/sites/blue/welcome-assets/star1.png"
+							src="/sites/blue/welcome-assets/star1.webp"
 							alt="star"
 							width={100}
 							height={100}
@@ -285,7 +285,7 @@ export default function WelcomePage() {
 					</div>
 					<div className="star2 absolute left-[267px] top-[153px]">
 						<Image
-							src="/sites/blue/welcome-assets/star2.png"
+							src="/sites/blue/welcome-assets/star2.webp"
 							alt="star"
 							width={100}
 							height={100}
@@ -294,7 +294,7 @@ export default function WelcomePage() {
 					</div>
 					<div className="triangle absolute left-[283.94px] top-[345px] -rotate-[9.59]">
 						<Image
-							src="/sites/blue/welcome-assets/triangle-sticker.png"
+							src="/sites/blue/welcome-assets/triangle-sticker.webp"
 							alt="triangle"
 							width={100}
 							height={100}
@@ -303,7 +303,7 @@ export default function WelcomePage() {
 					</div>
 					<div className="star3 absolute left-[61px] top-[411px]">
 						<Image
-							src="/sites/blue/welcome-assets/star3.png"
+							src="/sites/blue/welcome-assets/star3.webp"
 							alt="star"
 							width={100}
 							height={100}
@@ -312,7 +312,7 @@ export default function WelcomePage() {
 					</div>
 					<div className="star4 absolute left-[8px] top-[533px]">
 						<Image
-							src="/sites/blue/welcome-assets/star4.png"
+							src="/sites/blue/welcome-assets/star4.webp"
 							alt="star"
 							width={100}
 							height={100}
@@ -321,7 +321,7 @@ export default function WelcomePage() {
 					</div>
 					<div className="star5 absolute left-[220px] top-[562px]">
 						<Image
-							src="/sites/blue/welcome-assets/star5.png"
+							src="/sites/blue/welcome-assets/star5.webp"
 							alt="star"
 							width={100}
 							height={100}
@@ -330,7 +330,7 @@ export default function WelcomePage() {
 					</div>
 					<div className="colors absolute left-[214.69px] top-[647px]">
 						<Image
-							src="/sites/blue/welcome-assets/colors-of-blue.png"
+							src="/sites/blue/welcome-assets/colors-of-blue.webp"
 							alt="star"
 							width={100}
 							height={100}
@@ -389,7 +389,7 @@ export default function WelcomePage() {
 						</p>
 						<Image
 							className="w-[50vw] h-auto"
-							src="/sites/blue/tutorial-assets/char1.png"
+							src="/sites/blue/tutorial-assets/char1.webp"
 							alt="Char1"
 							width={500}
 							height={500}
@@ -412,7 +412,7 @@ export default function WelcomePage() {
 						<p>Find this exhibit on the upper level of the Museum.</p>
 						<Image
 							className="w-[60vw] h-auto"
-							src="/sites/blue/tutorial-assets/char2.png"
+							src="/sites/blue/tutorial-assets/char2.webp"
 							alt="Char1"
 							width={500}
 							height={500}
@@ -436,7 +436,7 @@ export default function WelcomePage() {
 						</p>
 						<Image
 							className="w-[40vw] h-auto"
-							src="/sites/blue/tutorial-assets/char3.png"
+							src="/sites/blue/tutorial-assets/char3.webp"
 							alt="Char1"
 							width={500}
 							height={500}
@@ -459,7 +459,7 @@ export default function WelcomePage() {
 						</p>
 						<Image
 							className="w-[50vw] h-auto"
-							src="/sites/blue/tutorial-assets/char4.png"
+							src="/sites/blue/tutorial-assets/char4.webp"
 							alt="Char1"
 							width={500}
 							height={500}

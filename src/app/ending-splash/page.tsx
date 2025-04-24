@@ -27,7 +27,7 @@ export default function WelcomePage() {
             {/* First content */}
             <div className={`absolute inset-0 transition-opacity duration-1000 ${showContent ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
                 <div className="h-full flex flex-col items-center justify-center gap-16 z-10" style={{ height: "-webkit-fill-available"}}>
-                    <img src="/sites/blue/character/ending.png" alt="Character" className="w-[208px] " />
+                    <img src="/sites/blue/character/ending.webp" alt="Character" className="w-[208px] " />
                     <div className="flex flex-col items-center justify-center gap-4 z-10">
                         <p className="w-full text-center text-blue-black font-medium text-2xl leading-[1.75] px-[20px]">We hope you enjoyed your journey <i>Into the Blue!</i></p>
                         <div className="h-full flex flex-col items-center justify-center gap-[30px] z-10">
@@ -36,7 +36,7 @@ export default function WelcomePage() {
 
                                     <Image
                                         className="w-[30vw] h-auto"
-                                        src="/sites/blue/icons/PennSparkLogo.png"
+                                        src="/sites/blue/icons/PennSparkLogo.webp"
                                         alt="Spark"
                                         width={500}
                                         height={500}
@@ -52,7 +52,7 @@ export default function WelcomePage() {
                                 <Link href="https://penn.museum/" target="_blank" rel="noopener noreferrer">
                                     <Image
                                         className="w-[40vw] h-auto"
-                                        src="/sites/blue/icons/PennMuseumLogo.png"
+                                        src="/sites/blue/icons/PennMuseumLogo.webp"
                                         alt="Penn Museum"
                                         width={500}
                                         height={500}
@@ -60,7 +60,7 @@ export default function WelcomePage() {
                                 </Link>
 
                                 {/* <Image className="w-[31px] h-[31px] padding-l-[1px]"
-                                    src="/sites/blue/welcome-assets/penn-museum.png" alt="Spark" width={100} height={100} 
+                                    src="/sites/blue/welcome-assets/penn-museum.webp" alt="Spark" width={100} height={100} 
                                 />
                                 <p className="text-blue-black font-FibraOneSemi text-base">PENN MUSEUM</p> */}
                             </div>
