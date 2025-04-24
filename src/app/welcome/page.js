@@ -107,6 +107,8 @@ export default function WelcomePage() {
 
 	// Resets images, collected artifacts, and visited exhibits before resetting metrics.
 	const handleStartOver = async () => {
+		localStorage.clear();
+		sessionStorage.clear();
 		await clearImages();
 		await clearCollectedArtifacts();
 		await clearVisitedExhibits();

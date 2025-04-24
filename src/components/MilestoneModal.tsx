@@ -22,6 +22,11 @@ const MilestoneModal: React.FC<MilestoneModalProps> = ({
   const [imageOpacity, setImageOpacity] = useState(0);
   const [previousObjectsFound, setPreviousObjectsFound] = useState(objectsFound);
 
+  // Add a state to track the opacity of each modal
+  const [firstModalOpacity, setFirstModalOpacity] = useState(1);
+  const [secondModalOpacity, setSecondModalOpacity] = useState(1);
+  const [thirdModalOpacity, setThirdModalOpacity] = useState(1);
+
   // Milestone thresholds
   const FIRST_MILESTONE = 3;
   const SECOND_MILESTONE = 18;
@@ -47,7 +52,7 @@ const MilestoneModal: React.FC<MilestoneModalProps> = ({
       const timer = setTimeout(() => {
         setShowThirdModal(false);
         localStorage.setItem('thirdMilestoneDismissed', 'true');
-      }, 3000);
+      }, 5000);
       
       return () => clearTimeout(timer);
     }, 5000);
@@ -65,16 +70,23 @@ const MilestoneModal: React.FC<MilestoneModalProps> = ({
       if (objectsFound >= FIRST_MILESTONE && previousObjectsFound < FIRST_MILESTONE && !firstMilestoneDismissed) {
         setShowFirstModal(true);
       } else if (objectsFound >= SECOND_MILESTONE && previousObjectsFound < SECOND_MILESTONE && !secondMilestoneDismissed) {
-        // Show second milestone modal immediately
         setShowSecondModal(true);
         
-        // Auto-dismiss after 3 seconds
-        const timer = setTimeout(() => {
+        // Auto-dismiss with fade-out after 3 seconds
+        const fadeTimer = setTimeout(() => {
+          setSecondModalOpacity(0);
+        }, 2500); // Start fade 0.5s before hiding
+        
+        const hideTimer = setTimeout(() => {
           setShowSecondModal(false);
+          setSecondModalOpacity(1); // Reset for next time
           localStorage.setItem('secondMilestoneDismissed', 'true');
         }, 3000);
         
-        return () => clearTimeout(timer);
+        return () => {
+          clearTimeout(fadeTimer);
+          clearTimeout(hideTimer);
+        };
       } else if (objectsFound >= THIRD_MILESTONE && previousObjectsFound < THIRD_MILESTONE && !thirdMilestoneDismissed) {
         // For the third milestone (37 objects), show fullscreen image first
         displayFullScreenImage();
@@ -97,13 +109,21 @@ const MilestoneModal: React.FC<MilestoneModalProps> = ({
     } else if (objectsFound >= SECOND_MILESTONE && objectsFound < THIRD_MILESTONE && !secondMilestoneDismissed) {
       setShowSecondModal(true);
       
-      // Auto-dismiss after 3 seconds
-      const timer = setTimeout(() => {
+      // Auto-dismiss with fade-out after 3 seconds
+      const fadeTimer = setTimeout(() => {
+        setSecondModalOpacity(0);
+      }, 2500); // Start fade 0.5s before hiding
+      
+      const hideTimer = setTimeout(() => {
         setShowSecondModal(false);
+        setSecondModalOpacity(1); // Reset for next time
         localStorage.setItem('secondMilestoneDismissed', 'true');
       }, 3000);
       
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(fadeTimer);
+        clearTimeout(hideTimer);
+      };
     } else if (objectsFound >= THIRD_MILESTONE && !thirdMilestoneDismissed && objectsFound === FINAL_MILESTONE) {
       // Only for the third milestone (37/37 objects), show fullscreen image first
       displayFullScreenImage();
@@ -112,18 +132,35 @@ const MilestoneModal: React.FC<MilestoneModalProps> = ({
       setShowThirdModal(true);
       
       // Auto-dismiss after 3 seconds
-      const timer = setTimeout(() => {
+      const fadeTimer = setTimeout(() => {
+        setThirdModalOpacity(0);
+      }, 2500); // Start fade 0.5s before hiding
+      
+      const hideTimer = setTimeout(() => {
         setShowThirdModal(false);
+        setThirdModalOpacity(1); // Reset for next time
         localStorage.setItem('thirdMilestoneDismissed', 'true');
       }, 3000);
       
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(fadeTimer);
+        clearTimeout(hideTimer);
+      };
     }
   }, []);
 
+  // For the first modal (OK button)
   const handleDismissFirst = () => {
-    setShowFirstModal(false);
-    localStorage.setItem('firstMilestoneDismissed', 'true');
+    // Start fade out
+    setFirstModalOpacity(0);
+    
+    // Actually remove the modal after animation completes
+    setTimeout(() => {
+      setShowFirstModal(false);
+      // Reset opacity for next time
+      setFirstModalOpacity(1);
+      localStorage.setItem('firstMilestoneDismissed', 'true');
+    }, 500); // Match this to the transition duration
   };
 
   // First milestone modal (3 objects) - with OK button
@@ -142,12 +179,14 @@ const MilestoneModal: React.FC<MilestoneModalProps> = ({
             position: 'absolute',
             bottom: 75,
             right: 20,
+            opacity: firstModalOpacity,
+            transition: 'opacity 0.5s ease-out'
           }}
         >
           <div className="bg-[#333D37] text-warm-white p-4 rounded-lg max-w-[14rem] shadow-lg">
             <div className="flex flex-col space-y-2.5 text-center">
               <p className="text-base font-semibold leading-tight mx-2">
-                When you're ready, click here to finalize your stickerbook and finish the hunt.
+                When you&apos;re ready to leave the museum, click here to finalize your stickerbook and finish the hunt.
               </p>
               <button 
                 onClick={handleDismissFirst}
@@ -189,12 +228,14 @@ const MilestoneModal: React.FC<MilestoneModalProps> = ({
             position: 'absolute',
             bottom: 75,
             right: 20,
+            opacity: secondModalOpacity,
+            transition: 'opacity 0.5s ease-out'
           }}
         >
           <div className="bg-[#333D37] text-warm-white p-4 rounded-lg max-w-[14rem] shadow-lg">
             <div className="flex flex-col space-y-2.5 text-center">
               <p className="text-base font-semibold leading-tight mx-2">
-                Almost there! Click here to finalize your stickerbook and finish the hunt.
+                Remember, you can click here to finish your hunt anytime!
               </p>
               {/* No OK button for the second milestone */}
             </div>
@@ -231,12 +272,14 @@ const MilestoneModal: React.FC<MilestoneModalProps> = ({
             position: 'absolute',
             bottom: 75,
             right: 20,
+            opacity: thirdModalOpacity,
+            transition: 'opacity 0.5s ease-out'
           }}
         >
           <div className="bg-[#333D37] text-warm-white p-4 rounded-lg max-w-[14rem] shadow-lg">
             <div className="flex flex-col space-y-2.5 text-center">
               <p className="text-base font-semibold leading-tight mx-2">
-                Congratulations! You've found all objects. Click here to finalize your stickerbook and complete the hunt.
+                Congratulations! You've found every artifact. Click here to finalize your stickerbook and complete the hunt.
               </p>
               {/* No OK button for the third milestone */}
             </div>
@@ -257,27 +300,34 @@ const MilestoneModal: React.FC<MilestoneModalProps> = ({
     );
   };
 
-const renderFullScreenImage = () => {
-  if (!showFullScreenImage) return null;
-  
-  return (
-    <div 
-      className="fixed inset-0 z-50"
-      style={{ 
-        opacity: imageOpacity,
-        transition: 'opacity 0.5s ease-in-out'
-      }}
-    >
-      <div className="w-screen h-screen flex items-center justify-center">
-        <img 
-          src={fullScreenImagePath} 
-          alt="Milestone achievement" 
-          className="w-full h-full object-cover" 
-        />
+  const renderFullScreenImage = () => {
+    if (!showFullScreenImage) return null;
+    
+    return (
+      <div 
+        className="fixed inset-0 z-50"
+        style={{ 
+          opacity: imageOpacity,
+          transition: 'opacity 0.5s ease-in-out'
+        }}
+      >
+        {/* First content */}
+        <div 
+          className={`absolute inset-0 transition-opacity duration-1000`}
+          style={{ 
+            background: 'linear-gradient(to bottom, #F4F8FF, #CBDEFF)' 
+          }}
+        >
+            <div className="h-full flex flex-col items-center justify-center gap-16 z-10" style={{ height: "-webkit-fill-available"}}>
+                <img src="/sites/blue/character/ending.png" alt="Character" className="w-[208px] " />
+                <div className="flex flex-col items-center justify-center gap-4 z-10">
+                    <p className="w-full text-center text-blue-black font-medium text-2xl leading-[1.75] px-[20px]">Congrats! <br></br> You found all 37 artifacts!</p>
+                </div>
+            </div>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
 
   return (
     <>
