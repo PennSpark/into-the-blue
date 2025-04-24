@@ -124,10 +124,11 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
           const dy = 0;
 
           ctx.clearRect(0, 0, canvas.width, canvas.height);
-          const zoomedWidth = videoWidth / zoom;
-          const zoomedHeight = videoHeight / zoom;
-          const sx = (videoWidth - zoomedWidth) / 2;
-          const sy = (videoHeight - zoomedHeight) / 2;
+          const zoomedWidth = video.videoWidth / zoom;
+          const zoomedHeight = video.videoHeight / zoom;
+          
+          const sx = (video.videoWidth - zoomedWidth) / 2;
+          const sy = (video.videoHeight - zoomedHeight) / 2;
     
           ctx.drawImage(
             video,
@@ -195,17 +196,19 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
           
 
           //draw the image and account for zoom
-          const zoomedWidth = canvas.width / zoom;
-          const zoomedHeight = canvas.height / zoom;
+          const aspectRatio = 300 / 360;
+          const zoomedHeight = video.videoHeight / (zoom * 1.25);
+          const zoomedWidth = zoomedHeight * aspectRatio;
+          
           const sx = (video.videoWidth - zoomedWidth) / 2;
-          const sy = (video.videoHeight - (zoomedWidth * 360 / 300)) / 2;
-
+          const sy = (video.videoHeight - zoomedHeight) / 2;
+          
           clipCtx.drawImage(
             video,
-            sx, sy, zoomedWidth, zoomedWidth * 360 / 300, // source
+            sx, sy, zoomedWidth, zoomedHeight, // source
             0, 0, clipCanvas.width, clipCanvas.height // destination
           );
-
+          
           clipCtx.restore();
           setImage(clipCanvas.toDataURL("image/png"));
           setText("");
@@ -295,7 +298,7 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
         <Webcam 
           ref={webcamRef}
           videoConstraints={videoConstraints}  // <-- Added prop
-          className="absolute opacity-0 pointer-events-none" 
+          className="absolute w-[40svh] h-[60svh] opacity-0 pointer-events-none" 
         />
         
         <canvas
