@@ -194,6 +194,10 @@ const StickerBoard: React.FC = () => {
     )
   ).length;
 
+  const handleFinishClick = () => {
+    setShowFinishHint(true);
+  };
+
   const handleAnyClick = () => {
     if (showFinishHint) setShowFinishHint(false);
   };
@@ -218,8 +222,9 @@ const StickerBoard: React.FC = () => {
             alt='back'
           />
         </button>
-
-        <FinishHuntButton objectsFound={uniqueCount} />
+        <div onClick={handleFinishClick}>
+          <FinishHuntButton objectsFound={uniqueCount}/>
+        </div>
 
         {uniqueCount < 3 && (
           <div

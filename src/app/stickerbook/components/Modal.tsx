@@ -67,10 +67,11 @@ export default function Modal({ setMenuSelection, addSticker, setGridBg, menuSel
   // );
 
   const stickerList = [
-    "1.png", "4.png",
-    "5.png", "7.png", 
-    "8.png", "9.png", "10.png",
-    "11.png", "12.png" 
+    "1.webp", "4.webp",
+    "5.webp", "7.webp", 
+    "8.webp", "9.webp", "10.webp",
+    "11-new.webp", "12.webp", "13.webp", "14.webp",
+    "15.webp" 
   ];
 
   const bgColors = [
@@ -83,11 +84,6 @@ export default function Modal({ setMenuSelection, addSticker, setGridBg, menuSel
     >
     <div id="top-bar" className="w-full h-[4svh] flex items-center">
     <div className="flex-1"></div>
-    <div className="flex gap-[1svh]">
-        <div className={`w-[1.5svh] h-[1.5svh] rounded-full ${menuSelection === "sticker" ? "bg-blue-1" : "bg-blue-5"}`}></div>
-        <div className={`w-[1.5svh] h-[1.5svh] rounded-full ${menuSelection === "label" ? "bg-blue-1" : "bg-blue-5"}`}></div>
-        <div className={`w-[1.5svh] h-[1.5svh] rounded-full ${menuSelection === "grid" ? "bg-blue-1" : "bg-blue-5"}`}></div>
-    </div>
     <div className="flex-1 flex justify-end w-[7svh]">
     <button 
         className="flex p-[1svh] justify-end round-button w-[4svh] h-[4svh] rounded-full text-white"

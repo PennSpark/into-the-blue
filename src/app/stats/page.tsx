@@ -173,14 +173,14 @@ export default function StatsPage() {
     const formattedTime = formatElapsedTime(elapsedSeconds);
 
     const personality = metrics.totalObjectsFound === 36 ? 'COMPLETIONIST' :
-        metrics.totalObjectsFound >= 24 ? 'COLLECTOR' :
+        metrics.totalObjectsFound >= 24 ? 'EXPLORER' :
         metrics.totalObjectsFound >= 12 ? 'INVESTIGATOR' :
-        'CURIOUS';
+        'ADVENTURER';
 
     const personalityDescription = metrics.totalObjectsFound === 37 ? 'You found all 37 objects and completed the scavenger hunt!' :
-        metrics.totalObjectsFound >= 24 ? `You found ${metrics.totalObjectsFound} objects and are a true collector!` :
+        metrics.totalObjectsFound >= 24 ? `You found ${metrics.totalObjectsFound} objects and are a true explorer!` :
         metrics.totalObjectsFound >= 12 ? `You found ${metrics.totalObjectsFound} objects and are quite the investigator!` :
-        `You found ${metrics.totalObjectsFound} objects and are a curious explorer!`;
+        `You found ${metrics.totalObjectsFound} objects and are a curious adventurer!`;
 
     const settings = {
         dots: false,
