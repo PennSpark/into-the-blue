@@ -38,6 +38,8 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 
   const [zoom, setZoom] = useState(1.0);
 
+  const [showPrivateModeWarning, setShowPrivateModeWarning] = useState(false);
+
   useEffect(() => {
     console.log("Zoom camera changed:", zoom);
   }, [zoom]);
@@ -181,6 +183,60 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 		requestAnimationFrame(processWebcamFeed);
 	}, [canvasSize, clipPathData, zoom]);
 
+	useEffect(() => {
+		// Enhanced private mode detection, specifically targeted for Safari
+		const detectPrivateMode = async () => {
+			try {
+				// Test 1: Try writing to localStorage
+				localStorage.setItem('test', 'test');
+				localStorage.removeItem('test');
+				
+				// Test 2: Try using IndexedDB (critical for your app)
+				const request = window.indexedDB.open('test_db', 1);
+				let detected = false;
+				
+				request.onerror = () => {
+					console.log("IndexedDB error - likely private mode");
+					setShowPrivateModeWarning(true);
+					detected = true;
+				};
+				
+				// Test 3: Try writing a large item to sessionStorage
+				// Safari often limits storage in private mode
+				const largeString = new Array(5000000).join('A');
+				try {
+					sessionStorage.setItem('largeData', largeString);
+					sessionStorage.removeItem('largeData');
+				} catch (e) {
+					if (!detected) {
+						console.log("Storage quota error - likely private mode");
+						setShowPrivateModeWarning(true);
+						detected = true;
+					}
+				}
+				
+				// Test 4: Check if we can use the Cache API
+				if ('caches' in window) {
+					try {
+						const testCache = await caches.open('test-cache');
+						await testCache.add(new Request('/test-url', { cache: 'no-store' }));
+					} catch (e) {
+						if (!detected) {
+							console.log("Cache API error - likely private mode");
+							setShowPrivateModeWarning(true);
+						}
+					}
+				}
+			} catch (error) {
+				console.log("Storage error - likely private mode");
+				setShowPrivateModeWarning(true);
+			}
+		};
+
+		// Call immediately
+		detectPrivateMode();
+	}, []);
+
 	const captureImage = async () => {
 		if (webcamRef.current && canvasRef.current) {
 			setTutIndex(-1);
@@ -281,6 +337,33 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 			className="relative flex flex-col items-center justify-center w-screen h-screen bg-blue-black"
 			style={{ height: "calc(var(--vh, 1vh) * 100)" }}
 		>
+			{/* Private Browsing Warning */}
+			{showPrivateModeWarning && (
+				<div className="fixed inset-0 z-[3000] bg-black bg-opacity-80 flex items-center justify-center p-4">
+					<div className="bg-white rounded-lg p-6 max-w-sm">
+						<h2 className="text-xl font-bold text-black mb-3">Private Browsing Not Supported</h2>
+						<p className="mb-4">
+							This app requires temporary storage access to save your scavenger hunt progress. 
+							Please use regular browsing mode instead of private/incognito mode.
+						</p>
+						<button 
+						onClick={() => {
+							navigator.clipboard.writeText("https://penn.museum/sites/blue/welcome/")
+							.then(() => {
+								alert("Link copied to clipboard! Please exit private mode and paste it into your regular browser to enjoy the scavenger hunt.");
+							})
+							.catch(err => {
+								alert("Failed to copy: " + err);
+							});
+						}}
+						className="bg-blue-500 text-white px-4 py-2 rounded"
+						>
+						Copy Link to Clipboard
+						</button>
+					</div>
+				</div>
+			)}
+
 			{showTutOverlay && cameraReady && tutIndex == 0 && (
 				<motion.div
 					className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-75 z-[2000]"
@@ -579,16 +662,23 @@ export default function Camera({ artifact, onImageCaptured }: CameraProps) {
 			)}
 
 			{shouldProcess && image && (
+			<>
 				<ImageCutout
-					imageUrl={image}
-					svgUrl={artifact.svgURL}
-					onReady={async (processedImage) => {
-						await saveImage(processedImage, artifact.id, artifact.exhibitID);
-						sessionStorage.setItem("newlyFoundArtifact", artifact.id);
-						console.log("processed image saved");
-						onImageCaptured();
-					}}
+				imageUrl={image}
+				svgUrl={artifact.svgURL}
+				onReady={async (processedImage) => {
+					try {
+					await saveImage(processedImage, artifact.id, artifact.exhibitID);
+					
+					sessionStorage.setItem("newlyFoundArtifact", artifact.id);
+					
+					console.log("processed image saved");
+					onImageCaptured();
+					} catch (error) {
+					}
+				}}
 				/>
+			</>
 			)}
 		</div>
 	);

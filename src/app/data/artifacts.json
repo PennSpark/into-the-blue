@@ -19,7 +19,7 @@
 		"exhibitID": "etruscan",
 		"imageURL": "/sites/blue/images/artifacts/Etruscan-Mirror.webp",
 		"svgURL": "/sites/blue/svg-outlines/SVG-_Etruscan-Mirror.svg",
-		"hint": "Look in the case next to the sarcophagus with reclining man!"
+		"hint": "Look near the entrance to the Rome gallery!"
 	},
 	{
 		"id": "Greece-Oinochoe",
@@ -30,7 +30,7 @@
 		"exhibitID": "greece",
 		"imageURL": "/sites/blue/images/artifacts/Greece-Oinochoe.webp",
 		"svgURL": "/sites/blue/svg-outlines/SVG-_Greece-Oinochoe.svg",
-		"hint": "Look near the wall where the grave stelae are displayed!"
+		"hint": "Look near the wall mural where relief sculptures are displayed!"
 	},
 	{
 		"id": "Greece-Alabastron",
@@ -41,7 +41,7 @@
 		"exhibitID": "greece",
 		"imageURL": "/sites/blue/images/artifacts/Greece-Alabastron.webp",
 		"svgURL": "/sites/blue/svg-outlines/SVG-_Greece-Alabastron.svg",
-		"hint": "Look near the wall where the grave stelae are displayed!"
+		"hint": "Look near the wall mural where relief sculptures are displayed!"
 	},
 	{
 		"id": "Rome-Urn",
@@ -228,7 +228,7 @@
 		"exhibitID": "middle-east",
 		"imageURL": "/sites/blue/images/artifacts/ME-Diadems.webp",
 		"svgURL": "/sites/blue/svg-outlines/SVG-_ME-Diadems.svg",
-		"hint": "Look in the direction Puabi is looking!"
+		"hint": "Follow Puabi's gaze toward this case of jewelry."
 	},
 	{
 		"id": "ME-Bottle",
@@ -239,7 +239,7 @@
 		"exhibitID": "middle-east",
 		"imageURL": "/sites/blue/images/artifacts/ME-Bottle.webp",
 		"svgURL": "/sites/blue/svg-outlines/SVG-_ME-Bottle.svg",
-		"hint": "This bottle is part of a set of three bottles!"
+		"hint": "Look for the passageway between the last 2 rooms of the gallery. This bottle is on the left hand side."
 	},
 	{
 		"id": "ME-Decor",
@@ -250,7 +250,7 @@
 		"exhibitID": "middle-east",
 		"imageURL": "/sites/blue/images/artifacts/ME-Decor.webp",
 		"svgURL": "/sites/blue/svg-outlines/SVG-_ME-Decor.svg",
-		"hint": "Look between the last two rooms of the gallery!"
+		"hint": "Look for the passageway between the last 2 rooms of the gallery. This decoration is on the right side."
 	},
 	{
 		"id": "ME-Dish",
@@ -283,7 +283,7 @@
 		"exhibitID": "middle-east",
 		"imageURL": "/sites/blue/images/artifacts/ME-Tile.webp",
 		"svgURL": "/sites/blue/svg-outlines/SVG-_ME-Tile.svg",
-		"hint": "The tile mosaic panel is large but hidden behind a corner."
+		"hint": "Look in the last room of the gallery. The tile mosaic panel is large, but hidden behind a corner."
 	},
 	{
 		"id": "ME-String",
@@ -294,7 +294,7 @@
 		"exhibitID": "middle-east",
 		"imageURL": "/sites/blue/images/artifacts/ME-String.webp",
 		"svgURL": "/sites/blue/svg-outlines/SVG-_ME-String.svg",
-		"hint": "Look closely at a display case of small objects near the gallery entrance. This object is near a group of tiny animal figurines!"
+		"hint": "Look for a three-pronged fork in the first room of the gallery. This object is in the same case."
 	},
 	{
 		"id": "NA-Cradleboard",
@@ -349,7 +349,7 @@
 		"exhibitID": "mexico-central-america",
 		"imageURL": "/sites/blue/images/artifacts/MCA-Ear.webp",
 		"svgURL": "/sites/blue/svg-outlines/SVG-_MCA-Ear.svg",
-		"hint": "Look to the left of the large metate (grinding stone)."
+		"hint": "Find the corner with 5 large sculptures on display. Look to the right of that corner."
 	},
 	{
 		"id": "Africa-Robe",
@@ -371,7 +371,7 @@
 		"exhibitID": "africa",
 		"imageURL": "/sites/blue/images/artifacts/Africa-Dress.webp",
 		"svgURL": "/sites/blue/svg-outlines/SVG-_Africa-Dress.svg",
-		"hint": "Look closely at the mannequin in the center of the hallway…"
+		"hint": "Look closely at the mannequin in the center of the hallway..."
 	},
 	{
 		"id": "Africa-Beads",
@@ -382,7 +382,7 @@
 		"exhibitID": "africa",
 		"imageURL": "/sites/blue/images/artifacts/Africa-Beads.webp",
 		"svgURL": "/sites/blue/svg-outlines/SVG-_Africa-Beads.svg",
-		"hint": "This shroud is in the hallway next to several bracelets on display."
+		"hint": "These beads are in the hallway, next to several bracelets on display."
 	},
 	{
 		"id": "Africa-Illu",
