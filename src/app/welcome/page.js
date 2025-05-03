@@ -385,7 +385,7 @@ export default function WelcomePage() {
 				{introIndex === 0 && (
 					<div className="flex flex-col justify-center items-center gap-4 h-full w-full">
 						<p>
-							Welcome to <i>Into the Blue</i> scavenger hunt!
+							Welcome to the <i>Into the Blue</i> scavenger hunt!
 						</p>
 						<Image
 							className="w-[50vw] h-auto"
@@ -409,7 +409,7 @@ export default function WelcomePage() {
 						<p className="pb-[18px]">
 							<i>Into the Blue</i> is an exhibit all about the color blue.
 						</p>
-						<p>Find this exhibit on the upper level of the Museum.</p>
+						<p>It&apos;s located on the upper level of the Museum.</p>
 						<Image
 							className="w-[60vw] h-auto"
 							src="/sites/blue/tutorial-assets/char2.webp"
@@ -454,8 +454,8 @@ export default function WelcomePage() {
 						transition={{ duration: 1, ease: "easeOut" }}
 					>
 						<p>
-							Then, you can create a stickerbook to share your finds with
-							friends & family!
+							Then you can create a stickerbook to share your finds with
+							friends and family!	
 						</p>
 						<Image
 							className="w-[50vw] h-auto"

@@ -204,7 +204,7 @@ const MilestoneModal: React.FC<MilestoneModalProps> = ({
           <div className="bg-[#333D37] text-warm-white p-4 rounded-lg max-w-[14rem] shadow-lg">
             <div className="flex flex-col space-y-2.5 text-center">
               <p className="text-base font-semibold leading-tight mx-2">
-                When you&apos;re ready to leave the museum, click here to finalize your stickerbook and finish the hunt.
+                When you&apos;re ready to leave the Museum, click here to finalize your stickerbook and finish the hunt.
               </p>
               <button 
                 onClick={handleDismissFirst}
