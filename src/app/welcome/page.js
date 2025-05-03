@@ -26,6 +26,7 @@ export default function WelcomePage() {
 	const [showIntroSlides, setShowIntroSlides] = useState(false);
 	const [introIndex, setIntroIndex] = useState(0);
 	const [hasMetrics, setHasMetrics] = useState(false);
+	const [showPrivateModeWarning, setShowPrivateModeWarning] = useState(false);
 
 	const router = useRouter();
 	// Set CSS variable for viewport height
@@ -115,6 +116,62 @@ export default function WelcomePage() {
 			.add({ targets: ".buttons", translateY: [-7, 0], duration: 400 }, 2490);
 	}, [showSecondContent]);
 
+	// Add this useEffect for private mode detection
+	useEffect(() => {
+		// Enhanced private mode detection, specifically targeted for Safari
+		const detectPrivateMode = async () => {
+			try {
+				// Test 1: Try writing to localStorage
+				localStorage.setItem("test", "test");
+				localStorage.removeItem("test");
+
+				// Test 2: Try using IndexedDB (critical for your app)
+				const request = window.indexedDB.open("test_db", 1);
+				let detected = false;
+
+				request.onerror = () => {
+					console.log("IndexedDB error - likely private mode");
+					setShowPrivateModeWarning(true);
+					detected = true;
+				};
+
+				// Test 3: Try writing a large item to sessionStorage
+				const largeString = new Array(5000000).join("A");
+				try {
+					sessionStorage.setItem("largeData", largeString);
+					sessionStorage.removeItem("largeData");
+				} catch (e) {
+					if (!detected) {
+						console.log("Storage quota error - likely private mode");
+						setShowPrivateModeWarning(true);
+						detected = true;
+					}
+				}
+
+				// Test 4: Check if we can use the Cache API
+				if ("caches" in window) {
+					try {
+						const testCache = await caches.open("test-cache");
+						await testCache.add(
+							new Request("/test-url", { cache: "no-store" })
+						);
+					} catch (e) {
+						if (!detected) {
+							console.log("Cache API error - likely private mode");
+							setShowPrivateModeWarning(true);
+						}
+					}
+				}
+			} catch (error) {
+				console.log("Storage error - likely private mode");
+				setShowPrivateModeWarning(true);
+			}
+		};
+
+		// Call immediately
+		detectPrivateMode();
+	}, []);
+
 	// Resets images, collected artifacts, and visited exhibits before resetting metrics.
 	const handleStartOver = async () => {
 		localStorage.clear();
@@ -125,7 +182,7 @@ export default function WelcomePage() {
 		await clearGridSettings();
 		await clearStickers();
 		await clearIntroAnimations();
-		await clearTutorialCompletion(); 
+		await clearTutorialCompletion();
 		await saveMetrics({
 			totalObjectsFound: 0,
 			totalExhibitsVisited: 0,
@@ -171,6 +228,25 @@ export default function WelcomePage() {
 			className="bg-warm-white w-full relative overflow-hidden"
 			style={{ height: "calc(var(--vh, 1vh) * 100)" }}
 		>
+			{/* Private Browsing Warning */}
+			{showPrivateModeWarning && (
+				<div className="fixed inset-0 z-[3000] bg-black bg-opacity-80 flex items-center justify-center p-4">
+					<div className="bg-white rounded-lg p-6 max-w-sm">
+						<h2 className="text-xl font-bold text-black mb-3">
+							Private Browsing Not Supported
+						</h2>
+						<p className="mb-4">
+							This app requires temporary storage access to save your scavenger
+							hunt progress. Please use regular browsing mode instead of
+							private/incognito mode.
+						</p>
+						<p className="font-medium text-blue-500">
+							Please exit private browsing and re-scan the QR code to continue.
+						</p>
+					</div>
+				</div>
+			)}
+
 			<img
 				src="/sites/blue/images/paper.webp"
 				className="w-full h-full absolute z-0 object-cover"
@@ -455,7 +531,7 @@ export default function WelcomePage() {
 					>
 						<p>
 							Then you can create a stickerbook to share your finds with
-							friends and family!	
+							friends and family!
 						</p>
 						<Image
 							className="w-[50vw] h-auto"
