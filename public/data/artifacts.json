@@ -228,7 +228,7 @@
 		"exhibitID": "middle-east",
 		"imageURL": "/sites/blue/images/artifacts/ME-Diadems.webp",
 		"svgURL": "/sites/blue/svg-outlines/SVG-_ME-Diadems.svg",
-		"hint": "Look in the direction Puabi is looking!"
+		"hint": "Follow Puabi's gaze toward this case of jewelry."
 	},
 	{
 		"id": "ME-Bottle",
@@ -250,7 +250,7 @@
 		"exhibitID": "middle-east",
 		"imageURL": "/sites/blue/images/artifacts/ME-Decor.webp",
 		"svgURL": "/sites/blue/svg-outlines/SVG-_ME-Decor.svg",
-		"hint": "Look for the passageway between the last 2 rooms of the gallery. This bottle is on the right side."
+		"hint": "Look for the passageway between the last 2 rooms of the gallery. This decoration is on the right side."
 	},
 	{
 		"id": "ME-Dish",
@@ -371,7 +371,7 @@
 		"exhibitID": "africa",
 		"imageURL": "/sites/blue/images/artifacts/Africa-Dress.webp",
 		"svgURL": "/sites/blue/svg-outlines/SVG-_Africa-Dress.svg",
-		"hint": "Look closely at the mannequin in the center of the hallway…"
+		"hint": "Look closely at the mannequin in the center of the hallway..."
 	},
 	{
 		"id": "Africa-Beads",
@@ -382,7 +382,7 @@
 		"exhibitID": "africa",
 		"imageURL": "/sites/blue/images/artifacts/Africa-Beads.webp",
 		"svgURL": "/sites/blue/svg-outlines/SVG-_Africa-Beads.svg",
-		"hint": "This shroud is in the hallway next to several bracelets on display."
+		"hint": "These beads are in the hallway, next to several bracelets on display."
 	},
 	{
 		"id": "Africa-Illu",
