@@ -24,6 +24,14 @@ export default function StatsPage() {
         stickerbookViewTime: 0,
     });
     const [collectedImages, setCollectedImages] = useState<string[]>([]);
+    const [elapsedSeconds, setElapsedSeconds] = useState(0);
+    const [isSharing, setIsSharing] = useState(false);
+    const [isSharingTooLong, setIsSharingTooLong] = useState(false);
+    const [isShareSuccessful, setIsShareSuccessful] = useState(false);
+    const [prerenderedImages, setPrerenderedImages] = useState<{[key: string]: File | null}>({
+        stats: null,
+        stickerBook: null
+    });
 
     useEffect(() => {
         setTimeout(() => {
@@ -36,6 +44,9 @@ export default function StatsPage() {
             const m = await getMetrics();
             if (m) {
                 setMetrics(m);
+
+                const calculatedSeconds = Math.floor((Date.now() - m.startTime) / 1000);
+                setElapsedSeconds(calculatedSeconds);
             }
         }
         fetchMetrics();
@@ -80,78 +91,125 @@ export default function StatsPage() {
         }
     }, [showContent, activeSlide]);
 
-    const shareStats = async () => {
-        // Determine which element to capture based on active slide
-        const elementId = activeSlide === 0 ? 'stats-container' : 'sticker-board-static';
-        const elementToCapture = document.getElementById(elementId);
+    useEffect(() => {
+        if (!showContent) return;
+
+        async function prerenderImages() {
+            // Prerender stats image (slide 0)
+            const statsElement = document.getElementById('stats-container');
+            if (statsElement) {
+                const personalityTextEl = document.querySelector('.font-FibraOneBold');
+                let originalStyle = null;
+
+                if (personalityTextEl) {
+                    originalStyle = personalityTextEl.getAttribute('style') || '';
+                    personalityTextEl.setAttribute('style', 
+                        'color: #004972 !important; background: none !important;');
+                }
+
+                const options = {
+                    backgroundColor: null,
+                    useCORS: true,
+                    allowTaint: true,
+                    scale: window.devicePixelRatio || 2,
+                    logging: false
+                };
+
+                try {
+                    const canvas = await html2canvas(statsElement, options);
+
+                    // Restore original gradient style
+                    if (personalityTextEl && originalStyle !== null) {
+                        personalityTextEl.setAttribute('style', originalStyle);
+                    }
+
+                    const dataURL = canvas.toDataURL('image/png');
+                    const imageBlob = await (await fetch(dataURL)).blob();
+                    const file = new File([imageBlob], 'Penn Museum Scavenger Hunt Stats.png', { type: 'image/png' });
+                    
+                    setPrerenderedImages(prev => ({ ...prev, stats: file }));
+                } catch (error) {
+                    console.error('Error pre-rendering stats image:', error);
+                }
+            }
+            
+            // Prerender sticker book image (slide 1)
+            const stickerElement = document.getElementById('sticker-board-static');
+            if (stickerElement) {
+                const options = {
+                    backgroundColor: '#FFFFFF',
+                    useCORS: true,
+                    allowTaint: true,
+                    scale: window.devicePixelRatio || 2,
+                    logging: false
+                };
+
+                try {
+                    const canvas = await html2canvas(stickerElement, options);
+                    const dataURL = canvas.toDataURL('image/png');
+                    const imageBlob = await (await fetch(dataURL)).blob();
+                    const file = new File([imageBlob], 'Penn Museum Sticker Book.png', { type: 'image/png' });
+                    
+                    setPrerenderedImages(prev => ({ ...prev, stickerBook: file }));
+                } catch (error) {
+                    console.error('Error pre-rendering sticker book image:', error);
+                }
+            }
+        }
+
+        // Small delay to ensure DOM is fully rendered
+        const renderTimeout = setTimeout(() => {
+            prerenderImages();
+        }, 500);
+
+        return () => clearTimeout(renderTimeout);
+    }, [showContent, collectedImages, metrics.totalObjectsFound, statsHeight]);
+
+    const shareStats = () => {
+        const fileKey = activeSlide === 0 ? 'stats' : 'stickerBook';
+        const file = prerenderedImages[fileKey];
         
-        if (!elementToCapture) {
-            console.error(`Element with ID '${elementId}' not found`);
+        if (!file) {
+            console.error(`Pre-rendered image for ${fileKey} not available`);
             return;
         }
-        
+
         // Custom text based on which content is being shared
         const shareText = activeSlide === 0 
             ? `I found ${metrics.totalObjectsFound} artifacts in the scavenger hunt at the Penn Museum! Plan your visit now at https://penn.museum/`
             : `Check out my personalized sticker book from the Penn Museum scavenger hunt! Plan your visit now at https://penn.museum/`;
-        
-        // Custom filename based on content
-        const filename = activeSlide === 0 
-            ? 'Penn Museum Scavenger Hunt Stats.png'
-            : 'Penn Museum Sticker Book.png';
-            
+
+        const shareData = {
+            title: activeSlide === 0 ? 'Penn Museum Scavenger Hunt Stats' : 'Penn Museum Sticker Book',
+            text: shareText,
+            files: [file],
+        };
+
         try {
-            // Fix gradient text for HTML2Canvas
-            const personalityTextEl = document.querySelector('.font-FibraOneBold');
-            let originalStyle = null;
-            
-            if (personalityTextEl && activeSlide === 0) {
-                // Save original style
-                originalStyle = personalityTextEl.getAttribute('style') || '';
-                
-                // Apply solid color instead of gradient for screenshot
-                personalityTextEl.setAttribute('style', 
-                    'color: #004972 !important; background: none !important;');
-            }
-            
-            // Enhanced options for better rendering
-            const options = {
-                backgroundColor: activeSlide === 1 ? '#FFFFFF' : null,
-                useCORS: true,
-                allowTaint: true, 
-                scale: window.devicePixelRatio || 2, // Better quality
-                logging: false
-            };
-                
-            const canvas = await html2canvas(elementToCapture, options);
-            
-            // Restore original gradient style
-            if (personalityTextEl && originalStyle !== null && activeSlide === 0) {
-                personalityTextEl.setAttribute('style', originalStyle);
-            }
-            
-            const dataURL = canvas.toDataURL('image/png');
-            const imageBlob = await (await fetch(dataURL)).blob();
-            const file = new File([imageBlob], filename, { type: 'image/png' });
-        
-            const shareData = {
-                title: activeSlide === 0 ? 'Penn Museum Scavenger Hunt Stats' : 'Penn Museum Sticker Book',
-                text: shareText,
-                files: [file],
-            };
-        
             if (navigator.canShare && navigator.canShare({ files: shareData.files }) && navigator.share) {
-                await navigator.share(shareData);
-                console.log('Successful share');
+                setIsSharing(true);
+                
+                // Now the share happens synchronously within the click handler
+                navigator.share(shareData)
+                    .then(() => {
+                        console.log('Successful share');
+                        setIsShareSuccessful(true);
+                    })
+                    .catch((error) => {
+                        console.error('Error sharing:', error);
+                    })
+                    .finally(() => {
+                        setIsSharing(false);
+                    });
             } else {
                 alert('Sharing is not supported on this device.');
+                setIsSharing(false);
             }
         } catch (error) {
-            console.error('Error capturing or sharing:', error);
+            console.error('Error sharing:', error);
+            setIsSharing(false);
         }
     };
-
-    const elapsedSeconds = Math.floor((Date.now() - metrics.startTime) / 1000);
 
     const formatElapsedTime = (seconds: number): string => {
         if (seconds < 60) {
@@ -202,6 +260,32 @@ export default function StatsPage() {
             className="relative w-full overflow-hidden bg-gradient-to-b from-[#d8e3f7] to-[#aec6f0]"
             style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
         >
+            {isSharing && (
+                <div className="fixed inset-0 z-[3000] bg-black bg-opacity-70 flex flex-col items-center justify-center p-4">
+                    <div className="bg-white rounded-lg p-6 max-w-sm text-center">
+                        <p className="text-xl font-semibold text-black mb-4">Preparing to share...</p>
+                        {isSharingTooLong && !isShareSuccessful && (
+                            <>
+                                <p className="text-gray-600 text-sm mt-2">
+                                    This is taking longer than usual. Please check your network connection or try again later.
+                                </p>
+                            </>
+                        )}
+                        <div className={`${isSharingTooLong ? 'mt-4' : 'mt-6'} flex justify-center`}>
+                            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+                        </div>
+                        <button 
+                            onClick={() => {
+                                setIsSharing(false);
+                                setIsSharingTooLong(false);
+                            }}
+                            className="mt-6 py-2 px-4 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                        >
+                        Cancel
+                        </button>
+                    </div>
+                </div>
+            )}
             <div className={`absolute inset-0 transition-opacity duration-1000 ${showContent ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
                 <div className="h-full flex flex-col items-center justify-start gap-1 z-10">
                     <div className="w-full mt-6">
@@ -284,7 +368,7 @@ export default function StatsPage() {
                             aria-label="Go to slide 2"
                         />
                     </div>
-                    <div className="w-full px-10 py-3 flex justify-between z-40 mt-auto">
+                    <div className="fixed bottom-0 left-0 right-0 w-full px-10 py-3 flex justify-between z-40 bg-gradient-to-b from-transparent to-[#aec6f0]">
                         <Link href="/ending">
                             <div className="flex items-center bg-warm-white w-fit h-[44px] gap-[6px] px-[16px] rounded-full">
                                 <img src="/sites/blue/icons/left-arrow-black.svg" alt="Back" className="w-[16px] h-[14px]" />
