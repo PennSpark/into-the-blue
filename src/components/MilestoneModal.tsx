@@ -201,18 +201,18 @@ const MilestoneModal: React.FC<MilestoneModalProps> = ({
             transition: 'opacity 0.5s ease-out'
           }}
         >
-          <div className="bg-[#333D37] text-warm-white p-4 rounded-lg max-w-[14rem] shadow-lg">
+          <div className="bg-green text-warm-white p-4 rounded-lg max-w-[14rem] shadow-lg relative">
             <div className="flex flex-col space-y-2.5 text-center">
               <p className="text-base font-semibold leading-tight mx-2">
                 When you&apos;re ready to leave the Museum, click here to finalize your stickerbook and finish the hunt.
               </p>
-              <button 
-                onClick={handleDismissFirst}
-                className="bg-white text-[#3D4F40] font-normal py-1 px-4 rounded-full mt-2 w-full"
-              >
-                Ok
-              </button>
             </div>
+            <div 
+                onClick={handleDismissFirst}
+                className="bg-white py-[6px] px-[10px] rounded-full absolute -top-4 -right-3 border-[3px] border-green "
+              >
+                <img src="/sites/blue/icons/exit-x.svg" className="w-3 h-3"/>
+              </div>
           </div>
           
           {/* Speech bubble pointer */}
