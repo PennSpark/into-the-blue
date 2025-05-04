@@ -116,23 +116,23 @@ export default function Modal({ setMenuSelection, addSticker, setGridBg, menuSel
 
         {/* Labels Section */}
         {menuSelection === "label" && addSticker && (
-            <div className="flex flex-wrap gap-[1.5svh] w-full">
-            {stickerList.map((image, index) => (
+            <div className="flex grid grid-cols-3 gap-[1.5svh] w-full">
+              {stickerList.map((image, index) => (
                 <div
-                key={index}
-                onClick={() => {
+                  key={index}
+                  onClick={() => {
                     addSticker(image, true);
                     setMenuSelection(null);
-                }}
-                className="cursor-pointer  h-[10svh] w-full"
-                style={{
+                  }}
+                  className="cursor-pointer aspect-[5/6] w-full"
+                  style={{
                     backgroundImage: `url(/sites/blue/stickers/${image})`,
                     backgroundSize: "contain",
                     backgroundRepeat: "no-repeat",
                     backgroundPosition: "center",
-                }}
+                  }}
                 ></div>
-            ))}
+              ))}
             </div>
         )}
 
