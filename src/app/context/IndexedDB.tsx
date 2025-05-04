@@ -705,3 +705,54 @@ export const setTutorialCompleted = async (): Promise<void> => {
 		tx.onerror = () => reject("Failed to save tutorial completion");
 	});
 };
+
+// Add this function to the end of your IndexedDB.tsx file
+
+export const cleanupTestImage = async (): Promise<void> => {
+  try {
+    // 1. Delete the test image
+    const db = await openDB();
+    const imageTransaction = db.transaction(STORE_NAME, "readwrite");
+    const imageStore = imageTransaction.objectStore(STORE_NAME);
+    await new Promise<void>((resolve, reject) => {
+      const deleteRequest = imageStore.delete("test-private-mode");
+      deleteRequest.onsuccess = () => resolve();
+      deleteRequest.onerror = () => reject("Failed to delete test image");
+    });
+
+    // 2. Remove the artifact from collected artifacts
+    const artifactTransaction = db.transaction("collectedArtifacts", "readwrite");
+    const artifactStore = artifactTransaction.objectStore("collectedArtifacts");
+    await new Promise<void>((resolve, reject) => {
+      const deleteRequest = artifactStore.delete("test-private-mode");
+      deleteRequest.onsuccess = () => resolve();
+      deleteRequest.onerror = () => reject("Failed to delete test artifact");
+    });
+
+    // 3. Remove the test exhibit from visited exhibits
+    if ("test") {
+      const exhibitTransaction = db.transaction("visitedExhibits", "readwrite");
+      const exhibitStore = exhibitTransaction.objectStore("visitedExhibits");
+      await new Promise<void>((resolve, reject) => {
+        const deleteRequest = exhibitStore.delete("test");
+        deleteRequest.onsuccess = () => resolve();
+        deleteRequest.onerror = () => reject("Failed to delete test exhibit");
+      });
+    }
+
+    // 4. Decrement the totalObjectsFound count if needed
+    const currentMetrics = await getMetrics();
+    if (currentMetrics && currentMetrics.totalObjectsFound > 0) {
+      await saveMetrics({
+        ...currentMetrics,
+        totalObjectsFound: currentMetrics.totalObjectsFound - 1,
+        totalExhibitsVisited: currentMetrics.totalExhibitsVisited > 0 ? 
+                             currentMetrics.totalExhibitsVisited - 1 : 0
+      });
+    }
+    
+    console.log("✅ Test data successfully cleaned up");
+  } catch (error) {
+    console.error("Failed to cleanup test image:", error);
+  }
+};

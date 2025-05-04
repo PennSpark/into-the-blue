@@ -18,6 +18,8 @@ import {
 	getTutorialCompleted,
 	clearIntroAnimations,
 	clearTutorialCompletion,
+	saveImage,
+	cleanupTestImage,
 } from "../context/IndexedDB";
 
 export default function WelcomePage() {
@@ -29,6 +31,56 @@ export default function WelcomePage() {
 	const [showPrivateModeWarning, setShowPrivateModeWarning] = useState(false);
 
 	const router = useRouter();
+
+	// Add global error handler to catch BlobURL errors
+	useEffect(() => {
+		const globalErrorHandler = (event) => {
+			if (event.message && event.message.includes("BlobURLs are not yet supported")) {
+				event.preventDefault(); // Prevent further handling
+				setShowPrivateModeWarning(true);
+				return true;
+			}
+		};
+
+		window.addEventListener("error", globalErrorHandler, true);
+
+		return () => window.removeEventListener("error", globalErrorHandler, true);
+	}, []);
+
+	// Test IndexedDB Blob storage on component mount
+	useEffect(() => {
+		const testPrivateBrowsing = async () => {
+				try {
+					const response = await fetch('/sites/blue/test_img.txt');
+				if (!response.ok) {
+					throw new Error(`Failed to fetch test file: ${response.status}`);
+				}
+				
+				// Get the text content
+				const textContent = await response.text();
+
+				await saveImage(textContent, "test-private-mode", "test");
+
+				await cleanupTestImage();
+			} catch (error) {
+				console.log("Storage test failed:", error);
+				// If the error occurs but doesn't trigger the global handler
+				if (error.message && error.message.includes("BlobURLs are not yet supported")) {
+					setShowPrivateModeWarning(true);
+				}
+
+				try {
+					await cleanupTestImage();
+				  } catch (cleanupError) {
+					console.log("Cleanup after failed test also failed:", cleanupError);
+				  }
+			}
+		};
+
+		// Run the test
+		testPrivateBrowsing();
+	}, []);
+
 	// Set CSS variable for viewport height
 	useEffect(() => {
 		const setVh = () => {
@@ -116,59 +168,18 @@ export default function WelcomePage() {
 			.add({ targets: ".buttons", translateY: [-7, 0], duration: 400 }, 2490);
 	}, [showSecondContent]);
 
-	// Add this useEffect for private mode detection
 	useEffect(() => {
-		// Enhanced private mode detection, specifically targeted for Safari
-		const detectPrivateMode = async () => {
+		const detectPrivateMode = () => {
 			try {
-				// Test 1: Try writing to localStorage
-				localStorage.setItem("test", "test");
-				localStorage.removeItem("test");
-
-				// Test 2: Try using IndexedDB (critical for your app)
-				const request = window.indexedDB.open("test_db", 1);
-				let detected = false;
-
-				request.onerror = () => {
-					console.log("IndexedDB error - likely private mode");
-					setShowPrivateModeWarning(true);
-					detected = true;
-				};
-
-				// Test 3: Try writing a large item to sessionStorage
-				const largeString = new Array(5000000).join("A");
-				try {
-					sessionStorage.setItem("largeData", largeString);
-					sessionStorage.removeItem("largeData");
-				} catch (e) {
-					if (!detected) {
-						console.log("Storage quota error - likely private mode");
-						setShowPrivateModeWarning(true);
-						detected = true;
-					}
-				}
-
-				// Test 4: Check if we can use the Cache API
-				if ("caches" in window) {
-					try {
-						const testCache = await caches.open("test-cache");
-						await testCache.add(
-							new Request("/test-url", { cache: "no-store" })
-						);
-					} catch (e) {
-						if (!detected) {
-							console.log("Cache API error - likely private mode");
-							setShowPrivateModeWarning(true);
-						}
-					}
-				}
-			} catch (error) {
-				console.log("Storage error - likely private mode");
-				setShowPrivateModeWarning(true);
+				// Safari private mode throws QUOTA_EXCEEDED_ERR here
+				localStorage.setItem("privateModeTest", "1");
+				localStorage.removeItem("privateModeTest");
+				// In normal mode, nothing else needed
+			} catch (err) {
+				console.warn("Private browsing detected:", err);
 			}
 		};
 
-		// Call immediately
 		detectPrivateMode();
 	}, []);
 
@@ -228,7 +239,7 @@ export default function WelcomePage() {
 			className="bg-warm-white w-full relative overflow-hidden"
 			style={{ height: "calc(var(--vh, 1vh) * 100)" }}
 		>
-			{/* Private Browsing Warning */}
+			{/* Private Browsing Warning Modal */}
 			{showPrivateModeWarning && (
 				<div className="fixed inset-0 z-[3000] bg-black bg-opacity-80 flex items-center justify-center p-4">
 					<div className="bg-white rounded-lg p-6 max-w-sm">
