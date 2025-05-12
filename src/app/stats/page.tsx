@@ -3,12 +3,12 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import html2canvas from 'html2canvas';
 import { getMetrics, loadCollectedArtifacts } from "../context/IndexedDB";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import StaticStickerBoard from "@/components/StaticStickerBoard";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function StatsPage() {
     const [showContent, setShowContent] = useState(false);
@@ -25,13 +25,7 @@ export default function StatsPage() {
     });
     const [collectedImages, setCollectedImages] = useState<string[]>([]);
     const [elapsedSeconds, setElapsedSeconds] = useState(0);
-    const [isSharing, setIsSharing] = useState(false);
-    const [isSharingTooLong, setIsSharingTooLong] = useState(false);
-    const [isShareSuccessful, setIsShareSuccessful] = useState(false);
-    const [prerenderedImages, setPrerenderedImages] = useState<{[key: string]: File | null}>({
-        stats: null,
-        stickerBook: null
-    });
+    const [showShareModal, setShowShareModal] = useState(false);
 
     useEffect(() => {
         setTimeout(() => {
@@ -85,130 +79,16 @@ export default function StatsPage() {
         if (showContent && activeSlide === 0 && statsContainerRef.current) {
             const height = statsContainerRef.current.offsetHeight;
             setStatsHeight(height);
-            // Calculate width based on the 42.75:76 ratio
             const width = (height * 42.75) / 76;
             setStatsContainerWidth(width);
         }
     }, [showContent, activeSlide]);
 
-    useEffect(() => {
-        if (!showContent) return;
-
-        async function prerenderImages() {
-            // Prerender stats image (slide 0)
-            const statsElement = document.getElementById('stats-container');
-            if (statsElement) {
-                const personalityTextEl = document.querySelector('.font-FibraOneBold');
-                let originalStyle = null;
-
-                if (personalityTextEl) {
-                    originalStyle = personalityTextEl.getAttribute('style') || '';
-                    personalityTextEl.setAttribute('style', 
-                        'color: #004972 !important; background: none !important;');
-                }
-
-                const options = {
-                    backgroundColor: null,
-                    useCORS: true,
-                    allowTaint: true,
-                    scale: window.devicePixelRatio || 2,
-                    logging: false
-                };
-
-                try {
-                    const canvas = await html2canvas(statsElement, options);
-
-                    // Restore original gradient style
-                    if (personalityTextEl && originalStyle !== null) {
-                        personalityTextEl.setAttribute('style', originalStyle);
-                    }
-
-                    const dataURL = canvas.toDataURL('image/png');
-                    const imageBlob = await (await fetch(dataURL)).blob();
-                    const file = new File([imageBlob], 'Penn Museum Scavenger Hunt Stats.png', { type: 'image/png' });
-                    
-                    setPrerenderedImages(prev => ({ ...prev, stats: file }));
-                } catch (error) {
-                    console.error('Error pre-rendering stats image:', error);
-                }
-            }
-            
-            // Prerender sticker book image (slide 1)
-            const stickerElement = document.getElementById('sticker-board-static');
-            if (stickerElement) {
-                const options = {
-                    backgroundColor: '#FFFFFF',
-                    useCORS: true,
-                    allowTaint: true,
-                    scale: window.devicePixelRatio || 2,
-                    logging: false
-                };
-
-                try {
-                    const canvas = await html2canvas(stickerElement, options);
-                    const dataURL = canvas.toDataURL('image/png');
-                    const imageBlob = await (await fetch(dataURL)).blob();
-                    const file = new File([imageBlob], 'Penn Museum Sticker Book.png', { type: 'image/png' });
-                    
-                    setPrerenderedImages(prev => ({ ...prev, stickerBook: file }));
-                } catch (error) {
-                    console.error('Error pre-rendering sticker book image:', error);
-                }
-            }
-        }
-
-        // Small delay to ensure DOM is fully rendered
-        const renderTimeout = setTimeout(() => {
-            prerenderImages();
-        }, 500);
-
-        return () => clearTimeout(renderTimeout);
-    }, [showContent, collectedImages, metrics.totalObjectsFound, statsHeight]);
-
     const shareStats = () => {
-        const fileKey = activeSlide === 0 ? 'stats' : 'stickerBook';
-        const file = prerenderedImages[fileKey];
-        
-        if (!file) {
-            console.error(`Pre-rendered image for ${fileKey} not available`);
-            return;
-        }
-
-        // Custom text based on which content is being shared
-        const shareText = activeSlide === 0 
-            ? `I found ${metrics.totalObjectsFound} artifacts in the scavenger hunt at the Penn Museum! Plan your visit now at https://penn.museum/`
-            : `Check out my personalized sticker book from the Penn Museum scavenger hunt! Plan your visit now at https://penn.museum/`;
-
-        const shareData = {
-            title: activeSlide === 0 ? 'Penn Museum Scavenger Hunt Stats' : 'Penn Museum Sticker Book',
-            text: shareText,
-            files: [file],
-        };
-
-        try {
-            if (navigator.canShare && navigator.canShare({ files: shareData.files }) && navigator.share) {
-                setIsSharing(true);
-                
-                // Now the share happens synchronously within the click handler
-                navigator.share(shareData)
-                    .then(() => {
-                        console.log('Successful share');
-                        setIsShareSuccessful(true);
-                    })
-                    .catch((error) => {
-                        console.error('Error sharing:', error);
-                    })
-                    .finally(() => {
-                        setIsSharing(false);
-                    });
-            } else {
-                alert('Sharing is not supported on this device.');
-                setIsSharing(false);
-            }
-        } catch (error) {
-            console.error('Error sharing:', error);
-            setIsSharing(false);
-        }
+        setShowShareModal(true);
+        setTimeout(() => {
+            setShowShareModal(false);
+        }, 3000);
     };
 
     const formatElapsedTime = (seconds: number): string => {
@@ -251,7 +131,6 @@ export default function StatsPage() {
         arrows: false,
         centerMode: true,
         centerPadding: '50px',
-        // Make sure focus stays on current slide
         focusOnSelect: true,
     };
 
@@ -260,32 +139,6 @@ export default function StatsPage() {
             className="relative w-full overflow-hidden bg-gradient-to-b from-[#d8e3f7] to-[#aec6f0]"
             style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
         >
-            {isSharing && (
-                <div className="fixed inset-0 z-[3000] bg-black bg-opacity-70 flex flex-col items-center justify-center p-4">
-                    <div className="bg-white rounded-lg p-6 max-w-sm text-center">
-                        <p className="text-xl font-semibold text-black mb-4">Preparing to share...</p>
-                        {isSharingTooLong && !isShareSuccessful && (
-                            <>
-                                <p className="text-gray-600 text-sm mt-2">
-                                    This is taking longer than usual. Please check your network connection or try again later.
-                                </p>
-                            </>
-                        )}
-                        <div className={`${isSharingTooLong ? 'mt-4' : 'mt-6'} flex justify-center`}>
-                            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
-                        </div>
-                        <button 
-                            onClick={() => {
-                                setIsSharing(false);
-                                setIsSharingTooLong(false);
-                            }}
-                            className="mt-6 py-2 px-4 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
-                        >
-                        Cancel
-                        </button>
-                    </div>
-                </div>
-            )}
             <div className={`absolute inset-0 transition-opacity duration-1000 ${showContent ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
                 <div className="h-full flex flex-col items-center justify-start gap-1 z-10">
                     <div className="w-full mt-6">
@@ -374,32 +227,51 @@ export default function StatsPage() {
                                 <img src="/sites/blue/icons/left-arrow-black.svg" alt="Back" className="w-[16px] h-[14px]" />
                             </div>
                         </Link>
-                        <button
-                            onClick={shareStats}
-                            className="relative flex items-center bg-green text-warm-white w-fit h-[44px] gap-0 px-[16px] rounded-full overflow-hidden"
+                        <div className="relative flex justify-center items-center">
+                            <button
+                                onClick={shareStats}
+                                className="flex items-center bg-green text-warm-white w-fit h-[44px] gap-0 px-[16px] rounded-full overflow-hidden"
                             >
-                            <img
-                                src="/sites/blue/icons/export.svg"
-                                alt="Share"
-                                className="w-[16px] h-[18px] flex-shrink-0"
-                            />
-                            <div className="relative ml-2 w-[90px] h-[20px]">
-                                <span
-                                className={`absolute inset-0 flex items-center justify-center text-base font-medium transition-opacity duration-300 ${
-                                    activeSlide === 0 ? "opacity-100" : "opacity-0"
-                                }`}
-                                >
-                                Share Stats
-                                </span>
-                                <span
-                                className={`absolute inset-0 flex items-center justify-center text-base font-medium transition-opacity duration-300 ${
-                                    activeSlide === 1 ? "opacity-100" : "opacity-0"
-                                }`}
-                                >
-                                Share Board
-                                </span>
-                            </div>
-                        </button>
+                                <img
+                                    src="/sites/blue/icons/export.svg"
+                                    alt="Share"
+                                    className="w-[16px] h-[18px] flex-shrink-0"
+                                />
+                                <div className="relative ml-2 w-[90px] h-[20px]">
+                                    <span
+                                        className={`absolute inset-0 flex items-center justify-center text-base font-medium transition-opacity duration-300 ${
+                                            activeSlide === 0 ? "opacity-100" : "opacity-0"
+                                        }`}
+                                    >
+                                        Share Stats
+                                    </span>
+                                    <span
+                                        className={`absolute inset-0 flex items-center justify-center text-base font-medium transition-opacity duration-300 ${
+                                            activeSlide === 1 ? "opacity-100" : "opacity-0"
+                                        }`}
+                                    >
+                                        Share Board
+                                    </span>
+                                </div>
+                            </button>
+                            <AnimatePresence>
+                                {showShareModal && (
+                                    <motion.div 
+                                        className="absolute bottom-[52px] left-0 right-0 mx-auto z-50 pointer-events-none"
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: 10, transition: { duration: 0.5 } }}
+                                        transition={{ duration: 0.2 }}
+                                    >
+                                        <div className="bg-green text-warm-white p-3 rounded-lg text-center shadow-lg w-[120px] mx-auto">
+                                            <p className="text-sm font-medium">
+                                                To share, take a screenshot!
+                                            </p>
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </div>
                         <Link href="/ending-splash">
                             <div className="flex items-center bg-warm-white text-green w-fit h-[44px] gap-[6px] pl-[20px] pr-[16px] rounded-full">
                                 <p className="font-medium text-base">Exit App</p>                            
