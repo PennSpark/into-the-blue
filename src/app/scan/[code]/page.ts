@@ -29,7 +29,6 @@ export function generateStaticParams() {
     { code: 'asia' },
     { code: 'egypt' },
     { code: 'middle-east' },
-    { code: 'north-america' },
     { code: 'mexico-central-america' },
     { code: 'africa' },
     { code: 'assyria' },

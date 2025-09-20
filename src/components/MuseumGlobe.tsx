@@ -81,14 +81,6 @@ const regions: Region[] = [
     totalObjects: 9
   },
   { 
-    name: 'north-america', 
-    displayName: 'North America', 
-    position: [-0.8, 0.4, -0.3], 
-    color: '#32cd32', 
-    path: '/exhibit/north-america',
-    totalObjects: 4
-  },
-  { 
     name: 'mexico-central-america', 
     displayName: 'Mexico & C. America', 
     position: [-0.9, -0.1, -0.2], 
@@ -102,7 +94,7 @@ const regions: Region[] = [
     position: [-0.6, -0.7, -0.2], 
     color: '#8b4513', 
     path: '/exhibit/africa',
-    totalObjects: 4
+    totalObjects: 2
   },
 ];
 

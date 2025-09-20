@@ -297,50 +297,6 @@
 		"hint": "Look for a three-pronged fork in the first room of the gallery. This object is in the same case."
 	},
 	{
-		"id": "NA-Cradleboard",
-		"name": "Cradleboard",
-		"time": "ca. 1875 CE",
-		"material": "Glass Beads, Buckskin, Cotton, Wood",
-		"exhibit": "North America",
-		"exhibitID": "north-america",
-		"imageURL": "/sites/blue/images/artifacts/NA-Cradleboard.webp",
-		"svgURL": "/sites/blue/svg-outlines/SVG-_NA-Cradleboard.svg",
-		"hint": "Look in between two interactive screens!"
-	},
-	{
-		"id": "NA-Shirt",
-		"name": "Woman's T-shirt, Pueblo Revolt",
-		"time": "2010 CE",
-		"material": "Cotton",
-		"exhibit": "North America",
-		"exhibitID": "north-america",
-		"imageURL": "/sites/blue/images/artifacts/NA-Shirt.webp",
-		"svgURL": "/sites/blue/svg-outlines/SVG-_NA-Shirt.svg",
-		"hint": "Look towards the main entrance of the museum!"
-	},
-	{
-		"id": "NA-WomansDress",
-		"name": "Woman's Dress",
-		"time": "ca. 1880 CE",
-		"material": "Animal Skin, Glass Beads",
-		"exhibit": "North America",
-		"exhibitID": "north-america",
-		"imageURL": "/sites/blue/images/artifacts/NA-WomansDress.webp",
-		"svgURL": "/sites/blue/svg-outlines/SVG-_NA-WomansDress.svg",
-		"hint": "Look in between two interactive screens!"
-	},
-	{
-		"id": "NA-JingleDress",
-		"name": "Jingle Powwow Dress",
-		"time": "2013 CE",
-		"material": "Polyester, Cotton, Metal, Cowhide",
-		"exhibit": "North America",
-		"exhibitID": "north-america",
-		"imageURL": "/sites/blue/images/artifacts/NA-JingleDress.webp",
-		"svgURL": "/sites/blue/svg-outlines/SVG-_NA-JingleDress.svg",
-		"hint": "Look towards the main entrance of the museum!"
-	},
-	{
 		"id": "MCA-Ear",
 		"name": "Ear Ornaments",
 		"time": "1000-1521 CE",
@@ -350,17 +306,6 @@
 		"imageURL": "/sites/blue/images/artifacts/MCA-Ear.webp",
 		"svgURL": "/sites/blue/svg-outlines/SVG-_MCA-Ear.svg",
 		"hint": "Find the corner with 5 large sculptures on display. Look to the right of that corner."
-	},
-	{
-		"id": "Africa-Robe",
-		"name": "Agbádá (Robe)",
-		"time": "1962-1963 CE",
-		"material": "Cotton",
-		"exhibit": "Africa",
-		"exhibitID": "africa",
-		"imageURL": "/sites/blue/images/artifacts/Africa-Robe.webp",
-		"svgURL": "/sites/blue/svg-outlines/SVG-_Africa-Robe.svg",
-		"hint": "Look in a display case that's positioned diagonally!"
 	},
 	{
 		"id": "Africa-Dress",
@@ -383,17 +328,6 @@
 		"imageURL": "/sites/blue/images/artifacts/Africa-Beads.webp",
 		"svgURL": "/sites/blue/svg-outlines/SVG-_Africa-Beads.svg",
 		"hint": "These beads are in the hallway, next to several bracelets on display."
-	},
-	{
-		"id": "Africa-Illu",
-		"name": "Trial of Abraham",
-		"time": "1966 CE",
-		"material": "Vellum, Pigment",
-		"exhibit": "Africa",
-		"exhibitID": "africa",
-		"imageURL": "/sites/blue/images/artifacts/Africa-Illu.webp",
-		"svgURL": "/sites/blue/svg-outlines/SVG-_Africa-Illu.svg",
-		"hint": "Look in the room with a large modern sculpture on the wall!"
 	},
 	{
 		"id": "Assyria-Bead",

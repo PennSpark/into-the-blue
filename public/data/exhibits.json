@@ -144,26 +144,6 @@
 		"totalObjects": 9,
 		"path": "/exhibit/middle-east"
 	},
-	"north-america": {
-		"displayName": "North America",
-		"description": "Spot the beautiful variety of blues decorating the clothing and objects from North America!",
-		"items": [
-			{
-				"id": "NA-Cradleboard"
-			},
-			{
-				"id": "NA-Shirt"
-			},
-			{
-				"id": "NA-WomansDress"
-			},
-			{
-				"id": "NA-JingleDress"
-			}
-		],
-		"totalObjects": 4,
-		"path": "/exhibit/north-america"
-	},
 	"mexico-central-america": {
 		"displayName": "Mexico & Central America",
 		"description": "Most blue color has faded from objects found in Mexico & Central America, but one turquoise object  in this gallery remains bright blue!",
@@ -180,19 +160,13 @@
 		"description": "Blue materials appear in many forms across the African continent. Check out the ways they’re incorporated into art and fashion!",
 		"items": [
 			{
-				"id": "Africa-Robe"
-			},
-			{
 				"id": "Africa-Dress"
 			},
 			{
 				"id": "Africa-Beads"
-			},
-			{
-				"id": "Africa-Illu"
 			}
 		],
-		"totalObjects": 4,
+		"totalObjects": 2,
 		"path": "/exhibit/africa"
 	},
 	"assyria": {
